@@ -9,7 +9,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.3",
+        "php": "^8.4",
         "cachethq/core": "@dev",
         "cheesegrits/filament-google-maps": "@dev",
         "devletes/filament-pinnable-navigation": "^1.0",
