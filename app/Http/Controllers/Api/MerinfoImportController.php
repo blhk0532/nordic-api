@@ -1,0 +1,174 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Models\Merinfo;
+use App\Models\Person;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
+class MerinfoImportController extends Controller
+{
+    public function import(Request $request): JsonResponse
+    {
+        $content = $request->getContent();
+        $decoded = json_decode($content, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return response()->json(['error' => 'Invalid JSON'], 400);
+        }
+
+        // Handle different input formats:
+        // 1. { "results": [{ "items": [...] }] } - merinfo.se format
+        // 2. [ ... ] - simple array
+        // 3. { ... } - single object
+        if (isset($decoded['results'][0]['items'])) {
+            $items = $decoded['results'][0]['items'];
+        } elseif (isset($decoded['results'])) {
+            $items = $decoded['results'];
+        } elseif (array_is_list($decoded)) {
+            $items = $decoded;
+        } else {
+            $items = [$decoded];
+        }
+
+        Log::channel('merinfo')->info('merinfo.import.request', [
+            'content_length' => strlen($content),
+            'item_count' => count($items),
+            'sample' => array_slice($items, 0, 3),
+        ]);
+
+        $success = 0;
+        $failed = 0;
+        $errors = [];
+        $created = [];
+        $updated = [];
+
+        foreach ($items as $item) {
+            try {
+                $result = $this->createOrUpdateMerinfo($item);
+                $success++;
+                if ($result['created_at'] === $result['updated_at']) {
+                    $created[] = $result;
+                } else {
+                    $updated[] = $result;
+                }
+            } catch (\Exception $e) {
+                $failed++;
+                $errors[] = $e->getMessage();
+                Log::channel('merinfo')->warning('merinfo.import.error', [
+                    'error' => $e->getMessage(),
+                    'data' => $item,
+                ]);
+            }
+        }
+
+        Log::channel('merinfo')->info('merinfo.import.response', [
+            'success' => $success,
+            'failed' => $failed,
+        ]);
+
+        return response()->json([
+            'success' => $success,
+            'failed' => $failed,
+            'errors' => $errors,
+            'created' => $created,
+            'updated' => $updated,
+        ]);
+    }
+
+    private function createOrUpdateMerinfo(array $data): array
+    {
+        $shortUuid = $data['short_uuid'] ?? null;
+
+        if (! $shortUuid) {
+            throw new \Exception('short_uuid is required');
+        }
+
+        $address = $data['address'][0] ?? [];
+        $addressString = is_array($address) ? ($address['street'] ?? '') : '';
+
+        $isHouse = ! preg_match('/lgh|1 tr|2 tr|3 tr|4 tr|5 tr|6 tr| nb| bv|\bBox\b|\b([1-9][0-9]?|100)\s*[A-Z]\b/i', $addressString);
+
+        $normalized = [
+            'type' => $data['type'] ?? 'person',
+            'short_uuid' => $shortUuid,
+            'name' => $data['name'] ?? null,
+            'givenNameOrFirstName' => $data['givenNameOrFirstName'] ?? null,
+            'personalNumber' => $data['personalNumber'] ?? null,
+            'pnr' => isset($data['pnr']) && is_array($data['pnr']) ? $data['pnr'] : [],
+            'address' => isset($data['address'][0]) && is_array($data['address'][0]) ? $data['address'][0] : [],
+            'gender' => $data['gender'] ?? null,
+            'is_celebrity' => $data['is_celebrity'] ?? false,
+            'has_company_engagement' => $data['has_company_engagement'] ?? false,
+            'is_house' => $isHouse,
+            'number_plus_count' => $data['number_plus_count'] ?? 0,
+            'phone_number' => isset($data['phone_number'][0]) && is_array($data['phone_number'][0]) ? $data['phone_number'][0] : [],
+            'url' => $data['url'] ?? null,
+            'same_address_url' => $data['same_address_url'] ?? null,
+        ];
+
+        $existing = Merinfo::where('short_uuid', $normalized['short_uuid'])->first();
+
+        if ($existing) {
+            $existing->update(array_filter($normalized, fn ($v) => $v !== null));
+            $this->syncToPersons($existing);
+
+            return [
+                'id' => $existing->id,
+                'short_uuid' => $existing->short_uuid,
+                'created_at' => $existing->created_at?->toIso8601String(),
+                'updated_at' => $existing->updated_at?->toIso8601String(),
+            ];
+        }
+
+        $created = Merinfo::create($normalized);
+        $this->syncToPersons($created);
+
+        return [
+            'id' => $created->id,
+            'short_uuid' => $created->short_uuid,
+            'created_at' => $created->created_at?->toIso8601String(),
+            'updated_at' => $created->updated_at?->toIso8601String(),
+        ];
+    }
+
+    private function syncToPersons(Merinfo $merinfo): void
+    {
+        // Address is stored as flat object in merinfo
+        $address = is_array($merinfo->address) ? $merinfo->address : [];
+        $street = $address['street'] ?? '';
+        $zipCode = $address['zip_code'] ?? '';
+        $city = $address['city'] ?? '';
+
+        // Phone number - handle both array [{number: ...}] and flat object {number: ...}
+        $phoneData = is_array($merinfo->phone_number) ? $merinfo->phone_number : [];
+        $firstPhone = is_array($phoneData) ? ($phoneData[0] ?? $phoneData) : $phoneData;
+        $phoneNumber = is_array($firstPhone) ? ($firstPhone['number'] ?? null) : (is_string($firstPhone) ? $firstPhone : null);
+
+        $personData = [
+            'name' => $merinfo->name,
+            'street' => $street,
+            'zip' => $zipCode,
+            'city' => $city,
+            'phone' => $phoneNumber,
+            'merinfo_id' => $merinfo->id,
+            'merinfo_phone' => $phoneNumber,
+            'personal_number' => $merinfo->personalNumber,
+            'gender' => $merinfo->gender,
+            'merinfo_is_house' => $merinfo->is_house,
+        ];
+
+        $existingPerson = Person::where('merinfo_id', $merinfo->id)->first();
+
+        if ($existingPerson) {
+            $existingPerson->update(array_filter($personData, fn ($v) => $v !== null));
+
+            return;
+        }
+
+        Person::create(array_filter($personData, fn ($v) => $v !== null));
+    }
+}

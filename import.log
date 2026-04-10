@@ -1,0 +1,6 @@
+SET
+SET
+psql:database/imports/sweden_personer_final_import.sql:495481: ERROR:  column "is_hus" is of type boolean but expression is of type integer
+LINE 195562: ..., NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 1, 0...
+                                                                  ^
+HINT:  You will need to rewrite or cast the expression.

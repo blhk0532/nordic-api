@@ -1,0 +1,28 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+@source '../../../../app/Filament/**/*';
+@source '../../../../resources/views/filament/**/*';
+
+footer{
+    background:#18181b;
+}
+
+.fi-sidebar.fi-main-sidebar.fi-sidebar-opened{
+    background: #18181b;
+}
+.fi-main-sidebar{
+    background: #18181b;
+}
+
+html{
+    scrollbar-gutter: auto!important;
+    overflow: hidden;
+    max-height: 100vh;
+
+}
+
+.fi-main-ctn{
+    overflow-y:scroll;
+    max-height: 94vh;
+    scrollbar-width: thin;
+}

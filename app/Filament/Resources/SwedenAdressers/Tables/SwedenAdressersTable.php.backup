@@ -1,0 +1,116 @@
+<?php
+
+namespace App\Filament\Resources\SwedenAdressers\Tables;
+
+use EightyNine\ExcelImport\ExcelImportAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
+
+class SwedenAdressersTable
+{
+    public static function configure(Table $table): Table
+    {
+        return $table
+            ->headerActions([
+                ExcelImportAction::make()
+                    ->color('primary'),
+                static::importSqlAction(),
+            ])
+            ->columns([
+                TextColumn::make('id')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->label('ID')
+                    ->sortable(),
+                TextColumn::make('adress')
+                    ->label('Gatuadress')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('postnummer')
+                    ->label('Postnr')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('postort')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('kommun')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('lan')
+                    ->label('Landskap')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('personer')
+                    ->label('Pers')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('företag')
+                    ->hidden()
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('adresser')
+                    ->hidden()
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('ratsit_link')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->searchable(),
+                TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                IconColumn::make('is_active')
+                    ->label('Active')
+                    ->boolean(),
+                IconColumn::make('is_queue')
+                    ->label('Queue')
+                    ->boolean(),
+                IconColumn::make('is_done')
+                    ->label('Done')
+                    ->boolean(),
+            ])
+            ->filters([
+                //
+            ])
+            ->recordActions([
+                ViewAction::make(),
+                EditAction::make(),
+            ])
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                ]),
+            ]);
+    }
+
+    private static function importSqlAction(): \\Filament\\Actions\\Action
+    {
+        return \\Filament\\Actions\\Action::make('importSql')
+            ->label('Import SQL')
+            ->icon('heroicon-o-arrow-up-on-square')
+            ->color('success')
+            ->form([
+                \\Filament\\Forms\\Components\\FileUpload::make('file')
+                    ->label('SQL File')
+                    ->acceptedFileTypes(['application/sql', 'text/plain', '.sql'])
+                    ->storeFiles(false)
+                    ->required(),
+            ])
+            ->action(function (array $data): void {
+                self::handleSqlImport($data);
+            });
+    }
+
+    private static function handleSqlImport(array $data): void
+    {
+        // TODO: implement
+    }
+}

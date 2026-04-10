@@ -1,0 +1,3 @@
+COPY ratsit_data (gatuadress, postnummer, postort, forsamling, kommun, lan, adressandring, telfonnummer, stjarntacken, fodelsedag, personnummer, alder, kon, civilstand, fornamn, efternamn, personnamn, telefon, epost_adress, agandeform, bostadstyp, boarea, byggar, fastighet, personer, foretag, grannar, fordon, hundar, bolagsengagemang, longitude, latitud, google_maps, google_streetview, ratsit_se, is_active, is_hus, is_telefon, created_at, updated_at, kommun_ratsit, is_queued)
+FROM '/home/baba/apps/api/database/imports/ratsit_data_quoted_with_header.csv'
+WITH (FORMAT CSV, HEADER true, DELIMITER ',', NULL '');

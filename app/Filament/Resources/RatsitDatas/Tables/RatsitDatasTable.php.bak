@@ -1,0 +1,299 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Filament\Resources\RatsitDatas\Tables;
+
+use App\Actions\TransferRatsitDataToRingaDataAction;
+use App\Filament\Exports\RatsitDataExporter;
+use App\Models\RatsitData;
+use Filament\Actions\BulkAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ExportBulkAction;
+use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
+use Filament\Tables\Table;
+use Illuminate\Support\Collection;
+
+class RatsitDatasTable
+{
+    public static function configure(Table $table): Table
+    {
+        return $table
+            ->columns([
+                TextColumn::make('id')
+                    ->label('ID')
+                    ->sortable()
+                    ->weight('medium')
+                    ->limit(50),
+                TextColumn::make('personnamn')
+                    ->label('Name')
+                    ->searchable()
+                    ->sortable()
+                    ->weight('medium')
+                    ->limit(50),
+
+                TextColumn::make('personnummer')
+                    ->label('Personnummer')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+
+                TextColumn::make('alder')
+                    ->label('Age')
+                    ->sortable()
+                    ->toggleable(),
+
+                TextColumn::make('kon')
+                    ->label('Gender')
+                    ->sortable()
+                    ->toggleable(),
+
+                TextColumn::make('fodelsedag')
+                    ->label('Date of Birth')
+                    ->sortable()
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
+
+                TextColumn::make('gatuadress')
+                    ->label('Address')
+                    ->searchable()
+                    ->sortable()
+                    ->limit(50)
+                    ->toggleable(),
+
+                TextColumn::make('postnummer')
+                    ->label('Postnummer')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('postort')
+                    ->label('City')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('forsamling')
+                    ->label('Parish')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable()
+                    ->toggledHiddenByDefault(true),
+
+                TextColumn::make('kommun')
+                    ->label('Municipality')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable()
+                    ->toggledHiddenByDefault(true),
+
+                TextColumn::make('lan')
+                    ->label('County')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable()
+                    ->toggledHiddenByDefault(true),
+
+                TextColumn::make('telefon')
+                    ->label('Phone')
+                    ->searchable()
+                    ->toggleable()
+                    ->toggledHiddenByDefault(false),
+
+                TextColumn::make('telfonnummer')
+                    ->label('Alt Phone')
+                    ->searchable()
+                    ->toggleable()
+                    ->toggledHiddenByDefault(false),
+
+                TextColumn::make('agandeform')
+                    ->label('Ownership')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
+
+                TextColumn::make('bostadstyp')
+                    ->label('Housing Type')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
+
+                IconColumn::make('is_active')
+                    ->label('Active')
+                    ->boolean()
+                    ->sortable()
+                    ->toggleable()
+                    ->toggledHiddenByDefault(true),
+
+                IconColumn::make('is_queued')
+                    ->label('Queued')
+                    ->boolean()
+                    ->sortable()
+                    ->toggleable(),
+
+                TextColumn::make('created_at')
+                    ->label('Created')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
+
+                TextColumn::make('updated_at')
+                    ->label('Updated')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
+            ])
+            ->filters([
+                TernaryFilter::make('is_active')
+                    ->label('Active')
+                    ->placeholder('All records')
+                    ->trueLabel('Active only')
+                    ->falseLabel('Inactive only'),
+                TernaryFilter::make('personnummer')
+                    ->label('personnummer')
+                    ->form([
+                        TextInput::make('personnummer')
+                            ->label('personnummer'),
+                    ])
+                    ->query(function ($query, array $data) {
+                        return $query->when(
+                            $data['personnummer'] ?? null,
+                            fn ($query, $postnummer) => $query->where('personnummer', 'not like', "%{$postnummer}%")
+                        );
+                    }),
+                TernaryFilter::make('is_queued')
+                    ->label('Queued')
+                    ->placeholder('All records')
+                    ->trueLabel('Queued only')
+                    ->falseLabel('Not queued only'),
+
+                SelectFilter::make('postort')
+                    ->label('City')
+                    ->multiple()
+                    ->searchable()
+                    ->options(function () {
+                        return RatsitData::query()
+                            ->whereNotNull('postort')
+                            ->distinct()
+                            ->orderBy('postort')
+                            ->pluck('postort', 'postort')
+                            ->toArray();
+                    }),
+
+                SelectFilter::make('kommun')
+                    ->label('Municipality')
+                    ->multiple()
+                    ->searchable()
+                    ->options(function () {
+                        return RatsitData::query()
+                            ->whereNotNull('kommun')
+                            ->distinct()
+                            ->orderBy('kommun')
+                            ->pluck('kommun', 'kommun')
+                            ->toArray();
+                    }),
+
+                SelectFilter::make('lan')
+                    ->label('State')
+                    ->multiple()
+                    ->searchable()
+                    ->options(function () {
+                        return RatsitData::query()
+                            ->whereNotNull('lan')
+                            ->distinct()
+                            ->orderBy('lan')
+                            ->pluck('lan', 'lan')
+                            ->toArray();
+                    }),
+
+                SelectFilter::make('agandeform')
+                    ->label('Ownership Form')
+                    ->multiple()
+                    ->searchable()
+                    ->options(function () {
+                        return RatsitData::query()
+                            ->whereNotNull('agandeform')
+                            ->distinct()
+                            ->orderBy('agandeform')
+                            ->pluck('agandeform', 'agandeform')
+                            ->toArray();
+                    }),
+
+                SelectFilter::make('bostadstyp')
+                    ->label('Housing Type')
+                    ->multiple()
+                    ->searchable()
+                    ->options(function () {
+                        return RatsitData::query()
+                            ->whereNotNull('bostadstyp')
+                            ->distinct()
+                            ->orderBy('bostadstyp')
+                            ->pluck('bostadstyp', 'bostadstyp')
+                            ->toArray();
+                    }),
+
+                // Filter: has phone (telefon not empty)
+                Filter::make('has_telefon')
+                    ->label('Has phone')
+                    ->query(
+                        fn ($query) => $query->whereNotNull('telefon')
+                            ->where('telefon', '<>', '')
+                        // handle JSON empty array serialized as '[]' or 'null-like' strings
+                            ->where('telefon', '<>', '[]')
+                    ),
+
+                Filter::make('postnummer')
+                    ->label('Postnummer')
+                    ->form([
+                        TextInput::make('postnummer')
+                            ->label('Postnummer'),
+                    ])
+                    ->query(function ($query, array $data) {
+                        return $query->when(
+                            $data['postnummer'] ?? null,
+                            fn ($query, $postnummer) => $query->where('postnummer', 'like', "%{$postnummer}%")
+                        );
+                    }),
+            ], layout: FiltersLayout::AboveContentCollapsible)
+            ->deferFilters()
+            ->defaultSort('created_at', 'desc')
+            ->paginated([10, 25, 50, 100, 250, 500, 1000])
+            ->defaultPaginationPageOption(25)
+            ->recordActions([
+                EditAction::make(),
+            ])
+            ->bulkActions([
+                BulkActionGroup::make([
+                    ExportBulkAction::make()
+                        ->exporter(RatsitDataExporter::class),
+                    BulkAction::make('transferToRingaData')
+                        ->label('Transfer to Ringa Data')
+                        ->icon('heroicon-o-arrow-right')
+                        ->color('success')
+                        ->requiresConfirmation()
+                        ->action(function (Collection $records, array $data): void {
+                            $action = new TransferRatsitDataToRingaDataAction;
+                            $action->handle($records, $data);
+
+                            Notification::make()
+                                ->title('Success')
+                                ->body(count($records).' records transferred to Ringa Data')
+                                ->success()
+                                ->send();
+                        }),
+                    DeleteBulkAction::make(),
+                ]),
+            ]);
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "agents": [
+        "opencode",
+        "copilot"
+    ],
+    "guidelines": true,
+    "mcp": true,
+    "nightwatch_mcp": false,
+    "packages": [
+        "internachi/modular",
+        "nativephp/mobile",
+        "filament/filament"
+    ],
+    "sail": false,
+    "skills": [
+        "fortify-development",
+        "laravel-best-practices",
+        "fluxui-development",
+        "livewire-development",
+        "pest-testing",
+        "tailwindcss-development",
+        "modular",
+        "nativephp-mobile"
+    ]
+}

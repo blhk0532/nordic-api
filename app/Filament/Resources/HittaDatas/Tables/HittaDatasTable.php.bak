@@ -1,0 +1,197 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Filament\Resources\HittaDatas\Tables;
+
+use App\Filament\Exports\HittaDataExporter;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ExportBulkAction;
+use Filament\Actions\ViewAction;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+
+class HittaDatasTable
+{
+    public static function configure(Table $table): Table
+    {
+        return $table
+            ->columns([
+                TextColumn::make('personnamn')
+                    ->label('Personnamn')
+                    ->sortable()
+                    ->weight('medium')
+                    ->limit(50),
+
+                TextColumn::make('gatuadress')
+                    ->label('Gatuadress')
+                    ->searchable()
+                    ->sortable()
+                    ->limit(40)
+                    ->toggleable(),
+
+                TextColumn::make('postnummer')
+                    ->label('Postnummer')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+
+                TextColumn::make('postort')
+                    ->label('Postort')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+
+                TextColumn::make('kon')
+                    ->label('Kön')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'Man' => 'info',
+                        'Kvinna' => 'success',
+                        default => 'gray',
+                    })
+                    ->sortable()
+                    ->toggleable(),
+
+                TextColumn::make('alder')
+                    ->label('Ålder')
+                    ->sortable()
+                    ->toggleable(),
+
+                IconColumn::make('is_hus')
+                    ->label('Är Hus')
+                    ->boolean()
+                    ->sortable()
+                    ->toggleable(),
+
+                TextColumn::make('telefon')
+                    ->label('Telefon')
+                    ->copyable()
+                    ->tooltip('Klicka för att kopiera')
+                    ->limit(20)
+                    ->sortable()
+                    ->toggleable(),
+
+                TextColumn::make('telefonnummer')
+                    ->label('Telefoner')
+                    ->sortable()
+                //    ->limit(12)
+                    ->toggleable()
+                    ->toggledHiddenByDefault(true),
+
+                TextColumn::make('bostadspris')
+                    ->label('Bostadspris')
+                    ->money('SEK')
+                    ->sortable()
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
+
+                IconColumn::make('is_active')
+                    ->label('Aktiv')
+                    ->boolean()
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
+
+                IconColumn::make('is_telefon')
+                    ->label('Har Telefon')
+                    ->boolean()
+                    ->toggleable()
+                    ->toggledHiddenByDefault(true),
+
+                IconColumn::make('is_ratsit')
+                    ->label('I Ratsit')
+                    ->boolean()
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
+
+                TextColumn::make('created_at')
+                    ->label('Skapad')
+                    ->dateTime('Y-m-d H:i')
+                    ->sortable()
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
+
+                TextColumn::make('updated_at')
+                    ->label('Uppdaterad')
+                    ->dateTime('Y-m-d H:i')
+                    ->sortable()
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
+            ])
+            ->filters([
+                TernaryFilter::make('is_telefon')
+                    ->label('Har Telefon')
+                    ->default(true),
+
+                TernaryFilter::make('is_active')
+                    ->label('Aktiv'),
+
+                TernaryFilter::make('is_ratsit')
+                    ->label('I Ratsit'),
+
+                TernaryFilter::make('is_hus')
+                    ->label('Är Hus'),
+
+                SelectFilter::make('kon')
+                    ->label('Kön')
+                    ->options([
+                        'Man' => 'Man',
+                        'Kvinna' => 'Kvinna',
+                    ]),
+
+                Filter::make('postnummer')
+                    ->form([
+                        TextInput::make('postnummer')
+                            ->label('Postnummer')
+                            ->placeholder('Sök efter exakt postnummer (t.ex. 184 44)'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['postnummer'],
+                                fn (Builder $query, $search): Builder => $query->where('postnummer', '=', $search)
+                            );
+                    }),
+
+                Filter::make('postort')
+                    ->form([
+                        TextInput::make('postort')
+                            ->label('Postort')
+                            ->placeholder('Sök efter postort'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['postort'],
+                                fn (Builder $query, $search): Builder => $query->where('postort', 'like', "%{$search}%")
+                            );
+                    }),
+            ])
+        //    ->filtersLayout(FiltersLayout::AboveContentCollapsible)
+            ->actions([
+                //       ViewAction::make(),
+                EditAction::make(),
+            ])
+            ->bulkActions([
+                BulkActionGroup::make([
+                    ExportBulkAction::make()
+                        ->exporter(HittaDataExporter::class),
+                    DeleteBulkAction::make(),
+                ]),
+            ])
+            ->defaultSort('created_at', 'desc')
+            ->persistFiltersInSession()
+            ->persistSearchInSession()
+            ->persistColumnSearchesInSession()
+            ->striped();
+    }
+}

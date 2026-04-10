@@ -1,0 +1,4 @@
+SET
+SET
+psql:database/imports/batches/sweden_personer_batch_10.sql:49549: ERROR:  duplicate key value violates unique constraint "sweden_personer_adress_fornamn_efternamn_key"
+DETAIL:  Key (adress, fornamn, efternamn)=(Liars väg 34, Anneli, Larsson) already exists.
