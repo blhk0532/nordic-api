@@ -8,10 +8,10 @@ footer{
 }
 
 .fi-sidebar.fi-main-sidebar.fi-sidebar-opened{
-    background: #18181b;
+    background: #18181b!important;
 }
 .fi-main-sidebar{
-    background: #18181b;
+    background: #18181b!important;
 }
 
 html{
@@ -23,6 +23,14 @@ html{
 
 .fi-main-ctn{
     overflow-y:scroll;
-    max-height: 94vh;
+    max-height: 94vh!important;
     scrollbar-width: thin;
+}
+
+aside.fi-sidebar.fi-main-sidebar.fi-sidebar-opened{
+    background: #18181b!important;
+}
+
+.fi-sidebar{
+    background: #18181b!important;
 }
