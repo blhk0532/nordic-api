@@ -77,7 +77,7 @@ function parseCliFilters(argv) {
 }
 
 async function scrapeRatsitGator(url, row, connection) {
-\tconsole.log(`\nScraping: ${url} (${row.postnummer} ${row.postort || ''})`);
+	console.log(`\nScraping: ${url} (${row.postnummer} ${row.postort || ''})`);
 
 	let browser = null;
 
