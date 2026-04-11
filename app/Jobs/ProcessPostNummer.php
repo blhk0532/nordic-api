@@ -1,0 +1,287 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Jobs;
+
+use App\Events\PostNummerStatusUpdated;
+use App\Models\Postnummer;
+use Exception;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Process;
+use Throwable;
+
+class ProcessPostNummer implements ShouldQueue
+{
+    use Queueable;
+
+    public int $timeout = 9600; // 1 hour timeout
+
+    public int $tries = 3; // Retry up to 3 times on failure
+
+    /**
+     * Create a new job instance.
+     */
+    public function __construct(
+        public string $postNummer
+    ) {
+        // Set the queue to ensure jobs run in order
+        $this->onQueue('postnummer');
+    }
+
+    /**
+     * Execute the job.
+     */
+    public function handle(): void
+    {
+        Log::info("[Postnummer {$this->postNummer}] Job starting");
+
+        // Find the Postnummer record
+        $record = Postnummer::where('post_nummer', $this->postNummer)->first();
+
+        if (! $record) {
+            Log::error("[Postnummer {$this->postNummer}] Record not found");
+
+            return;
+        }
+
+        // Get the script path
+        $scriptPath = base_path('scripts/post_ort_update.mjs');
+
+        if (! file_exists($scriptPath)) {
+            Log::error("Script not found at: {$scriptPath}");
+            $record->update(['status' => 'pending', 'is_active' => false]);
+
+            return;
+        }
+
+        // Build search query: "post_nummer" (e.g., "11212")
+        $searchQuery = $this->postNummer;
+        Log::info("[Postnummer {$this->postNummer}] Search query: {$searchQuery}");
+
+        // PRE-FLIGHT CHECK: Run --onlyTotals first to detect "no direct match" case
+        Log::info("[Postnummer {$this->postNummer}] Running pre-flight check (onlyTotals)");
+        $checkResult = Process::path(base_path('scripts'))
+            ->timeout(120) // 2 minute timeout for quick check
+            ->run(['APP_URL='.config('app.url'), 'API_URL='.config('app.url'), 'node', 'post_ort_update.mjs', $searchQuery, '--onlyTotals']);
+
+        if ($checkResult->successful()) {
+            $checkOutput = $checkResult->output();
+            $checkLines = explode("\n", $checkOutput);
+            $noDirectResults = false;
+
+            foreach ($checkLines as $line) {
+                $line = mb_trim($line);
+                if (preg_match('/^NO_DIRECT_RESULTS=1$/', $line)) {
+                    $noDirectResults = true;
+
+                    break;
+                }
+                // Detect "Ingen träff på" (no results at all)
+                if (str_contains(mb_strtolower($line), 'ingen träff på')) {
+                    $noDirectResults = true;
+
+                    break;
+                }
+            }
+
+            if ($noDirectResults) {
+                Log::info("[Postnummer {$this->postNummer}] No direct results. Marking empty and skipping full scrape.");
+                $record->update([
+                    'status' => 'empty',
+                    'total_count' => 0,
+                    'count' => 0,
+                    'progress' => 0,
+                    'phone' => 0,
+                    'house' => 0,
+                    'is_active' => false,
+                    'is_complete' => false,
+                ]);
+                event(new PostNummerStatusUpdated($record->fresh()));
+
+                return; // Skip full scrape, move to next job
+            }
+        } else {
+            Log::warning("[Postnummer {$this->postNummer}] Pre-flight check failed: {$checkResult->errorOutput()}");
+            // Continue with full scrape despite check failure
+        }
+
+        // Determine resume state
+        $resumePage = (int) ($record->last_processed_page ?? 0);
+        $resumeCount = (int) ($record->processed_count ?? 0);
+        Log::info("[Postnummer {$this->postNummer}] Resume state page={$resumePage} count={$resumeCount}");
+
+        // Update status to running (keep existing progress if resuming)
+        $record->update([
+            'status' => 'running',
+            'is_active' => true,
+            'progress' => $record->progress ?? 0,
+            // Preserve existing counters when resuming, only set to 0 for fresh starts
+            'phone' => $resumePage > 0 ? ($record->phone ?? 0) : 0,
+            'house' => $resumePage > 0 ? ($record->house ?? 0) : 0,
+            'bolag' => $resumePage > 0 ? ($record->bolag ?? 0) : 0,
+        ]);
+
+        event(new PostNummerStatusUpdated($record));
+
+        Log::info("[Postnummer {$this->postNummer}] Invoking script post_ort_update.mjs");
+
+        // Run the script with the search query (post_nummer) with resume args
+        $currentTotalCount = (int) ($record->total_count ?? 0);
+        $currentCount = (int) max(0, $resumeCount);
+        $result = Process::path(base_path('scripts'))
+            ->timeout($this->timeout)
+            ->run(['APP_URL='.config('app.url'), 'API_URL='.config('app.url'), 'node', 'post_ort_update.mjs', $searchQuery, '--startPage', (string) $resumePage, '--startIndex', (string) $resumeCount], function (string $type, string $buffer) use ($record, &$currentTotalCount, &$currentCount) {
+                // Parse output in real-time to update progress
+                $lines = explode("\n", $buffer);
+                $phoneCount = (int) ($record->phone ?? 0);
+                $houseCount = (int) ($record->house ?? 0);
+                $bolagCount = (int) ($record->bolag ?? 0);
+
+                foreach ($lines as $line) {
+                    $line = mb_trim($line);
+                    if (empty($line)) {
+                        continue;
+                    }
+
+                    Log::info("[Postnummer {$record->post_nummer}] OUT: {$line}");
+
+                    // Extract total results count only (avoid matching "Total pages")
+                    if (
+                        // Match "Total results: 402"
+                        preg_match('/^Total\s+results\s*:\s*(\d+)/i', $line, $matches)
+                        ||
+                        // Match "Found 402 results" but NOT "on page"
+                        preg_match('/^Found\s+(\d+)\s+results(?!\s+on\s+page)/i', $line, $matches)
+                    ) {
+                        $totalCount = (int) $matches[1];
+                        $currentTotalCount = $totalCount;
+                        $record->update(['total_count' => $totalCount]);
+                        Log::info("[Postnummer {$record->post_nummer}] total_count={$totalCount}");
+                    }
+
+                    // Incremental progress based on extracted items per page
+                    if (preg_match('/^\[Page\s+\d+\]\s+Extracted\s+(\d+)\/(\d+)/i', $line, $matches)) {
+                        // Increase global count by 1 when an item is extracted
+                        $currentCount = $currentCount + 1;
+                        $updates = [
+                            'count' => $currentCount,
+                            'processed_count' => $currentCount,
+                        ];
+                        if ($currentTotalCount > 0) {
+                            $updates['progress'] = round(($currentCount / $currentTotalCount) * 100, 2);
+                        }
+                        $record->update($updates);
+                        $progressText = array_key_exists('progress', $updates) ? (string) $updates['progress'] : 'n/a';
+                        Log::info("[Postnummer {$record->post_nummer}] progress={$progressText} ({$currentCount}/".($currentTotalCount ?: 'unknown').')');
+                        event(new PostNummerStatusUpdated($record->fresh()));
+                    }
+
+                    // Track page lines: "Page 3:" or "Page 3 of 17"
+                    if (preg_match('/^Page\s+(\d+)(?:\s+of\s+\d+)?/i', $line, $pm)) {
+                        $pageNo = (int) $pm[1];
+                        $record->update(['last_processed_page' => $pageNo]);
+                        Log::info("[Postnummer {$record->post_nummer}] last_processed_page={$pageNo}");
+                        event(new PostNummerStatusUpdated($record->fresh()));
+                    }
+
+                    // Aggregate phones and houses on-the-fly if script emits detail lines
+                    // Expected summary lines at end: "Phones: X" and "Houses: Y"
+                    if (preg_match('/^Phones:\s*(\d+)/i', $line, $m)) {
+                        $phoneCount = (int) $m[1];
+                        $record->update(['phone' => $phoneCount]);
+                        Log::info("[Postnummer {$record->post_nummer}] phone={$phoneCount}");
+                        event(new PostNummerStatusUpdated($record->fresh()));
+                    }
+                    if (preg_match('/^Houses:\s*(\d+)/i', $line, $m)) {
+                        $houseCount = (int) $m[1];
+                        $record->update(['house' => $houseCount]);
+                        Log::info("[Postnummer {$record->post_nummer}] house={$houseCount}");
+                        event(new PostNummerStatusUpdated($record->fresh()));
+                    }
+                    if (preg_match('/^Bolag:\s*(\d+)/i', $line, $m)) {
+                        $bolagCount = (int) $m[1];
+                        $record->update(['bolag' => $bolagCount]);
+                        Log::info("[Postnummer {$record->post_nummer}] bolag={$bolagCount}");
+                        event(new PostNummerStatusUpdated($record->fresh()));
+                    }
+                }
+            });
+
+        if ($result->successful()) {
+            Log::info("[Postnummer {$this->postNummer}] Script completed successfully");
+
+            // Reload record to get latest values
+            $record = $record->fresh();
+
+            $total = (int) ($record->total_count ?? 0);
+            $done = (int) ($record->count ?? 0);
+            $computedProgress = $total > 0 ? (int) min(100, floor(($done / $total) * 100)) : (int) ($record->progress ?? 0);
+
+            // Only mark as complete if we've actually processed all known results
+            if ($total > 0 && $done >= $total) {
+                $record->update([
+                    'status' => 'complete',
+                    'progress' => 100,
+                    'is_active' => true,  // Mark as active for successfully completed rows
+                    'is_complete' => true,
+                ]);
+            } else {
+                // Not fully complete – keep record pending for resume, don't force 100%
+                $record->update([
+                    'status' => 'pending',
+                    'progress' => $computedProgress,
+                    'is_active' => false,
+                    'is_complete' => false,
+                ]);
+            }
+
+            event(new PostNummerStatusUpdated($record));
+        } else {
+            Log::error("[Postnummer {$this->postNummer}] Script failed: {$result->errorOutput()}");
+
+            // Update status back to pending - reset progress but keep other counters for resume
+            $record->update([
+                'status' => 'pending',
+                'is_active' => false,
+                'progress' => 0,
+                // Keep count, total_count, phone, house, bolag for resume capability
+                // Only reset last_processed_page to allow restart from beginning of current page
+                'last_processed_page' => max(0, ($record->last_processed_page ?? 0) - 1),
+            ]);
+
+            event(new PostNummerStatusUpdated($record));
+
+            throw new Exception("Script execution failed: {$result->errorOutput()}");
+        }
+    }
+
+    /**
+     * Handle a job failure.
+     */
+    public function failed(Throwable $exception): void
+    {
+        Log::error("[Postnummer {$this->postNummer}] Job failed: {$exception->getMessage()}");
+
+        // Update record status on failure - reset all counters for clean retry
+        $record = Postnummer::where('post_nummer', $this->postNummer)->first();
+        if ($record) {
+            $record->update([
+                'status' => 'pending',
+                'is_active' => false,
+                'progress' => 0,
+                'count' => 0,
+                'total_count' => 0,
+                'phone' => 0,
+                'house' => 0,
+                'bolag' => 0,
+                'last_processed_page' => 0,
+                'processed_count' => 0,
+            ]);
+
+            event(new PostNummerStatusUpdated($record));
+        }
+    }
+}

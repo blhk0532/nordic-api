@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use Devletes\FilamentPinnableNavigation\PinnableNavigationPlugin;
 use Filament\Enums\ThemeMode;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -48,10 +49,22 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('Noridic Digital')
             ->defaultThemeMode(ThemeMode::Dark)
             ->revealablePasswords(true)
+            ->unsavedChangesAlerts()
             ->passwordReset()
+            ->databaseNotifications()
+            ->databaseNotificationsPolling('30s')
             ->emailChangeVerification()
             ->spaUrlExceptions(['tel:*', 'mailto:*'])
             ->navigationGroups([
+                NavigationGroup::make('Dialers TELE')
+                    ->collapsed(true)
+                    ->icon('heroicon-o-phone-arrow-up-right'),
+                NavigationGroup::make('Sverige MAP')
+                    ->collapsed(true)
+                    ->icon('heroicon-o-map'),
+                NavigationGroup::make('Queue JOBS')
+                    ->collapsed(true)
+                    ->icon('heroicon-o-clock'),
                 NavigationGroup::make('Sweden GEO')
                     ->collapsed(true)
                     ->icon('heroicon-o-map-pin'),
@@ -61,12 +74,7 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make('Database PS')
                     ->collapsed(true)
                     ->icon('heroicon-o-shield-check'),
-                NavigationGroup::make('Sverige MAP')
-                    ->collapsed(true)
-                    ->icon('heroicon-o-map'),
-                NavigationGroup::make('Queue JOBS')
-                    ->collapsed(true)
-                    ->icon('heroicon-o-clock'),
+
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
@@ -92,8 +100,9 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
+            ->plugin(PinnableNavigationPlugin::make())
             ->plugins([
-                ArchitectPlugin::make(),
+                //    ArchitectPlugin::make(),
             ]);
     }
 }

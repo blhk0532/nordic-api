@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Merinfo;
 use App\Models\Person;
+use App\Models\SwedenPersoner;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -115,6 +116,7 @@ class MerinfoImportController extends Controller
         if ($existing) {
             $existing->update(array_filter($normalized, fn ($v) => $v !== null));
             $this->syncToPersons($existing);
+            $this->syncToSwedenPersoner($existing);
 
             return [
                 'id' => $existing->id,
@@ -126,6 +128,7 @@ class MerinfoImportController extends Controller
 
         $created = Merinfo::create($normalized);
         $this->syncToPersons($created);
+        $this->syncToSwedenPersoner($created);
 
         return [
             'id' => $created->id,
@@ -170,5 +173,51 @@ class MerinfoImportController extends Controller
         }
 
         Person::create(array_filter($personData, fn ($v) => $v !== null));
+    }
+
+    private function syncToSwedenPersoner(Merinfo $merinfo): void
+    {
+        $address = is_array($merinfo->address) ? $merinfo->address : [];
+        $street = $address['street'] ?? '';
+        $zipCode = $address['zip_code'] ?? '';
+        $city = $address['city'] ?? '';
+
+        $phoneData = is_array($merinfo->phone_number) ? $merinfo->phone_number : [];
+        $phoneArray = is_array($phoneData) ? (array_is_list($phoneData) ? $phoneData : [$phoneData]) : [];
+        $firstPhoneItem = $phoneArray[0] ?? null;
+        $phoneNumber = is_array($firstPhoneItem) ? ($firstPhoneItem['number'] ?? null) : (is_string($firstPhoneItem) ? $firstPhoneItem : null);
+
+        // Map names
+        $names = explode(' ', (string) $merinfo->name);
+        $firstName = $merinfo->givenNameOrFirstName ?? ($names[0] ?? null);
+        $lastName = count($names) > 1 ? end($names) : null;
+
+        $swedenPersonData = [
+            'personnamn' => $merinfo->name,
+            'fornamn' => $firstName,
+            'efternamn' => $lastName,
+            'adress' => $street,
+            'postnummer' => $zipCode,
+            'postort' => $city,
+            'personnummer' => $merinfo->personalNumber,
+            'kon' => $merinfo->gender,
+            'telefon' => $phoneNumber,
+            'telefonnummer' => $phoneArray,
+            'is_hus' => $merinfo->is_house,
+            'merinfo_link' => $merinfo->url,
+            'merinfo_data' => $merinfo->toArray(),
+        ];
+
+        $existingSwedenPerson = SwedenPersoner::where('personnummer', $merinfo->personalNumber)
+            ->where('personnamn', $merinfo->name)
+            ->first();
+
+        if ($existingSwedenPerson) {
+            $existingSwedenPerson->update(array_filter($swedenPersonData, fn ($v) => $v !== null));
+
+            return;
+        }
+
+        SwedenPersoner::create($swedenPersonData);
     }
 }

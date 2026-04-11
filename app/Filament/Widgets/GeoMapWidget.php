@@ -23,11 +23,11 @@ class GeoMapWidget extends MapWidget
 
     protected int $defaultZoom = 5;
 
-    protected int $mapHeight = 500;
+    protected int $mapHeight = 690;
 
     public ?string $selectedKommun = null;
 
-    protected string $view = 'filament.widgets.map-widget';
+    protected string $view = 'filament.widgets.map-widget-dashboard';
 
     #[On('show-postorter')]
     public function handleShowPostorter(string $kommun): void
@@ -133,7 +133,7 @@ class GeoMapWidget extends MapWidget
 
     public function getHeading(): ?string
     {
-        return 'Spararade Pins';
+        return 'Map Pins';
     }
 
     protected function getTotalKommuner(): int

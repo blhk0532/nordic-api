@@ -136,7 +136,7 @@ class SwedenPersonersTable
                     ->label('Personnummer')
                     ->numeric()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: false),
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('kon')
                     ->label('Kön')
                     ->sortable()
@@ -205,6 +205,7 @@ class SwedenPersonersTable
             ->filters([
                 SelectFilter::make('telefon')
                     ->label('Phone')
+                    ->default('yes')
                     ->options([
                         'yes' => 'Yes',
                         'no' => 'No',

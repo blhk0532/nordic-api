@@ -14,6 +14,7 @@ use App\Jobs\RunScriptForPostnummerJob;
 use App\Models\HittaData;
 use App\Models\MerinfoData;
 use App\Models\RatsitData;
+use App\Models\SwedenPersoner;
 use App\Models\SwedenPostnummer;
 use App\Services\GoogleSheets\PeopleSheetsSyncService;
 use App\Services\Import\PeopleImportService;
@@ -47,71 +48,100 @@ class SwedenPostnummersTable
                     ->hidden()
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('postnummers')
-                    ->label('Postnrs')
+                TextColumn::make('postnummer')
+                    ->label('Postnr')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->searchable(),
                 TextColumn::make('postort')
+                    ->label('Postort')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->searchable(),
                 TextColumn::make('kommun')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->label('Kommun')
                     ->searchable(),
                 TextColumn::make('lan')
-                    ->label('Län')
+                    ->sortable()
+                    ->label('Landskap')
+                    ->limit(12)
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
                 TextColumn::make('country')
                     ->hidden()
                     ->label('Land')
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->searchable(),
-                TextColumn::make('latitude')
-                    ->numeric()
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(),
-                TextColumn::make('longitude')
-                    ->numeric()
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(),
                 TextColumn::make('personer')
                     ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->label('Pers')
                     ->sortable(),
                 TextColumn::make('foretag')
                     ->numeric()
+                    ->hidden()
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 TextColumn::make('personer_saved')
                     ->label('Saved')
+                    ->hidden()
                     ->dateTime()
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
-                TextColumn::make('personer_ratsit_saved')
+                TextColumn::make('live_ratsit_count')
                     ->label('Ratsit')
                     ->numeric()
-                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->placeholder('-')
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
-                TextColumn::make('personer_hitta_saved')
+                TextColumn::make('live_hitta_count')
                     ->label('Hitta')
                     ->numeric()
-                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->placeholder('-')
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
-                TextColumn::make('personer_merinfo_saved')
-                    ->label('Merinfo')
+                TextColumn::make('live_merinfo_count')
+                    ->label('Mer')
+                    ->numeric()
+                    ->placeholder('-')
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->sortable(),
+                TextColumn::make('live_personer_count')
+                    ->label('DB')
+                    ->numeric()
+                    ->placeholder('-')
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
                 ToggleColumn::make('personer_merinfo_queue')
                     ->label('Queue')
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
+                TextColumn::make('latitude')
+                    ->numeric()
+                    ->hidden()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
+                TextColumn::make('longitude')
+                    ->numeric()
+                    ->hidden()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
+                    ->hidden()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
+                    ->hidden()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->defaultSort('updated_at', 'desc')
             ->paginated([10, 25, 50, 100, 200, 500])
-            ->defaultPaginationPageOption(25)
+            ->defaultPaginationPageOption(10)
             ->filters([
                 Filter::make('has_personer')
                     ->label('Has Personer')
@@ -521,5 +551,27 @@ class SwedenPostnummersTable
                     })
                     ->deselectRecordsAfterCompletion(),
             ]);
+    }
+
+    protected function getTableQuery(): Builder
+    {
+        return SwedenPostnummer::query()
+            ->addSelect('sweden_postnummer.*')
+            ->selectSub(
+                RatsitData::selectRaw('COUNT(*)')->whereColumn('postnummer', 'sweden_postnummer.postnummer'),
+                'live_ratsit_count'
+            )
+            ->selectSub(
+                HittaData::selectRaw('COUNT(*)')->whereColumn('postnummer', 'sweden_postnummer.postnummer'),
+                'live_hitta_count'
+            )
+            ->selectSub(
+                MerinfoData::selectRaw('COUNT(*)')->whereColumn('postnummer', 'sweden_postnummer.postnummer'),
+                'live_merinfo_count'
+            )
+            ->selectSub(
+                SwedenPersoner::selectRaw('COUNT(*)')->whereColumn('postnummer', 'sweden_postnummer.postnummer'),
+                'live_personer_count'
+            );
     }
 }

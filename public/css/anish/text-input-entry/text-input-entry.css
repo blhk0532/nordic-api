@@ -1,0 +1,1 @@
+.fi-text-input-entry{transition: all 0.075s ease-in-out} .fi-text-input-entry:focus{outline: none} .fi-text-input-entry-border{border-width: 1px} .fi-text-input-entry-border:focus{ring-width: 2px} input[type="text"]{min-width: 0;width: 100%;box-sizing: border-box} input[type="text"]{overflow: visible;text-overflow: clip;white-space: normal}

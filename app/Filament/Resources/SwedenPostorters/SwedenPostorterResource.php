@@ -27,12 +27,11 @@ class SwedenPostorterResource extends Resource
 
     protected static ?int $navigationSort = 2;
 
-     protected static string|UnitEnum|null $navigationGroup = 'Sweden GEO';
+    protected static string|UnitEnum|null $navigationGroup = 'Sweden GEO';
 
-     protected static bool $shouldRegisterNavigation = false;
+    protected static bool $shouldRegisterNavigation = false;
 
-
-         public static function getNavigationBadgeColor(): string|array|null
+    public static function getNavigationBadgeColor(): string|array|null
     {
         return 'success';
     }

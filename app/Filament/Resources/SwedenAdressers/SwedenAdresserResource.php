@@ -29,8 +29,7 @@ class SwedenAdresserResource extends Resource
 
     protected static ?int $navigationSort = 5;
 
-
-        public static function getNavigationBadgeColor(): string|array|null
+    public static function getNavigationBadgeColor(): string|array|null
     {
         return 'success';
     }

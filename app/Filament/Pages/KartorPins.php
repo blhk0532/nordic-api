@@ -84,7 +84,7 @@ class KartorPins extends BasePage
 
             //    \App\Filament\App\Widgets\LatestOrders::class,
             //    \App\Filament\App\Widgets\StatsOverviewWidget::class,
-         LocationMapPickerWidgetFull::class,
+            LocationMapPickerWidgetFull::class,
             GeoMapWidget::class,
             //    MultiCalendar1::class,
             //    MultiCalendar2::class,

@@ -24,6 +24,8 @@ class SwedenPostnummer extends Page
 
     protected static ?string $navigationLabel = 'Postnummer';
 
+    protected static bool $shouldRegisterNavigation = false;
+
     public static function getNavigationBadgeColor(): string|array|null
     {
         return 'success';
@@ -32,7 +34,7 @@ class SwedenPostnummer extends Page
     protected function getHeaderWidgets(): array
     {
         return [
-            MapPickerWidget::class,
+            //   MapPickerWidget::class,
         ];
     }
 

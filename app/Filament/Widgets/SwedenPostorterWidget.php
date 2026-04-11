@@ -4,26 +4,25 @@ declare(strict_types=1);
 
 namespace App\Filament\Widgets;
 
+use App\Exports\SwedenPostorterExporter;
 use App\Filament\Resources\SwedenPostorters\SwedenPostorterResource;
 use App\Models\SwedenPostorter;
+use EightyNine\ExcelImport\ExcelImportAction;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ExportAction;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\FileUpload;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
-use App\Exports\SwedenPostorterExporter;
-use EightyNine\ExcelImport\ExcelImportAction;
-use Filament\Actions\Action;
-use Filament\Forms\Components\FileUpload;
-use Filament\Notifications\Notification;
-use Filament\Tables\Columns\IconColumn;
 use Illuminate\Support\Facades\DB;
-use Filament\Actions\ExportAction;
 
 class SwedenPostorterWidget extends BaseWidget
 {
@@ -144,7 +143,7 @@ class SwedenPostorterWidget extends BaseWidget
                 static::importSqlAction(),
                 ExportAction::make()
                     ->label('CSV')
-                       ->visible(fn () => auth()->user()->role === 'super')
+                    ->visible(fn () => auth()->user()->role === 'super')
                     ->exporter(SwedenPostorterExporter::class)
                     ->icon('heroicon-o-arrow-up-tray')
                     ->color('danger'),
@@ -152,11 +151,11 @@ class SwedenPostorterWidget extends BaseWidget
             ]);
     }
 
-         private static function exportSqlAction(): Action
+    private static function exportSqlAction(): Action
     {
         return Action::make('exportSql')
             ->label('SQL')
-              ->visible(fn () => auth()->user()->role === 'super')
+            ->visible(fn () => auth()->user()->role === 'super')
             ->icon('heroicon-o-arrow-up-on-square')
             ->color('danger')
             ->action(function () {

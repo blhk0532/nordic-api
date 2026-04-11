@@ -5,6 +5,8 @@ namespace EightyNine\ExcelImport\Tables;
 use Closure;
 use EightyNine\ExcelImport\Concerns\HasExcelImportAction;
 use EightyNine\ExcelImport\DefaultRelationshipImport;
+use EightyNine\ExcelImport\Exceptions\ImportStoppedException;
+use Filament\Notifications\Notification;
 use Filament\Tables\Actions\Action;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -58,22 +60,22 @@ class ExcelImportRelationshipAction extends Action
                 }
 
                 return true;
-            } catch (\EightyNine\ExcelImport\Exceptions\ImportStoppedException $e) {
+            } catch (ImportStoppedException $e) {
                 // Handle stopped import with user message
                 $notification = match ($e->getType()) {
-                    'warning' => \Filament\Notifications\Notification::make()
+                    'warning' => Notification::make()
                         ->warning()
                         ->title(__('excel-import::excel-import.import_warning'))
                         ->body($e->getUserMessage()),
-                    'info' => \Filament\Notifications\Notification::make()
+                    'info' => Notification::make()
                         ->info()
                         ->title(__('excel-import::excel-import.import_information'))
                         ->body($e->getUserMessage()),
-                    'success' => \Filament\Notifications\Notification::make()
+                    'success' => Notification::make()
                         ->success()
                         ->title(__('excel-import::excel-import.import_success'))
                         ->body($e->getUserMessage()),
-                    default => \Filament\Notifications\Notification::make()
+                    default => Notification::make()
                         ->danger()
                         ->title(__('excel-import::excel-import.import_failed'))
                         ->body($e->getUserMessage()),

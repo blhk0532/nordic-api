@@ -6,6 +6,7 @@ namespace App\Filament\Widgets;
 
 use App\Models\RatsitKommun;
 use App\Models\RatsitPostort;
+use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
@@ -52,7 +53,7 @@ class PostorterTableWidget extends TableWidget
                 Filter::make('personer_count')
                     ->label('Min antal personer')
                     ->schema([
-                        \Filament\Forms\Components\TextInput::make('min_personer')
+                        TextInput::make('min_personer')
                             ->numeric()
                             ->label('Min personer'),
                     ])

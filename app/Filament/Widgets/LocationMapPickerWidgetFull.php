@@ -14,10 +14,9 @@ use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Support\Colors\Color;
 use Filament\Widgets\Widget;
 use Illuminate\Support\Collection;
-use Filament\Support\Colors\Color;
-use Livewire\Attributes\On;
 
 class LocationMapPickerWidgetFull extends Widget implements HasForms
 {
@@ -155,7 +154,7 @@ class LocationMapPickerWidgetFull extends Widget implements HasForms
                                     ->maxLength(255)
                                     ->columnSpan(1)
                                     ->readOnly(),
-                                                TextInput::make('zip')
+                                TextInput::make('zip')
                                     ->label(' ')
                                     ->extraAttributes(['style' => 'background-color:#232326;color:#fff;'])
                                     ->columnSpan(1)
@@ -191,7 +190,6 @@ class LocationMapPickerWidgetFull extends Widget implements HasForms
                             ->extraAttributes(['class' => 'pin-location-section absolute z-10', 'style' => 'background-color:transparent;border:none;bottom:20px;left:0px;opacity:1;'])
                             ->schema([
 
-
                                 ColorPicker::make('pin_color')
                                     ->label('Pin Color')
                                     ->placeholder('Color')
@@ -210,11 +208,11 @@ class LocationMapPickerWidgetFull extends Widget implements HasForms
                                     ->maxLength(255),
 
                             ])
-                            ->columns(2)
+                            ->columns(2),
 
                     ])
                     ->columns(5)
-                    ->columnSpanFull()
+                    ->columnSpanFull(),
             ])
             ->statePath('data');
     }

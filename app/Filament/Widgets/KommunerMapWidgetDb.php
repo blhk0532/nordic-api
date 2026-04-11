@@ -23,7 +23,7 @@ class KommunerMapWidgetDb extends MapWidget
 
     protected int $mapHeight = 655;
 
- protected string $view = 'filament.widgets.map-widget';
+    protected string $view = 'filament.widgets.map-widget';
 
     public function getHeading(): ?string
     {

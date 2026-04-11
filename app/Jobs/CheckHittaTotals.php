@@ -1,0 +1,152 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Jobs;
+
+use App\Events\PostNummerStatusUpdated;
+use App\Models\Postnummer;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Process;
+
+class CheckHittaTotals implements ShouldQueue
+{
+    use Queueable;
+
+    public int $timeout = 60000;
+
+    public int $tries = 1;
+
+    public function __construct(public string $postNummer)
+    {
+        $this->onQueue('postnummer');
+    }
+
+    public function handle(): void
+    {
+        $record = Postnummer::where('post_nummer', $this->postNummer)->first();
+        if (! $record) {
+            Log::warning("[CheckHittaTotals {$this->postNummer}] Record not found");
+
+            return;
+        }
+
+        Log::info("[CheckHittaTotals {$this->postNummer}] Starting totals check");
+
+        $scriptPath = base_path('scripts/post_ort_update.mjs');
+        if (! file_exists($scriptPath)) {
+            Log::error("[CheckHittaTotals {$this->postNummer}] Script missing at {$scriptPath}");
+
+            return;
+        }
+
+        // Build search query: "post_nummer" (e.g., "11212")
+        $searchQuery = $this->postNummer;
+        Log::info("[CheckHittaTotals {$this->postNummer}] Search query: {$searchQuery}");
+
+        $result = Process::path(base_path('scripts'))
+            ->timeout($this->timeout)
+            ->run(['APP_URL='.config('app.url'), 'API_URL='.config('app.url'), 'node', 'post_ort_update.mjs', $searchQuery, '--onlyTotals']);
+
+        if (! $result->successful()) {
+            Log::error("[CheckHittaTotals {$this->postNummer}] Script failed: {$result->errorOutput()}");
+
+            return;
+        }
+
+        $output = $result->output();
+        $lines = explode("\n", $output);
+        $total = null;
+        $noDirectResults = false;
+        foreach ($lines as $line) {
+            $line = mb_trim($line);
+            // Machine-readable flag from script for extended results (no direct match)
+            if (preg_match('/^NO_DIRECT_RESULTS=1$/', $line)) {
+                $noDirectResults = true;
+
+                break;
+            }
+            // Detect "Ingen träff på" (no results at all)
+            if (str_contains(mb_strtolower($line), 'ingen träff på')) {
+                $noDirectResults = true;
+
+                break;
+            }
+            if (preg_match('/^Total\s+results\s*:\s*(\d+)/i', $line, $m)) {
+                $total = (int) $m[1];
+
+                break;
+            }
+            if (preg_match('/^Found\s+(\d+)\s+results(?!\s+on\s+page)/i', $line, $m)) {
+                $total = (int) $m[1];
+
+                break;
+            }
+        }
+
+        // Handle the extended results case: clear status and total_count (display as — in UI)
+        if ($noDirectResults) {
+            $record->update([
+                'status' => 'empty',
+                'total_count' => 0,
+                'count' => 0,
+                'progress' => 0,
+                // Keep existing count/progress as-is; ensure flags are not active/complete
+                'is_active' => false,
+                'is_complete' => false,
+            ]);
+
+            Log::info("[CheckHittaTotals {$this->postNummer}] No direct results. Set status to empty.");
+            event(new PostNummerStatusUpdated($record->fresh()));
+
+            return;
+        }
+
+        if ($total !== null) {
+            // Reconcile totals with current progress & status
+            $done = (int) ($record->count ?? 0);
+            $updates = [
+                'total_count' => $total,
+            ];
+
+            if ($total > 0) {
+                $computed = (int) min(100, max(0, floor(($done / $total) * 100)));
+                $updates['progress'] = $computed;
+
+                // If total is not 0, set status to pending (unless already complete)
+                if ($done < $total) {
+                    $updates['status'] = 'pending';
+                    $updates['is_complete'] = false;
+                    $updates['is_active'] = false;
+                    $updates['is_pending'] = true;
+                }
+            }
+
+            // If previously marked complete but counts disagree, revert to pending
+            if ($record->status === 'complete' && $total > 0 && $done < $total) {
+                $updates['status'] = 'pending';
+                $updates['is_complete'] = false;
+                $updates['is_active'] = false;
+                $updates['is_pending'] = true;
+            }
+
+            // If counts show completion, ensure status is complete
+            if ($total > 0 && $done >= $total) {
+                $updates['status'] = 'complete';
+                $updates['is_complete'] = true;
+                $updates['is_active'] = false;
+                $updates['is_pending'] = false;
+                $updates['progress'] = 100;
+            }
+
+            $record->update($updates);
+
+            Log::info("[CheckHittaTotals {$this->postNummer}] Reconciled totals: total={$total}, count={$done}, updates=".json_encode(array_keys($updates)));
+            event(new PostNummerStatusUpdated($record->fresh()));
+        } else {
+            Log::warning("[CheckHittaTotals {$this->postNummer}] No total results found in output");
+        }
+    }
+}

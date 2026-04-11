@@ -119,5 +119,4 @@ class KommunerMapWidget2 extends MapWidget
 
         return Color::Gray;
     }
-
 }

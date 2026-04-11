@@ -42,7 +42,7 @@ class LocationMapPickerWidget extends Widget implements HasForms
     public function form(Schema $schema): Schema
     {
         return $schema
-        ->extraAttributes(['class' => 'pb-0 mb-0'])
+            ->extraAttributes(['class' => 'pb-0 mb-0'])
             ->schema([
                 Grid::make()
 
@@ -66,9 +66,9 @@ class LocationMapPickerWidget extends Widget implements HasForms
                                 'city' => '%L',
                                 'state' => '%A1',
                                 'zip' => '%z',
-                                 'country' => '%c',
-                            //    'latitude' => 'latitude',
-                            //    'longitude' => 'longitude',
+                                'country' => '%c',
+                                //    'latitude' => 'latitude',
+                                //    'longitude' => 'longitude',
                             ])
                             ->debug(true)
                             ->defaultLocation([60.1282, 18.6435])
@@ -100,16 +100,16 @@ class LocationMapPickerWidget extends Widget implements HasForms
                             ->maxLength(255)
                             ->columnSpan(1)
                             ->readOnly(),
-                    //    TextInput::make('latitude')
-                    //        ->label('...')
-                    //        ->maxLength(255)
-                    //        ->columnSpan(1)
-                    //        ->readOnly(),
-                    //    TextInput::make('longitude')
-                    //        ->label('...')
-                    //        ->maxLength(255)
-                    //        ->columnSpan(1)
-                    //        ->readOnly(),
+                        //    TextInput::make('latitude')
+                        //        ->label('...')
+                        //        ->maxLength(255)
+                        //        ->columnSpan(1)
+                        //        ->readOnly(),
+                        //    TextInput::make('longitude')
+                        //        ->label('...')
+                        //        ->maxLength(255)
+                        //        ->columnSpan(1)
+                        //        ->readOnly(),
                         TextInput::make('country')
                             ->label('...')
                             ->maxLength(255)

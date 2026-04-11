@@ -33,6 +33,8 @@ class Dashboard extends BaseDashboard
 
     protected static string|BackedEnum|null $activeNavigationIcon = 'heroicon-s-user-circle';
 
+    protected static bool $shouldRegisterNavigation = false;
+
     // protected static UnitEnum|string|null $navigationGroup = 'Dashboard';
 
     //   protected static UnitEnum|string|null $navigationGroup = 'Sverige MAP';
@@ -45,7 +47,7 @@ class Dashboard extends BaseDashboard
 
     public static function getNavigationLabel(): string
     {
-        return 'Dashboard';
+        return 'DASHBOARD';
     }
 
     public static function getNavigationBadgeColor(): string|array|null
@@ -97,7 +99,7 @@ class Dashboard extends BaseDashboard
     public function getWidgets(): array
     {
         return [
-          //  DatabaseBackupWidget::class,
+            //  DatabaseBackupWidget::class,
             //    LocationMapPickerWidgetFull::class,
             GeoMapWidget::class,
         ];

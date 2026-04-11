@@ -6,18 +6,7 @@ namespace App\Filament\Resources\HittaDatas\Pages;
 
 use App\Filament\Resources\HittaDatas\HittaDataResource;
 use App\Filament\Widgets\HittaDataStatsWidget;
-use App\Jobs\BackupHittaData;
-use App\Jobs\ImportHittaData;
-use App\Models\User;
-use Exception;
-use Filament\Actions\Action;
-use Filament\Actions\CreateAction;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Select;
-use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
-use Filament\Schemas\Components\Utilities\Get;
-use Filament\Schemas\Components\Utilities\Set;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ListHittaDatas extends ListRecords
@@ -38,14 +27,15 @@ class ListHittaDatas extends ListRecords
         ];
     }
 
- public function getBreadcrumbs(): array
- {
-    return [
+    public function getBreadcrumbs(): array
+    {
+        return [
 
         ];
- }
- public function getHeading(): string|Htmlable|null
- {
-    return null;
- }
+    }
+
+    public function getHeading(): string|Htmlable|null
+    {
+        return null;
+    }
 }

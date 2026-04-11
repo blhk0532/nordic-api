@@ -124,9 +124,7 @@ class KommunViewMapWidget extends MapWidget
                     foreach ($searchTerms as $term) {
                         $like = '%'.$term.'%';
 
-                        $query->orWhereRaw('LOWER(kommun) LIKE ?', [$like])
-                            ->orWhereRaw('LOWER(personer_kommun) LIKE ?', [$like])
-                            ->orWhereRaw('LOWER(foretag_kommun) LIKE ?', [$like]);
+                        $query->orWhereRaw('LOWER(kommun) LIKE ?', [$like]);
                     }
                 });
             });

@@ -1,11 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources\Users\Tables;
 
+use App\Enums\AuthRole;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\CreateAction;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Facades\Filament;
+use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -16,13 +23,57 @@ class UsersTable
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->searchable(),
+                    ->label('User')
+                    ->formatStateUsing(function ($state, $record) {
+                        $avatarUrl = $record->email ? 'https://www.gravatar.com/avatar/'.md5(strtolower(trim($record->email))).'?d=mp&s=64' : null;
+                        $name = $record->name ?? '';
+                        $email = $record->email ?? '';
+
+                        return view('filament.columns.user-avatar', [
+                            'avatarUrl' => $avatarUrl,
+                            'name' => $name,
+                            'email' => $email,
+                        ])->render();
+                    })
+                    ->html(),
+                SelectColumn::make('role')
+                    ->options(collect(AuthRole::cases())->mapWithKeys(fn ($case) => [$case->value => $case->label()])->toArray())
+                    ->disabled(fn ($record) => $record->role === 'super'),
+                // IconColumn::make('status')
+                //     ->boolean()
+                //     ->trueIcon('heroicon-o-check-badge')
+                //     ->falseIcon('heroicon-o-x-circle')
+                //     ->sortable(),
+                // BadgeableColumn::make('name')
+                //     ->hidden()
+                //     ->separator(':'),
                 TextColumn::make('email')
-                    ->label('Email address')
-                    ->searchable(),
-                TextColumn::make('email_verified_at')
-                    ->dateTime()
-                    ->sortable(),
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+                TextColumn::make('phone')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+                TextColumn::make('company.name')
+                    ->label('Company')
+                    ->badge()
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+                TextColumn::make('currentTeam.name')
+                    ->label('Current Team')
+                    ->badge()
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+                TextColumn::make('teams.name')
+                    ->hidden()
+                    ->label('Team Name')
+                    ->badge()
+                    ->searchable()
+                    ->toggleable(),
+                //       RatingColumn::make('rating'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -31,23 +82,26 @@ class UsersTable
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('two_factor_confirmed_at')
-                    ->dateTime()
-                    ->sortable(),
-                TextColumn::make('currentTeam.name')
-                    ->searchable(),
             ])
             ->filters([
                 //
-            ])
-            ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
+                CreateAction::make(),
+            ])
+            ->recordActions([
+                ViewAction::make(),
+                EditAction::make()
+                    ->visible(fn ($record) => Filament::auth()->user()->role === 'super' || $record->role !== 'super'),
+                // Impersonate::make()
+                //     ->color('success')
+                //     ->label('Login')
+                //     ->visible(fn () => auth()->user()->role === 'super'),
+                DeleteAction::make()
+                    ->visible(fn () => Filament::auth()->user()->role === 'super'),
             ]);
     }
 }

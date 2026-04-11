@@ -8,14 +8,11 @@
 <x-filament-widgets::widget>
 
 
-          <x-filament::section class="filament-google-maps-widget-table mb-4">
-        {{ $this->table }}
-    </x-filament::section>
 
     <x-filament::section
-            class="filament-google-maps-widget"
+            class="filament-google-maps-widget mb-4"
             :icon="$icon"
-            :collapsible="$collapsible"
+            :collapsible="true"
     >
         <x-slot name="heading">
             {{ $heading }}
@@ -43,7 +40,7 @@
         @endif
 
 
-  
+
 
 
         <div>
@@ -80,6 +77,12 @@
                 ></div>
             </div>
         </div>
+    </x-filament::section>
+
+              <x-filament::section
+              style="padding: 0 !important;margin-top: 2rem;"
+              class="filament-google-maps-widget-table mt-4 no-margin-padding">
+        {{ $this->table }}
     </x-filament::section>
 
 

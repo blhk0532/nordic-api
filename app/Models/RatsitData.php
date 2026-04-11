@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Casts\SwedishDateCast;
+use Carbon\Carbon;
+use Carbon\CarbonImmutable;
+use Database\Factories\RatsitDataFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -20,7 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $adressandring
  * @property array $telfonnummer
  * @property string|null $stjarntacken
- * @property \Carbon\Carbon|null $fodelsedag
+ * @property Carbon|null $fodelsedag
  * @property string|null $personnummer
  * @property string|null $alder
  * @property string|null $kon
@@ -49,8 +52,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool $is_active
  * @property bool $is_hus
  * @property bool $is_telefon
- * @property \Carbon\CarbonImmutable $created_at
- * @property \Carbon\CarbonImmutable $updated_at
+ * @property CarbonImmutable $created_at
+ * @property CarbonImmutable $updated_at
  * @property string|null $kommun_ratsit
  * @property bool $is_queued
  *
@@ -106,7 +109,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class RatsitData extends Model
 {
-    /** @use HasFactory<\Database\Factories\RatsitDataFactory> */
+    /** @use HasFactory<RatsitDataFactory> */
     use HasFactory;
 
     protected $table = 'ratsit_data';

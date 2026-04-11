@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources\Users\Pages;
 
 use App\Filament\Resources\Users\UserResource;
-use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Contracts\Support\Htmlable;
 
 class ListUsers extends ListRecords
 {
@@ -13,7 +15,19 @@ class ListUsers extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+
         ];
+    }
+
+    public function getBreadcrumbs(): array
+    {
+        return [
+
+        ];
+    }
+
+    public function getHeading(): string|Htmlable|null
+    {
+        return null;
     }
 }

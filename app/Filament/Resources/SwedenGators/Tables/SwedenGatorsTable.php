@@ -98,7 +98,7 @@ class SwedenGatorsTable
                 static::importSqlAction(),
                 ExportAction::make()
                     ->label('CSV')
-                       ->visible(fn () => auth()->user()->role === 'super')
+                    ->visible(fn () => auth()->user()->role === 'super')
                     ->exporter(SwedenGatorExporter::class)
                     ->icon('heroicon-o-arrow-up-tray')
                     ->color('danger'),
@@ -113,7 +113,7 @@ class SwedenGatorsTable
     {
         return Action::make('exportSql')
             ->label('SQL')
-              ->visible(fn () => auth()->user()->role === 'super')
+            ->visible(fn () => auth()->user()->role === 'super')
             ->icon('heroicon-o-arrow-up-on-square')
             ->color('danger')
             ->action(function () {

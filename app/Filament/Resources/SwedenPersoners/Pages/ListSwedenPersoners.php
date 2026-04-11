@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Filament\Resources\SwedenPersoners\Pages;
 
 use App\Filament\Resources\SwedenPersoners\SwedenPersonerResource;
-use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Contracts\Support\Htmlable;
 
@@ -19,6 +18,7 @@ class ListSwedenPersoners extends ListRecords
 
         ];
     }
+
     public function getHeading(): string|Htmlable|null
     {
         return null;
@@ -26,6 +26,6 @@ class ListSwedenPersoners extends ListRecords
 
     public function getBreadcrumbs(): array
     {
-        return  [];
+        return [];
     }
 }

@@ -58,7 +58,7 @@ class SwedenKommunerInfolist
                                     ->placeholder('-'),
                                 TextEntry::make('deleted_at')
                                     ->dateTime()
-                                    ->visible(fn(SwedenKommuner $record): bool => $record->trashed()),
+                                    ->visible(fn (SwedenKommuner $record): bool => $record->trashed()),
                             ])
                             ->columnSpan('full')
                             ->columns(6),

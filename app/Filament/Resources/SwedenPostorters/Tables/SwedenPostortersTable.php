@@ -11,11 +11,10 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ExportAction;
 use Filament\Actions\ViewAction;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
 use Filament\Forms\Components\FileUpload;
 use Filament\Notifications\Notification;
-use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 use Illuminate\Support\Facades\DB;
 
 class SwedenPostortersTable
@@ -124,7 +123,7 @@ class SwedenPostortersTable
                 static::importSqlAction(),
                 ExportAction::make()
                     ->label('CSV')
-                       ->visible(fn () => auth()->user()->role === 'super')
+                    ->visible(fn () => auth()->user()->role === 'super')
                     ->exporter(SwedenPostorterExporter::class)
                     ->icon('heroicon-o-arrow-up-tray')
                     ->color('danger'),
@@ -135,11 +134,11 @@ class SwedenPostortersTable
             ->defaultPaginationPageOption(25);
     }
 
-       private static function exportSqlAction(): Action
+    private static function exportSqlAction(): Action
     {
         return Action::make('exportSql')
             ->label('SQL')
-              ->visible(fn () => auth()->user()->role === 'super')
+            ->visible(fn () => auth()->user()->role === 'super')
             ->icon('heroicon-o-arrow-up-on-square')
             ->color('danger')
             ->action(function () {

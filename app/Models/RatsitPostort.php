@@ -10,18 +10,19 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $id
- * @property string $post_ort
- * @property string $post_nummer
- * @property int $personer_count
- * @property int $foretag_count
- * @property string|null $personer_link
- * @property int $personer_link_status
- * @property string|null $foretag_link
- * @property string|null $personer_kommun
- * @property string|null $foretag_kommun
+ * @property string $postort
+ * @property string $postnummer
+ * @property int $personer
+ * @property int $foretag
+ * @property string|null $ratsit_link
+ * @property string|null $kommun
+ * @property string|null $lan
  * @property float|null $latitude
  * @property float|null $longitude
- * @property int $foretag_link_status
+ * @property int $team_id
+ * @property bool $is_active
+ * @property bool $is_queue
+ * @property bool $is_done
  * @property CarbonImmutable|null $created_at
  * @property CarbonImmutable|null $updated_at
  *
@@ -29,19 +30,13 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RatsitPostort newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RatsitPostort query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RatsitPostort whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RatsitPostort whereForetagCount($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RatsitPostort whereForetagKommun($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RatsitPostort whereForetagLink($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RatsitPostort whereForetagLinkStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RatsitPostort whereForetag($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RatsitPostort whereKommun($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RatsitPostort whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RatsitPostort wherePersonerCount($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RatsitPostort wherePersonerKommun($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RatsitPostort wherePersonerLink($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RatsitPostort wherePersonerLinkStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RatsitPostort whereLat($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RatsitPostort whereLng($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RatsitPostort wherePostNummer($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RatsitPostort wherePostOrt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RatsitPostort wherePersoner($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RatsitPostort whereRatsitLink($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RatsitPostort wherePostnummer($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RatsitPostort wherePostort($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RatsitPostort whereUpdatedAt($value)
  *
  * @mixin \Eloquent

@@ -35,8 +35,7 @@ class SwedenPersonerResource extends Resource
 
     protected static bool $isScopedToTenant = false;
 
-
-        public static function getNavigationBadgeColor(): string|array|null
+    public static function getNavigationBadgeColor(): string|array|null
     {
         return 'success';
     }

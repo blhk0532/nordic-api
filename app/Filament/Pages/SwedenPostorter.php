@@ -5,7 +5,6 @@ namespace App\Filament\Pages;
 use App\Filament\Resources\SwedenPostorters\SwedenPostorterResource;
 use App\Filament\Widgets\KommunerMapWidget2;
 use App\Filament\Widgets\KommunerMapWidget2Db;
-use App\Filament\Widgets\LocationMapPickerWidget;
 use App\Filament\Widgets\SwedenPostorterWidget;
 use BackedEnum;
 use Filament\Pages\Page;
@@ -21,10 +20,9 @@ class SwedenPostorter extends Page
 
     protected static ?int $navigationSort = 2;
 
-     protected static string|UnitEnum|null $navigationGroup = 'Sweden GEO';
+    protected static string|UnitEnum|null $navigationGroup = 'Sweden GEO';
 
     protected static ?string $navigationLabel = 'Postorter';
-
 
     public static function getNavigationBadgeColor(): string|array|null
     {
@@ -55,11 +53,7 @@ class SwedenPostorter extends Page
     {
         return [
 
-
-
-
             SwedenPostorterWidget::class,
-
 
         ];
     }
@@ -69,7 +63,7 @@ class SwedenPostorter extends Page
         return 1;
     }
 
-        public function getHeaderWidgetsColumns(): int|array
+    public function getHeaderWidgetsColumns(): int|array
     {
         return 2;
     }

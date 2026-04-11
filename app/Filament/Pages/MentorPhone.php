@@ -1,0 +1,57 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Filament\Pages;
+
+use BackedEnum;
+use Filament\Pages\Page;
+use Filament\Support\Enums\Width;
+use Illuminate\Support\Facades\Auth;
+use UnitEnum;
+
+class MentorPhone extends Page
+{
+    protected string $view = 'filament.app.pages.mentor-phone';
+
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-phone';
+
+    protected static ?string $navigationLabel = 'Mentor Phone';
+
+    protected static ?string $title = '';
+
+    protected static ?int $navigationSort = 5;
+
+    protected static UnitEnum|string|null $navigationGroup = 'Dialers TELE';
+
+    protected static ?string $slug = 'mentor-phone';
+
+    // protected static string|UnitEnum|null $navigationGroup = '';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) 'Idle';
+    }
+
+    public static function getNavigationBadgeColor(): string|array|null
+    {
+        return 'gray';
+    }
+
+    public function getMaxContentWidth(): Width
+    {
+        return Width::Full;
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        // if (filament()->getTenant()->getAttribute('is_admin') !== true) {
+        //     return false;
+        // }
+        if (Auth::user()->role === 'admin' || Auth::user()->role === 'super' || Auth::user()->role === 'manager') {
+            return true;
+        }
+
+        return true;
+    }
+}

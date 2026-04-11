@@ -3,6 +3,8 @@
 @source '../../../../app/Filament/**/*';
 @source '../../../../resources/views/filament/**/*';
 
+@source '../../../../vendor/harvirsidhu/filament-cards/resources/views';
+
 footer{
     background:#18181b;
 }
@@ -22,9 +24,7 @@ html{
 }
 
 .fi-main-ctn{
-    overflow-y:scroll;
     max-height: 94vh!important;
-    scrollbar-width: thin;
 }
 
 aside.fi-sidebar.fi-main-sidebar.fi-sidebar-opened{
@@ -34,3 +34,19 @@ aside.fi-sidebar.fi-main-sidebar.fi-sidebar-opened{
 .fi-sidebar{
     background: #18181b!important;
 }
+
+.fi-main.fi-width-full{
+      scrollbar-width: thin;
+    scroll-behavior: smooth;
+    scrollbar-gutter: stable;
+    max-height: 96vh;
+    overflow-y: auto;
+}
+
+.fi-user-menu .fi-dropdown-trigger{
+     width: 32px!important;
+}
+
+.no-margin-padding .fi-section-content{
+    padding: 0!important;
+    }

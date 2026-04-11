@@ -33,8 +33,7 @@ class SwedenKommunerResource extends Resource
 
     protected static bool $shouldRegisterNavigation = false;
 
-
-        public static function getNavigationBadgeColor(): string|array|null
+    public static function getNavigationBadgeColor(): string|array|null
     {
         return 'success';
     }
@@ -82,6 +81,11 @@ class SwedenKommunerResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery();
     }
 
     public static function getNavigationBadge(): ?string

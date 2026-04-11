@@ -62,6 +62,19 @@ class Team extends Model
     }
 
     /**
+     * Alias for members() relationship for compatibility with Filament relation managers.
+     *
+     * @return BelongsToMany<User, $this>
+     */
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'team_members', 'team_id', 'user_id')
+            ->using(Membership::class)
+            ->withPivot(['role'])
+            ->withTimestamps();
+    }
+
+    /**
      * Get all memberships for this team.
      *
      * @return HasMany<Membership, $this>

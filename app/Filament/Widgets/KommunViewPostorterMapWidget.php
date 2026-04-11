@@ -170,16 +170,12 @@ class KommunViewPostorterMapWidget extends MapWidget
                         $like = '%'.$term.'%';
 
                         if ($index === 0) {
-                            $query->whereRaw('LOWER(kommun) LIKE ?', [$like])
-                                ->orWhereRaw('LOWER(personer_kommun) LIKE ?', [$like])
-                                ->orWhereRaw('LOWER(foretag_kommun) LIKE ?', [$like]);
+                            $query->whereRaw('LOWER(kommun) LIKE ?', [$like]);
 
                             continue;
                         }
 
-                        $query->orWhereRaw('LOWER(kommun) LIKE ?', [$like])
-                            ->orWhereRaw('LOWER(personer_kommun) LIKE ?', [$like])
-                            ->orWhereRaw('LOWER(foretag_kommun) LIKE ?', [$like]);
+                        $query->orWhereRaw('LOWER(kommun) LIKE ?', [$like]);
                     }
                 });
             });

@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -13,9 +15,20 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (DB::getDriverName() !== 'pgsql') {
+            Schema::table('ratsit_data', function (Blueprint $table) {
+                $table->index('postnummer', 'ratsit_data_postnummer_idx')->ifNotExists();
+                $table->index('postort', 'ratsit_data_postort_idx')->ifNotExists();
+                $table->index('kommun', 'ratsit_data_kommun_idx')->ifNotExists();
+                $table->index('lan', 'ratsit_data_lan_idx')->ifNotExists();
+            });
+
+            return;
+        }
+
         // Check if indexes exist before creating
         $indexes = DB::select("
-            SELECT indexname FROM pg_indexes 
+            SELECT indexname FROM pg_indexes
             WHERE tablename = 'ratsit_data' AND indexname IN (
                 'ratsit_data_postnummer_idx',
                 'ratsit_data_postort_idx',
@@ -50,9 +63,20 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (DB::getDriverName() !== 'pgsql') {
+            Schema::table('ratsit_data', function (Blueprint $table) {
+                $table->dropIndex('ratsit_data_postnummer_idx');
+                $table->dropIndex('ratsit_data_postort_idx');
+                $table->dropIndex('ratsit_data_kommun_idx');
+                $table->dropIndex('ratsit_data_lan_idx');
+            });
+
+            return;
+        }
+
         // Drop indexes if they exist
         $indexes = DB::select("
-            SELECT indexname FROM pg_indexes 
+            SELECT indexname FROM pg_indexes
             WHERE tablename = 'ratsit_data' AND indexname IN (
                 'ratsit_data_postnummer_idx',
                 'ratsit_data_postort_idx',

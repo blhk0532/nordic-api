@@ -1,40 +1,41 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources\Users\Schemas;
 
+use Anish\TextInputEntry\Infolists\Components\TextInputEntry;
+use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Auth;
 
 class UserInfolist
 {
     public static function configure(Schema $schema): Schema
     {
         return $schema
+            ->columns(1)
             ->components([
-                TextEntry::make('name'),
-                TextEntry::make('email')
-                    ->label('Email address'),
-                TextEntry::make('email_verified_at')
-                    ->dateTime()
-                    ->placeholder('-'),
-                TextEntry::make('created_at')
-                    ->dateTime()
-                    ->placeholder('-'),
-                TextEntry::make('updated_at')
-                    ->dateTime()
-                    ->placeholder('-'),
-                TextEntry::make('two_factor_secret')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('two_factor_recovery_codes')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('two_factor_confirmed_at')
-                    ->dateTime()
-                    ->placeholder('-'),
-                TextEntry::make('currentTeam.name')
-                    ->label('Current team')
-                    ->placeholder('-'),
+                Section::make()
+                    ->columns()
+                    ->schema([
+                        TextEntry::make('id'),
+                        IconEntry::make('status')
+                            ->boolean(),
+                        TextInputEntry::make('name')
+                            ->editable(true)
+
+                            ->rules(['required', 'string', 'max:255'])
+                            ->border(false),
+
+                        TextInputEntry::make('email')
+                            ->editable(Auth::user()->can('update email'))
+                            ->label('Email address')
+                            ->rules(['required', 'email'])
+                            ->border(false),
+                    ]),
             ]);
     }
 }
