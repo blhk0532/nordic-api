@@ -1,4 +1,0 @@
-SET
-SET
-psql:database/imports/batches/sweden_personer_batch_10.sql:49549: ERROR:  duplicate key value violates unique constraint "sweden_personer_pkey"
-DETAIL:  Key (id)=(675477) already exists.
