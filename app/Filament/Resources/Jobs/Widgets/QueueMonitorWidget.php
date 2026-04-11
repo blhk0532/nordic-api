@@ -21,7 +21,7 @@ class QueueMonitorWidget extends StatsOverviewWidget
         $pendingJobs = Job::count();
         $failedJobs = DB::table('failed_jobs')->count();
         $completedToday = DB::table('jobs')
-            ->whereRaw('DATE(FROM_UNIXTIME(created_at)) = CURDATE()')
+            ->whereDate('created_at', now()->today())
             ->count();
 
         // Check if queue worker is running
