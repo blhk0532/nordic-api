@@ -52,13 +52,13 @@ class UserForm
                             ->required(fn (string $context): bool => $context === 'create')
                             ->searchable()
                             ->columnSpan(1),
-                        Select::make('company_id')
-                            ->label('Company')
-                            ->relationship('company', 'name')
-                            ->searchable()
-                            ->preload()
-                            ->nullable()
-                            ->columnSpan(1),
+                        // Select::make('company_id')
+                        //     ->label('Company')
+                        //     ->relationship('company', 'name')
+                        //     ->searchable()
+                        //     ->preload()
+                        //     ->nullable()
+                        //     ->columnSpan(1),
                         // TextInput::make('role')
                         //     ->label('Behörighet')
                         //     ->hidden()

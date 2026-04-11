@@ -10,11 +10,19 @@ use App\Filament\Resources\SwedenKommuners\SwedenKommunerResource;
 use App\Filament\Resources\SwedenPersoners\SwedenPersonerResource;
 use App\Filament\Resources\SwedenPostnummers\SwedenPostnummerResource;
 use App\Filament\Resources\SwedenPostorters\SwedenPostorterResource;
+use App\Filament\Resources\Merinfos\MerinfoResource;
+use App\Filament\Resources\People\PersonResource;
 use BackedEnum;
 use Harvirsidhu\FilamentCards\CardGroup;
 use Harvirsidhu\FilamentCards\CardItem;
 use Harvirsidhu\FilamentCards\Filament\Pages\CardsPage;
 use Illuminate\Support\Facades\Auth;
+use UnitEnum;
+use App\Filament\Widgets\SEBackupWidget;
+use App\Filament\Widgets\GeoMapWidget;
+use App\Filament\Widgets\LocationMapPickerWidgetFull;
+use App\Filament\Widgets\MapPinsTableWidget;
+use Awcodes\Overlook\Widgets\OverlookWidget;
 
 class ControlPanel extends CardsPage
 {
@@ -24,11 +32,13 @@ class ControlPanel extends CardsPage
 
     protected static string|BackedEnum|null $activeNavigationIcon = 'heroicon-s-squares-2x2';
 
+    //   protected static string|UnitEnum|null $navigationGroup = 'Dashboards';
+
     protected static ?string $title = '';
 
     protected static ?string $slug = 'dashboard';
 
-    protected static ?string $navigationLabel = 'DASHBOARD';
+    protected static ?string $navigationLabel = 'Dashboards';
 
     protected static ?int $navigationSort = -1;
 
@@ -45,78 +55,105 @@ class ControlPanel extends CardsPage
     protected static function getCards(): array
     {
         return [
-            CardGroup::make('Sweden GEO')
+            CardGroup::make()
                 ->icon('heroicon-o-map-pin')
                 ->collapsible()
                 ->schema([
                     CardItem::make(SwedenKommunerResource::class)
-                        ->description('Sweden Kommuner Database')
+                        ->description('Sverige Kommuner DB')
                         ->icon('heroicon-o-map')
-                        ->label('Sverige Kommuner')
+                        ->label('Kommuner')
                         ->color('primary')
-                        ->badge(fn () => (string) SwedenKommunerResource::getModel()::count())
+                        ->badge(fn() => (string) SwedenKommunerResource::getModel()::count())
                         ->extraAttributes([
                             'style' => 'background:#18181b;padding-top:2rem;padding-bottom:2rem;',
                         ])
                         ->badgeColor('success')
                         ->columnSpan('1/3'),
                     CardItem::make(SwedenPostorterResource::class)
-                        ->description('Sweden Postorter Database')
+                        ->description('Sverige Postorter DB')
                         ->icon('heroicon-o-envelope')
-                        ->label('Sverige Postorter')
+                        ->label('Postorter')
                         ->color('primary')
-                        ->badge(fn () => (string) SwedenPostorterResource::getModel()::count())
+                        ->badge(fn() => (string) SwedenPostorterResource::getModel()::count())
                         ->extraAttributes([
                             'style' => 'background:#18181b;padding-top:2rem;padding-bottom:2rem;',
                         ])
                         ->badgeColor('success')
                         ->columnSpan('1/3'),
                     CardItem::make(SwedenPostnummerResource::class)
-                        ->description('Sweden Postnummer Database')
+                        ->description('Sverige Postnummer DB')
                         ->icon('heroicon-o-map-pin')
-                        ->label('Sverige Postnummer')
+                        ->label('Postnummer')
                         ->color('primary')
-                        ->badge(fn () => (string) SwedenPostnummerResource::getModel()::count())
+                        ->badge(fn() => (string) SwedenPostnummerResource::getModel()::count())
                         ->extraAttributes([
                             'style' => 'background:#18181b;padding-top:2rem;padding-bottom:2rem;',
                         ])
                         ->badgeColor('success')
                         ->columnSpan('1/3'),
                     CardItem::make(SwedenGatorResource::class)
-                        ->description('Sweden Gator Database')
+                        ->description('Sverige Gator DB')
                         ->icon('heroicon-o-home-modern')
-                        ->label('Sverige Gator')
+                        ->label('Gator')
                         ->color('primary')
-                        ->badge(fn () => (string) SwedenGatorResource::getModel()::count())
+                        ->badge(fn() => (string) SwedenGatorResource::getModel()::count())
                         ->extraAttributes([
                             'style' => 'background:#18181b;padding-top:2rem;padding-bottom:2rem;',
                         ])
                         ->badgeColor('success')
                         ->columnSpan('1/3'),
                     CardItem::make(SwedenAdresserResource::class)
-                        ->description('Sweden Adresser Database')
+                        ->description('Sverige Adresser DB')
                         ->icon('heroicon-o-home')
-                        ->label('Sverige Adresser')
+                        ->label('Adresser')
                         ->color('primary')
-                        ->badge(fn () => (string) SwedenAdresserResource::getModel()::count())
+                        ->badge(fn() => (string) SwedenAdresserResource::getModel()::count())
                         ->extraAttributes([
                             'style' => 'background:#18181b;padding-top:2rem;padding-bottom:2rem;',
                         ])
                         ->badgeColor('success')
                         ->columnSpan('1/3'),
                     CardItem::make(SwedenPersonerResource::class)
-                        ->description('Sweden Personer Database')
+                        ->description('Sverige Personer DB')
                         ->icon('heroicon-o-users')
-                        ->label('Sverige Personer')
+                        ->label('Personer')
                         ->color('primary')
-                        ->badge(fn () => (string) SwedenPersonerResource::getModel()::count())
+                        ->badge(fn() => (string) SwedenPersonerResource::getModel()::count())
                         ->extraAttributes([
                             'style' => 'background:#18181b;padding-top:2rem;padding-bottom:2rem;',
                         ])
                         ->badgeColor('success')
                         ->columnSpan('1/3'),
                 ]),
-
+            CardGroup::make()
+                ->icon('heroicon-o-map-pin')
+                ->collapsible()
+                ->schema([
+                    CardItem::make(MerinfoResource::class)
+                        ->description('Sverige Merinfo DB')
+                        ->icon('heroicon-o-users')
+                        ->label('Merinfo')
+                        ->color('success')
+                        ->badge(fn() => (string) MerinfoResource::getModel()::count())
+                        ->extraAttributes([
+                            'style' => 'background:#18181b;padding-top:2rem;padding-bottom:2rem;',
+                        ])
+                        ->badgeColor('primary')
+                        ->columnSpan('1/2'),
+                    CardItem::make(PersonResource::class)
+                        ->description('Sverige Personer DB')
+                        ->icon('heroicon-o-users')
+                        ->label('Personer')
+                        ->color('success')
+                        ->badge(fn() => (string) PersonResource::getModel()::count())
+                        ->extraAttributes([
+                            'style' => 'background:#18181b;padding-top:2rem;padding-bottom:2rem;',
+                        ])
+                        ->badgeColor('primary')
+                        ->columnSpan('1/2'),
+                ])
+                ->columns(2),
         ];
     }
 
@@ -128,7 +165,19 @@ class ControlPanel extends CardsPage
     protected function getFooterWidgets(): array
     {
         return [
-
+            OverlookWidget::class,
         ];
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            GeoMapWidget::class,
+        ];
+    }
+
+    public function getHeaderWidgetsColumns(): int|array
+    {
+        return 1;
     }
 }

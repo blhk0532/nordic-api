@@ -74,4 +74,14 @@ class SwedenPostnummerResource extends Resource
     {
         return (string) self::getModel()::count();
     }
+
+                    public static function getModelLabel(): string
+    {
+        return __('DB Postnummer');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('DB Postnummer');
+    }
 }

@@ -8,6 +8,7 @@ use App\Filament\Widgets\DatabaseBackupWidget;
 use App\Filament\Widgets\GeoMapWidget;
 use App\Filament\Widgets\LocationMapPickerWidgetFull;
 use App\Filament\Widgets\MapPinsTableWidget;
+use Awcodes\Overlook\Widgets\OverlookWidget;
 use BackedEnum;
 use Filament\Pages\Dashboard as BaseDashboard;
 use Filament\Support\Enums\Width;
@@ -42,12 +43,13 @@ class Dashboard extends BaseDashboard
     //   protected static string|BackedEnum|null $navigationIcon = Remix::RiCalendarScheduleLine;
     //   protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiCalendarScheduleFill;
 
-    //  protected static string|UnitEnum|null $navigationGroup = ' ';
+    protected static string|UnitEnum|null $navigationGroup = 'Dashboards';
+
     protected static ?int $navigationSort = -20;
 
     public static function getNavigationLabel(): string
     {
-        return 'DASHBOARD';
+        return __('Dashboards');
     }
 
     public static function getNavigationBadgeColor(): string|array|null
@@ -109,6 +111,7 @@ class Dashboard extends BaseDashboard
     {
         return [
             //    MapPinsTableWidget::class,
+            OverlookWidget::class,
         ];
     }
 

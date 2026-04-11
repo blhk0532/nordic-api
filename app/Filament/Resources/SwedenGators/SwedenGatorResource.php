@@ -29,6 +29,16 @@ class SwedenGatorResource extends Resource
 
     protected static ?int $navigationSort = 4;
 
+                    public static function getModelLabel(): string
+    {
+        return __('DB Gator');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('DB Gator');
+    }
+
     public static function getNavigationBadgeColor(): string|array|null
     {
         return 'success';

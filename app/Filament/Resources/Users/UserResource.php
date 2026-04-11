@@ -31,7 +31,7 @@ class UserResource extends Resource
 
     protected static bool $isGloballySearchable = true;
 
-    protected static ?string $navigationLabel = 'Användare';
+    protected static ?string $navigationLabel = 'Users TEAM';
 
     protected static ?int $navigationSort = 1;
 
@@ -51,7 +51,7 @@ class UserResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return __('User');
+        return __('Users');
     }
 
     public static function getPluralModelLabel(): string
@@ -66,7 +66,7 @@ class UserResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return __('Användare');
+        return __('Users TEAM');
     }
 
     public static function getNavigationBadge(): ?string
@@ -110,5 +110,10 @@ class UserResource extends Resource
     public static function shouldRegisterNavigation(): bool
     {
         return true;
+    }
+
+    public static function getOverlookWidgetTitle(): string
+    {
+        return 'Pending Users';
     }
 }

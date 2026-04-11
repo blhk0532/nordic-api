@@ -10,9 +10,13 @@
     "license": "MIT",
     "require": {
         "php": "^8.4",
+        "achyutn/filament-log-viewer": "@dev",
         "anish/text-input-entry": "*",
+        "asmit/resized-column": "^3.0",
         "awcodes/overlook": "^4.0",
-        "binarybuilds/filament-failed-jobs": "^2.1",
+        "bezhansalleh/filament-exceptions": "^4.2",
+        "bezhansalleh/filament-shield": "@dev",
+        "binarybuilds/filament-failed-jobs": "@dev",
         "cachethq/core": "@dev",
         "caresome/filament-auth-designer": "^3.1",
         "cheesegrits/filament-google-maps": "@dev",
@@ -24,6 +28,7 @@
         "fahiem/filament-pinpoint": "^1.1",
         "filament/filament": "^5.4",
         "gheith3/filament-relation-pages": "^1.0",
+        "hammadzafar05/mobile-bottom-nav": "^1.2",
         "harvirsidhu/filament-cards": "^1.0",
         "internachi/modular": "^3.0",
         "joaopaulolndev/filament-edit-profile": "^3.0",
@@ -37,7 +42,10 @@
         "livewire/livewire": "^4.1",
         "modules/filament": "*",
         "muazzam/slick-scrollbar": "dev-main",
+        "mwguerra/filemanager": "^2.1",
+        "mwguerra/web-terminal": "@dev",
         "nativephp/mobile": "^3.2",
+        "pxlrbt/filament-excel": "^3.6",
         "spatie/laravel-google-calendar": "^3.8",
         "spatie/laravel-permission": "^7.3",
         "spatie/laravel-query-builder": "^7.2",
@@ -145,7 +153,35 @@
         },
         {
             "type": "path",
+            "url": "app-plugins/bezhansalleh/filament-exceptions",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "app-plugins/bezhansalleh/filament-shield",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
             "url": "app-plugins/cachethq/core",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "app-plugins/achyutn/filament-log-viewer",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "app-plugins/mwguerra/web-terminal",
             "options": {
                 "symlink": true
             }
@@ -157,14 +193,21 @@
                 "symlink": true
             }
         },
-                {
+        {
             "type": "path",
             "url": "app-plugins/eightynine/filament-excel-import",
             "options": {
                 "symlink": true
             }
         },
-                {
+        {
+            "type": "path",
+            "url": "app-plugins/binarybuilds/filament-failed-jobs",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
             "type": "path",
             "url": "app-plugins/muazzam/slick-scrollbar",
             "options": {

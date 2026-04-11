@@ -74,4 +74,35 @@ class Job extends Model
         'available_at' => 'integer',
         'created_at' => 'integer',
     ];
+
+    public function getStatusAttribute(): string
+    {
+        if ($this->reserved_at !== null) {
+            return 'reserved';
+        }
+
+        if ($this->available_at > time()) {
+            return 'delayed';
+        }
+
+        return 'ready';
+    }
+
+    public function getNameAttribute(): ?string
+    {
+        $payload = $this->payload;
+
+        if (is_array($payload) && isset($payload['displayName'])) {
+            return $payload['displayName'];
+        }
+
+        if (is_string($payload) && json_decode($payload, true)) {
+            $decoded = json_decode($payload, true);
+            if (isset($decoded['displayName'])) {
+                return $decoded['displayName'];
+            }
+        }
+
+        return null;
+    }
 }

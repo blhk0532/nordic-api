@@ -16,6 +16,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class JobsTable
 {
@@ -35,8 +36,6 @@ class JobsTable
 
                 TextColumn::make('name')
                     ->label('Job Name')
-                    ->searchable()
-                    ->sortable()
                     ->limit(100)
                     ->toggleable(isToggledHiddenByDefault: false),
 
@@ -59,8 +58,12 @@ class JobsTable
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
-                    ->searchable()
-                    ->sortable()
+                    ->color(fn (string $state): string => match ($state) {
+                        'ready' => 'success',
+                        'reserved' => 'warning',
+                        'delayed' => 'info',
+                        default => 'gray',
+                    })
                     ->toggleable(isToggledHiddenByDefault: false),
 
                 TextColumn::make('available_at')
@@ -90,14 +93,24 @@ class JobsTable
 
                 SelectFilter::make('status')
                     ->label('Status')
-                    ->options(fn () => Job::query()
-                        ->select('status')
-                        ->distinct()
-                        ->pluck('status')
-                        ->filter()
-                        ->mapWithKeys(fn ($v) => [$v => ucfirst($v)])
-                        ->toArray())
-                    ->searchable(),
+                    ->options([
+                        'ready' => 'Ready',
+                        'reserved' => 'Reserved',
+                        'delayed' => 'Delayed',
+                    ])
+                    ->query(function (Builder $query, array $data) {
+                        if (empty($data['value'])) {
+                            return $query;
+                        }
+                        $value = $data['value'];
+
+                        return match ($value) {
+                            'reserved' => $query->whereNotNull('reserved_at'),
+                            'delayed' => $query->whereNull('reserved_at')->where('available_at', '>', time()),
+                            'ready' => $query->whereNull('reserved_at')->where('available_at', '<=', time()),
+                            default => $query,
+                        };
+                    }),
 
                 TernaryFilter::make('reserved')
                     ->label('Reserved')

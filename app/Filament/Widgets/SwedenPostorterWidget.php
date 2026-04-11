@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Widgets;
 
+use App\Enums\AuthRole;
 use App\Exports\SwedenPostorterExporter;
 use App\Filament\Resources\SwedenPostorters\SwedenPostorterResource;
 use App\Models\SwedenPostorter;
@@ -143,7 +144,19 @@ class SwedenPostorterWidget extends BaseWidget
                 static::importSqlAction(),
                 ExportAction::make()
                     ->label('CSV')
-                    ->visible(fn () => auth()->user()->role === 'super')
+                    ->visible(function () {
+                        $role = auth()->user()->role;
+                        if ($role instanceof AuthRole) {
+                            return $role === AuthRole::Super;
+                        }
+                        // Role is string - normalize legacy values
+                        $normalizedRole = match ($role) {
+                            'super_admin', 'superadmin' => 'super',
+                            default => $role,
+                        };
+
+                        return $normalizedRole === 'super';
+                    })
                     ->exporter(SwedenPostorterExporter::class)
                     ->icon('heroicon-o-arrow-up-tray')
                     ->color('danger'),
@@ -155,7 +168,19 @@ class SwedenPostorterWidget extends BaseWidget
     {
         return Action::make('exportSql')
             ->label('SQL')
-            ->visible(fn () => auth()->user()->role === 'super')
+            ->visible(function () {
+                $role = auth()->user()->role;
+                if ($role instanceof AuthRole) {
+                    return $role === AuthRole::Super;
+                }
+                // Role is string - normalize legacy values
+                $normalizedRole = match ($role) {
+                    'super_admin', 'superadmin' => 'super',
+                    default => $role,
+                };
+
+                return $normalizedRole === 'super';
+            })
             ->icon('heroicon-o-arrow-up-on-square')
             ->color('danger')
             ->action(function () {

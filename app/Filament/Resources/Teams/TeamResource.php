@@ -61,7 +61,7 @@ class TeamResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return __('Användare');
+        return __('Users TEAM');
     }
 
     public static function getNavigationBadge(): ?string

@@ -1,0 +1,84 @@
+{
+    "name": "mwguerra/web-terminal",
+    "description": "A web-based terminal component for Filament/Laravel with command whitelisting and multiple connection types",
+    "keywords": [
+        "laravel",
+        "livewire",
+        "filament",
+        "terminal",
+        "shell",
+        "ssh"
+    ],
+    "homepage": "https://github.com/mwguerra/web-terminal",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "mwguerra",
+            "email": "mwguerra@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/contracts": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
+        "laravel/prompts": "^0.3.0",
+        "livewire/livewire": "^4.0",
+        "phpseclib/phpseclib": "^3.0",
+        "symfony/process": "^7.0|^8.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.0",
+        "nunomaduro/collision": "^8.4",
+        "orchestra/testbench": "^10.0",
+        "pestphp/pest": "^3.0",
+        "pestphp/pest-plugin-laravel": "^3.0",
+        "ratchet/rfc6455": "^0.4.0",
+        "react/event-loop": "^1.6",
+        "react/socket": "^1.17"
+    },
+    "suggest": {
+        "filament/filament": "Required for Filament admin panel integration (^5.0)",
+        "react/socket": "Required for Ghostty terminal mode - WebSocket server (^1.17)",
+        "react/event-loop": "Required for Ghostty terminal mode - event loop (^1.6)",
+        "ratchet/rfc6455": "Required for Ghostty terminal mode - WebSocket protocol (^0.4)"
+    },
+    "autoload": {
+        "psr-4": {
+            "MWGuerra\\WebTerminal\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MWGuerra\\WebTerminal\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
+        "analyse": "vendor/bin/phpstan analyse",
+        "test": "vendor/bin/pest",
+        "test:parallel": "vendor/bin/pest --parallel",
+        "test:coverage": "XDEBUG_MODE=coverage vendor/bin/pest --coverage",
+        "test:coverage:html": "XDEBUG_MODE=coverage vendor/bin/pest --coverage-html tests/coverage",
+        "test:parallel:coverage": "XDEBUG_MODE=coverage vendor/bin/pest --parallel --coverage",
+        "format": "vendor/bin/pint",
+        "build": "npm run build",
+        "release": "bash scripts/release.sh"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "MWGuerra\\WebTerminal\\WebTerminalServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

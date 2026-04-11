@@ -38,6 +38,16 @@ class MerinfoDataResource extends Resource
     // place resource under Databaser cluster
     protected static ?string $slug = 'databaser/merinfo-data';
 
+            public static function getModelLabel(): string
+    {
+        return __('DB Merinfo');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('DB Merinfo');
+    }
+
     public static function getNavigationBadge(): ?string
     {
         return (string) self::getModel()::count();

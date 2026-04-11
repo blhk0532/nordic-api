@@ -22,6 +22,17 @@ class MerinfoResource extends Resource
 
     protected static ?string $navigationLabel = 'Merinfo NEW';
 
+
+                        public static function getModelLabel(): string
+    {
+        return __('DB Merinfos');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('DB Merinfos');
+    }
+
     public static function form(Schema $schema): Schema
     {
         return MerinfoForm::configure($schema);

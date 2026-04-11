@@ -38,6 +38,16 @@ class HittaDataResource extends Resource
     // place resource under Databaser cluster
     protected static ?string $slug = 'databaser/hitta-data';
 
+        public static function getModelLabel(): string
+    {
+        return __('DB Hitta');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('DB Hitta');
+    }
+
     public static function getNavigationBadge(): ?string
     {
         return (string) self::getModel()::count();

@@ -29,6 +29,16 @@ class SwedenAdresserResource extends Resource
 
     protected static ?int $navigationSort = 5;
 
+                    public static function getModelLabel(): string
+    {
+        return __('DB Adresser');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('DB Adresser');
+    }
+
     public static function getNavigationBadgeColor(): string|array|null
     {
         return 'success';

@@ -38,7 +38,7 @@ class UsersTable
                     ->html(),
                 SelectColumn::make('role')
                     ->options(collect(AuthRole::cases())->mapWithKeys(fn ($case) => [$case->value => $case->label()])->toArray())
-                    ->disabled(fn ($record) => $record->role === 'super'),
+                    ->disabled(fn ($record) => $record->role instanceof AuthRole ? $record->role === AuthRole::Super : $record->role === 'super'),
                 // IconColumn::make('status')
                 //     ->boolean()
                 //     ->trueIcon('heroicon-o-check-badge')
@@ -55,12 +55,12 @@ class UsersTable
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
-                TextColumn::make('company.name')
-                    ->label('Company')
-                    ->badge()
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(),
+                // TextColumn::make('company.name')
+                //     ->label('Company')
+                //     ->badge()
+                //     ->searchable()
+                //     ->sortable()
+                //     ->toggleable(),
                 TextColumn::make('currentTeam.name')
                     ->label('Current Team')
                     ->badge()
@@ -95,13 +95,22 @@ class UsersTable
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make()
-                    ->visible(fn ($record) => Filament::auth()->user()->role === 'super' || $record->role !== 'super'),
+                    ->visible(fn ($record) => (Filament::auth()->user()->role instanceof AuthRole
+                            ? Filament::auth()->user()->role === AuthRole::Super
+                            : Filament::auth()->user()->role === 'super')
+                        || ($record->role instanceof AuthRole
+                            ? $record->role !== AuthRole::Super
+                            : $record->role !== 'super')
+                    ),
                 // Impersonate::make()
                 //     ->color('success')
                 //     ->label('Login')
                 //     ->visible(fn () => auth()->user()->role === 'super'),
                 DeleteAction::make()
-                    ->visible(fn () => Filament::auth()->user()->role === 'super'),
+                    ->visible(fn () => Filament::auth()->user()->role instanceof AuthRole
+                            ? Filament::auth()->user()->role === AuthRole::Super
+                            : Filament::auth()->user()->role === 'super'
+                    ),
             ]);
     }
 }

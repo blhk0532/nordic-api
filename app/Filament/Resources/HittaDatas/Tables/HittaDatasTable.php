@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Resources\HittaDatas\Tables;
 
 use App\Actions\TransferHittaDataToRingaDataAction;
+use App\Enums\AuthRole;
 use App\Exports\HittaDataExporter;
 use App\Jobs\BackupHittaData;
 use App\Jobs\ImportHittaData;
@@ -202,7 +203,19 @@ class HittaDatasTable
             ->toolbarActions([
                 BulkActionGroup::make([
                     ExportBulkAction::make()
-                        ->visible(fn () => auth()->user()->role === 'super')
+                        ->visible(function () {
+                            $role = auth()->user()->role;
+                            if ($role instanceof AuthRole) {
+                                return $role === AuthRole::Super;
+                            }
+                            // Role is string - normalize legacy values
+                            $normalizedRole = match ($role) {
+                                'super_admin', 'superadmin' => 'super',
+                                default => $role,
+                            };
+
+                            return $normalizedRole === 'super';
+                        })
                         ->exporter(HittaDataExporter::class),
                     DeleteBulkAction::make(),
                     BulkAction::make('transferToRingaData')
@@ -278,7 +291,19 @@ class HittaDatasTable
                 Action::make('backupDatabase')
                     ->label('Backup DB')
                     ->icon('heroicon-o-cloud-arrow-down')
-                    ->visible(fn () => auth()->user()->role === 'super')
+                    ->visible(function () {
+                        $role = auth()->user()->role;
+                        if ($role instanceof AuthRole) {
+                            return $role === AuthRole::Super;
+                        }
+                        // Role is string - normalize legacy values
+                        $normalizedRole = match ($role) {
+                            'super_admin', 'superadmin' => 'super',
+                            default => $role,
+                        };
+
+                        return $normalizedRole === 'super';
+                    })
                     ->color('warning')
                     ->requiresConfirmation()
                     ->modalHeading('Backup Hitta Data Table')

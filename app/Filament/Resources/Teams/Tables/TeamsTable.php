@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Teams\Tables;
 
+use App\Enums\AuthRole;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
@@ -46,7 +47,10 @@ class TeamsTable
                 ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make()
-                    ->visible(fn () => filament()->auth()->user()?->role === 'super'),
+                    ->visible(fn () => filament()->auth()->user()?->role instanceof AuthRole
+                            ? filament()->auth()->user()->role === AuthRole::Super
+                            : filament()->auth()->user()?->role === 'super'
+                    ),
             ]);
     }
 }

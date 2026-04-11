@@ -32,7 +32,7 @@ class Overview extends BaseWidget
                 ->color('gray'),
 
             Stat::make('total_users', User::count())
-                ->label(__('Användare'))
+                ->label(__('Users TEAM'))
                 ->description(__(''))
                 ->chart(DB::table('users')->selectRaw('count(*) as total')->groupByRaw('date(created_at)')->pluck('total')->toArray())
                 ->icon('cachet-metrics')

@@ -35,6 +35,16 @@ class SwedenPersonerResource extends Resource
 
     protected static bool $isScopedToTenant = false;
 
+                public static function getModelLabel(): string
+    {
+        return __('DB Persons');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('DB Persons');
+    }
+
     public static function getNavigationBadgeColor(): string|array|null
     {
         return 'success';

@@ -58,6 +58,16 @@ class SwedenPostorterResource extends Resource
         ];
     }
 
+    public static function getModelLabel(): string
+    {
+        return __('DB Postorter');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('DB Postorter');
+    }
+
     public static function getPages(): array
     {
         return [
@@ -72,4 +82,6 @@ class SwedenPostorterResource extends Resource
     {
         return (string) self::getModel()::count();
     }
+
+
 }

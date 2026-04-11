@@ -4,6 +4,7 @@
 @source '../../../../resources/views/filament/**/*';
 
 @source '../../../../vendor/harvirsidhu/filament-cards/resources/views';
+@source '../../../../vendor/awcodes/overlook/resources/**/*.blade.php';
 
 footer{
     background:#18181b;
@@ -50,3 +51,39 @@ aside.fi-sidebar.fi-main-sidebar.fi-sidebar-opened{
 .no-margin-padding .fi-section-content{
     padding: 0!important;
     }
+
+    .terminal-output{
+        background: #18181b!important;
+        color: #fff;
+    }
+
+    .transition-colors{
+        background: #18181b!important;
+        color: #fff;
+    }
+
+    .fi-sidebar-nav-groups{
+        row-gap:1rem!important;
+    }
+
+    .fi-sidebar-item-btn-with-pin{
+    width: 100%;
+    min-width: 0;
+    padding-inline-end: 0rem!important;
+    padding-left:4px;
+    padding-top: 8px;
+}
+
+.fi-sidebar-open .fi-sidebar-item-btn-with-pin{
+    padding-inline-end: 2.5rem!important;
+        padding-left: 10px;
+         padding-top: 7px;
+}
+
+.fi-sidebar-pin-btn{
+    display: none !important;
+}
+
+.fi-sidebar-open .fi-sidebar-pin-btn{
+    display: flex !important;
+}

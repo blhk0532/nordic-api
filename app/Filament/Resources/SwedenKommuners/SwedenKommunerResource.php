@@ -92,4 +92,15 @@ class SwedenKommunerResource extends Resource
     {
         return (string) self::getModel()::count();
     }
+
+                public static function getModelLabel(): string
+    {
+        return __('DB Kommuner');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('DB Kommuner');
+    }
+
 }

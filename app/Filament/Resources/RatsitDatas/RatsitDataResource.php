@@ -41,6 +41,16 @@ class RatsitDataResource extends Resource
     // Make this resource global (not tenant-scoped) since Ratsit data is public information
     protected static ?string $tenantOwnershipRelationshipName = null;
 
+                public static function getModelLabel(): string
+    {
+        return __('DB Ratsit');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('DB Ratsit');
+    }
+
     public static function getNavigationBadge(): ?string
     {
         return (string) self::getModel()::count();

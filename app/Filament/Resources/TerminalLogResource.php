@@ -1,0 +1,55 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Filament\Resources;
+
+use App\Filament\Resources\TerminalLogResource\Pages\ListTerminalLogs;
+use App\Filament\Resources\TerminalLogResource\Pages\ViewTerminalLog;
+use BackedEnum;
+use MWGuerra\WebTerminal\Filament\Resources\TerminalLogResource as BaseTerminalLogResource;
+
+class TerminalLogResource extends BaseTerminalLogResource
+{
+    public static function getNavigationIcon(): string|BackedEnum|null
+    {
+        return 'heroicon-o-clipboard-document-list';
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('web-terminal::terminal.navigation.terminal_logs');
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('web-terminal::terminal.navigation.tools');
+    }
+
+    public static function getNavigationSort(): ?int
+    {
+        return 101;
+    }
+
+    /**
+     * Override to customize navigation badge count.
+     */
+    public static function getNavigationBadge(): ?string
+    {
+        // Example: Show count of today's logs
+        // return (string) static::getModel()::whereDate('created_at', today())->count();
+        return null;
+    }
+
+    /**
+     * Override to provide custom pages.
+     * By default, uses the generated List and View pages.
+     */
+    public static function getPages(): array
+    {
+        return [
+            'index' => ListTerminalLogs::route('/'),
+            'view' => ViewTerminalLog::route('/{record}'),
+        ];
+    }
+}

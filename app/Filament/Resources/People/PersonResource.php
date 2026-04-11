@@ -29,6 +29,16 @@ class PersonResource extends Resource
 
     protected static ?string $navigationLabel = 'Persons NEW';
 
+                    public static function getModelLabel(): string
+    {
+        return __('DB Personer');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('DB Personer');
+    }
+
     public static function form(Schema $schema): Schema
     {
         return PersonForm::configure($schema);

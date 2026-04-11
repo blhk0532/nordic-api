@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages;
 
+use App\Enums\AuthRole;
 use BackedEnum;
 use Filament\Pages\Page;
 use Filament\Support\Enums\Width;
@@ -16,7 +17,7 @@ class DisPhone extends Page
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-phone';
 
-    protected static ?string $navigationLabel = 'DisPhone SIP';
+    protected static ?string $navigationLabel = 'Mentor SIP';
 
     protected static ?string $title = '';
 
@@ -24,7 +25,7 @@ class DisPhone extends Page
 
     protected static UnitEnum|string|null $navigationGroup = 'Dialers TELE';
 
-    protected static ?string $slug = 'disphone';
+    protected static ?string $slug = 'mentor-sip';
 
     // protected static string|UnitEnum|null $navigationGroup = '';
 
@@ -45,13 +46,19 @@ class DisPhone extends Page
 
     public static function shouldRegisterNavigation(): bool
     {
-        // if (filament()->getTenant()->getAttribute('is_admin') !== true) {
-        //     return false;
-        // }
-        if (Auth::user()->role === 'admin' || Auth::user()->role === 'super' || Auth::user()->role === 'manager') {
-            return true;
+        $role = Auth::user()->role;
+
+        // Check if role is enum
+        if ($role instanceof AuthRole) {
+            return in_array($role, [AuthRole::Admin, AuthRole::Super, AuthRole::Manager], true);
         }
 
-        return true;
+        // Role is string - normalize legacy values
+        $normalizedRole = match ($role) {
+            'super_admin', 'superadmin' => 'super',
+            default => $role,
+        };
+
+        return in_array($normalizedRole, ['admin', 'super', 'manager'], true);
     }
 }

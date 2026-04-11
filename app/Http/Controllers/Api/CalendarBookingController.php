@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Api;
 use Adultdate\FilamentBooking\Enums\BookingStatus;
 use Adultdate\FilamentBooking\Models\Booking\DailyLocation;
 use Adultdate\FilamentBooking\Models\BookingServicePeriod;
+use App\Enums\AuthRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\StoreBookingRequest;
 use App\Http\Requests\Api\UpdateBookingRequest;
@@ -402,14 +403,23 @@ class CalendarBookingController extends Controller
             return false;
         }
 
-        // Admin, super, super_admin, or superadmin can edit any booking
-        if (in_array($user->role, ['admin', 'super', 'super_admin', 'superadmin'], true)) {
-            return true;
-        }
+        $role = $user->role;
 
-        // Manager role can edit any booking
-        if ($user->role === 'manager') {
-            return true;
+        // Check if role is enum
+        if ($role instanceof AuthRole) {
+            if (in_array($role, [AuthRole::Admin, AuthRole::Super, AuthRole::Manager], true)) {
+                return true;
+            }
+        } else {
+            // Role is string - normalize legacy values
+            $normalizedRole = match ($role) {
+                'super_admin', 'superadmin' => 'super',
+                default => $role,
+            };
+
+            if (in_array($normalizedRole, ['admin', 'super', 'manager'], true)) {
+                return true;
+            }
         }
 
         // Event creator (booking_user_id) can edit their own booking

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Resources\RatsitDatas\Tables;
 
 use App\Actions\TransferRatsitDataToRingaDataAction;
+use App\Enums\AuthRole;
 use App\Jobs\BackupRatsitData;
 use App\Jobs\ImportRatsitData;
 use App\Models\RatsitData;
@@ -219,7 +220,19 @@ class RatsitDatasTable
             ->toolbarActions([
                 BulkActionGroup::make([
                     ExportBulkAction::make()
-                        ->visible(fn () => auth()->user()->role === 'super'),
+                        ->visible(function () {
+                            $role = auth()->user()->role;
+                            if ($role instanceof AuthRole) {
+                                return $role === AuthRole::Super;
+                            }
+                            // Role is string - normalize legacy values
+                            $normalizedRole = match ($role) {
+                                'super_admin', 'superadmin' => 'super',
+                                default => $role,
+                            };
+
+                            return $normalizedRole === 'super';
+                        }),
                     BulkAction::make('setQueued')
                         ->label('Queue Records')
                         ->icon('heroicon-o-clock')
@@ -253,7 +266,19 @@ class RatsitDatasTable
                 ]),
                 static::exportSqlAction(),
                 Action::make('import')
-                    ->visible(fn () => auth()->user()->role === 'super')
+                    ->visible(function () {
+                        $role = auth()->user()->role;
+                        if ($role instanceof AuthRole) {
+                            return $role === AuthRole::Super;
+                        }
+                        // Role is string - normalize legacy values
+                        $normalizedRole = match ($role) {
+                            'super_admin', 'superadmin' => 'super',
+                            default => $role,
+                        };
+
+                        return $normalizedRole === 'super';
+                    })
                     ->label('Import Data')
                     ->icon('heroicon-o-document-arrow-up')
                     ->color('success')
@@ -308,7 +333,19 @@ class RatsitDatasTable
 
                 Action::make('backupDatabase')
                     ->label('Backup DB')
-                    ->visible(fn () => auth()->user()->role === 'super')
+                    ->visible(function () {
+                        $role = auth()->user()->role;
+                        if ($role instanceof AuthRole) {
+                            return $role === AuthRole::Super;
+                        }
+                        // Role is string - normalize legacy values
+                        $normalizedRole = match ($role) {
+                            'super_admin', 'superadmin' => 'super',
+                            default => $role,
+                        };
+
+                        return $normalizedRole === 'super';
+                    })
                     ->icon('heroicon-o-cloud-arrow-down')
                     ->color('warning')
                     ->requiresConfirmation()
@@ -348,7 +385,19 @@ class RatsitDatasTable
             ->label('SQL')
             ->icon('heroicon-o-arrow-up-on-square')
             ->color('danger')
-            ->visible(fn () => auth()->user()->role === 'super')
+            ->visible(function () {
+                $role = auth()->user()->role;
+                if ($role instanceof AuthRole) {
+                    return $role === AuthRole::Super;
+                }
+                // Role is string - normalize legacy values
+                $normalizedRole = match ($role) {
+                    'super_admin', 'superadmin' => 'super',
+                    default => $role,
+                };
+
+                return $normalizedRole === 'super';
+            })
             ->action(function () {
                 return self::handleSqlExport();
             });
