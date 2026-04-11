@@ -24,4 +24,4 @@ yarn-error.log
 rr
 .rr.yaml
 /temp
-/tmp/*
+/tmp
