@@ -36,7 +36,7 @@ class ControlPanel extends CardsPage
 
     protected static ?string $title = '';
 
-    protected static ?string $slug = 'dashboard';
+    protected static ?string $slug = 'dashboards';
 
     protected static ?string $navigationLabel = 'Dashboards';
 

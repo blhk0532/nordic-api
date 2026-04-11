@@ -1,0 +1,140 @@
+<?php
+
+declare(strict_types=1);
+
+namespace AdultDate\FilamentWirechat\Models\Concerns;
+
+use Adultdate\Wirechat\Facades\Wirechat;
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Str;
+
+trait HasDynamicIds
+{
+    /**
+     * Initialize the trait.
+     *
+     * @return void
+     */
+    public function initializeHasDynamicIds()
+    {
+        $this->usesUniqueIds = Wirechat::usesUuidForConversations();
+    }
+
+    /**
+     * Generate a new unique key for the model (only for UUIDs).
+     *
+     * @return string|null
+     */
+    public function newUniqueId()
+    {
+        if (Wirechat::usesUuidForConversations()) {
+            /** @phpstan-ignore-next-line */
+            if (method_exists(Str::class, 'uuid7')) {
+                return (string) Str::uuid7();
+            }
+
+            return (string) Str::uuid();
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the columns that should receive a unique identifier.
+     *
+     * @return array
+     */
+    public function uniqueIds()
+    {
+        return $this->usesUniqueIds ? [$this->getKeyName()] : [];
+    }
+
+    /**
+     * Retrieve the model for a bound value.
+     *
+     * @param  Model|Relation  $query
+     * @param  mixed  $value
+     * @param  string|null  $field
+     * @return Builder
+     *
+     * @throws ModelNotFoundException
+     */
+    public function resolveRouteBindingQuery($query, $value, $field = null)
+    {
+        if ($field && in_array($field, $this->uniqueIds()) && ! $this->isValidUniqueId($value)) {
+            $this->handleInvalidUniqueId($value, $field);
+        }
+
+        if (! $field && in_array($this->getRouteKeyName(), $this->uniqueIds()) && ! $this->isValidUniqueId($value)) {
+            $this->handleInvalidUniqueId($value, $field);
+        }
+
+        return $query->where($field ?? $this->getRouteKeyName(), $value);
+    }
+
+    /**
+     * Get the auto-incrementing key type.
+     *
+     * @return string
+     */
+    public function getKeyType()
+    {
+        return Wirechat::usesUuidForConversations() ? 'string' : 'int';
+    }
+
+    /**
+     * Get the value indicating whether the IDs are incrementing.
+     *
+     * @return bool
+     */
+    public function getIncrementing()
+    {
+        return ! Wirechat::usesUuidForConversations();
+    }
+
+    /**
+     * Boot the trait.
+     */
+    protected static function bootHasDynamicIds()
+    {
+        if (Wirechat::usesUuidForConversations()) {
+            static::creating(function ($model) {
+                if (! $model->getKey()) {
+                    $model->{$model->getKeyName()} = $model->newUniqueId();
+                }
+            });
+        }
+    }
+
+    /**
+     * Determine if the given key is valid.
+     *
+     * @param  mixed  $value
+     */
+    protected function isValidUniqueId($value): bool
+    {
+        if (Wirechat::usesUuidForConversations()) {
+            return Str::isUuid($value);
+        }
+
+        // For integer IDs, check if the value is a positive integer
+        return is_numeric($value) && (int) $value === $value && $value > 0;
+    }
+
+    /**
+     * Throw an exception for the given invalid unique ID.
+     *
+     * @param  mixed  $value
+     * @param  string|null  $field
+     * @return never
+     *
+     * @throws ModelNotFoundException
+     */
+    protected function handleInvalidUniqueId($value, $field)
+    {
+        throw (new ModelNotFoundException)->setModel(get_class($this), $value);
+    }
+}

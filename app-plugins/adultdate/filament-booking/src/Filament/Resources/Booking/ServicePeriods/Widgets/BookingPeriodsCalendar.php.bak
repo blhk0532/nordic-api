@@ -1,0 +1,141 @@
+<?php
+
+namespace Adultdate\FilamentBooking\Filament\Resources\Booking\ServicePeriods\Widgets;
+
+use Adultdate\FilamentBooking\Models\BookingServicePeriod;
+use App\Models\User;
+use Filament\Widgets\Widget;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\HtmlString;
+
+class BookingPeriodsCalendar extends Widget
+{
+    protected string $view = 'filament.widgets.booking-periods-calendar';
+
+    protected string|HtmlString|bool|null $heading = 'Service Persiods';
+
+    public ?string $service_date = null;
+    public ?int $service_user_id = null;
+    public ?string $service_location = null;
+    public ?string $start_time = null;
+    public ?string $end_time = null;
+    public ?string $period_type = 'unavailable';
+    public bool $showCreateModal = false;
+ 
+    public function mount(): void
+    {
+        // defaults
+        $this->period_type = 'unavailable';
+    }
+
+    public function getUsersProperty()
+    {
+        return User::query()->orderBy('name')->pluck('name', 'id');
+    }
+
+    protected $listeners = [
+        'openBookingCreate',
+    ];
+
+    public function openBookingCreate(array $payload = []): void
+    {
+        $this->service_date = $payload['date'] ?? ($payload['start'] ?? null);
+        $this->start_time = $payload['start_time'] ?? ($payload['start'] ?? null);
+        $this->end_time = $payload['end_time'] ?? ($payload['end'] ?? null);
+
+        $this->showCreateModal = true;
+    }
+
+    public function create(): void
+    {
+        $data = $this->validateData([
+            'service_date' => ['required', 'date'],
+            'service_user_id' => ['required', Rule::exists('users', 'id')],
+            'service_location' => ['nullable', 'string', 'max:255'],
+            'start_time' => ['nullable', 'date_format:H:i'],
+            'end_time' => ['nullable', 'date_format:H:i'],
+            'period_type' => ['nullable', 'string', 'max:50'],
+        ]);
+
+        BookingServicePeriod::create([
+            'service_date' => $data['service_date'],
+            'service_user_id' => $data['service_user_id'],
+            'service_location' => $data['service_location'] ?? null,
+            'start_time' => $data['start_time'] ?? null,
+            'end_time' => $data['end_time'] ?? null,
+            'period_type' => $data['period_type'] ?? 'unavailable',
+            'created_by' => Auth::id(),
+        ]);
+
+        $this->dispatchBrowserEvent('booking-period-created');
+
+        // reset form
+        $this->service_date = null;
+        $this->service_user_id = null;
+        $this->service_location = null;
+        $this->start_time = null;
+        $this->end_time = null;
+        $this->period_type = 'unavailable';
+    }
+
+
+    public function config(): array
+    {
+        return [
+            'initialView' => 'timeGridWeek',
+            'headerToolbar' => [
+                'left' => 'prev,next today',
+                'center' => 'title',
+                'right' => 'list dayGridMonth,timeGridWeek,timeGridDay',
+            ],
+            'nowIndicator' => true,
+            'selectable' => true,
+            'slotMinTime' => '06:00:00',
+            'slotMaxTime' => '22:00:00',
+            'slotDuration' => '00:30:00',
+            'allDayText' => '🗓️',
+            'allDaySlot' => true,
+            'views' => [
+                'timeGridDay' => [
+                    'slotMinTime' => '06:00:00',
+                    'slotMaxTime' => '22:00',
+                ],
+                'timeGridWeek' => [
+                    'slotMinTime' => '06:00:00',
+                    'slotMaxTime' => '22:00',
+                ],
+            ],
+        ];
+    }
+    
+        public function getConfig(): array
+    {
+        return array_replace_recursive(
+            $this->config(),
+            \Adultdate\FilamentBooking\FilamentBookingPlugin::get()->getConfig(),
+        );
+    }
+    protected function validateData(array $rules): array
+    {
+        return $this->callValidate($rules);
+    }
+
+    // helper to allow using $this->validate() in Livewire-like style
+    protected function callValidate(array $rules): array
+    {
+        return validator($this->getPublicProperties(), $rules)->validate();
+    }
+
+    protected function getPublicProperties(): array
+    {
+        return [
+            'service_date' => $this->service_date,
+            'service_user_id' => $this->service_user_id,
+            'service_location' => $this->service_location,
+            'start_time' => $this->start_time,
+            'end_time' => $this->end_time,
+            'period_type' => $this->period_type,
+        ];
+    }
+}

@@ -11,6 +11,7 @@
     "require": {
         "php": "^8.4",
         "achyutn/filament-log-viewer": "@dev",
+        "adultdate/filament-booking": "@dev",
         "anish/text-input-entry": "*",
         "asmit/resized-column": "^3.0",
         "awcodes/overlook": "^4.0",
@@ -37,6 +38,7 @@
         "laravel/octane": "^2.17",
         "laravel/sanctum": "^4.3",
         "laravel/tinker": "^3.0",
+        "laraveljutsu/zap": "^1.15",
         "leandrocfe/filament-apex-charts": "^5.1",
         "livewire/flux": "^2.12.0",
         "livewire/livewire": "^4.1",
@@ -47,6 +49,7 @@
         "nativephp/mobile": "^3.2",
         "pxlrbt/filament-excel": "^3.6",
         "spatie/laravel-google-calendar": "^3.8",
+        "spatie/laravel-model-states": "^2.13",
         "spatie/laravel-permission": "^7.3",
         "spatie/laravel-query-builder": "^7.2",
         "spiral/roadrunner-cli": "^2.6.0",
@@ -154,6 +157,20 @@
         {
             "type": "path",
             "url": "app-plugins/bezhansalleh/filament-exceptions",
+            "options": {
+                "symlink": true
+            }
+        },
+                {
+            "type": "path",
+            "url": "app-plugins/adultdate/filament-booking",
+            "options": {
+                "symlink": true
+            }
+        },
+                {
+            "type": "path",
+            "url": "app-plugins/adultdate/filament-wirechat",
             "options": {
                 "symlink": true
             }

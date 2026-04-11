@@ -1,0 +1,362 @@
+<?php
+
+namespace Adultdate\FilamentBooking\Filament\Widgets;
+
+use Adultdate\FilamentBooking\Enums\BookingStatus;
+use Adultdate\FilamentBooking\Models\Booking\Booking;
+use Adultdate\FilamentBooking\Models\Booking\BookingLocation;
+use Adultdate\FilamentBooking\Models\Booking\BookingSchedule;
+use Adultdate\FilamentBooking\Models\Booking\Client;
+use Adultdate\FilamentBooking\Models\Booking\Service;
+use Adultdate\FilamentBooking\Actions;
+use Adultdate\FilamentBooking\Concerns\CanRefreshCalendar;
+use Adultdate\FilamentBooking\Concerns\HasHeaderActions;
+use Adultdate\FilamentBooking\Concerns\HasSchema;
+use Adultdate\FilamentBooking\Concerns\InteractsWithCalendar;
+use Adultdate\FilamentBooking\Concerns\InteractsWithEventRecord;
+use Adultdate\FilamentBooking\Filament\Widgets\Concerns\CanBeConfigured;
+use Adultdate\FilamentBooking\Filament\Widgets\Concerns\InteractsWithRawJS;
+use Adultdate\FilamentBooking\Filament\Widgets\FullCalendarWidget;
+use Adultdate\FilamentBooking\ValueObjects\FetchInfo;
+use App\Models\User;
+use Carbon\Carbon;
+use Filament\Actions\Action;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\TimePicker;
+use Filament\Forms\Get;
+use Filament\Schemas\Schema;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
+
+class BookingCalendarWidget extends FullCalendarWidget implements \Adultdate\FilamentBooking\Contracts\HasCalendar
+{
+    use CanBeConfigured;
+    use CanRefreshCalendar;
+    use HasHeaderActions;
+    use InteractsWithCalendar {
+        InteractsWithCalendar::getOptions insteadof CanBeConfigured;
+    }
+    use InteractsWithEventRecord;
+    use InteractsWithRawJS;
+
+    public Model|string|null $model = Booking::class;
+
+    protected static ?int $sort = 2;
+
+    protected static bool $isDiscovered = true;
+
+    protected static ?string $title = 'Booking Calendar';
+
+    protected static string $viewIdentifier = 'booking-calendar-widget';
+
+    protected int|string|array $columnSpan = 'full';
+
+    public function getModel(): string
+    {
+        return $this->model;
+    }
+
+    public function config(): array
+    {
+        return [
+            'initialView' => 'timeGridWeek',
+            'headerToolbar' => [
+                'left' => 'prev,next today',
+                'center' => 'title',
+                'right' => 'dayGridMonth,timeGridWeek,timeGridDay',
+            ],
+            'nowIndicator' => true,
+            'slotMinTime' => '06:00:00',
+            'slotMaxTime' => '22:00:00',
+            'slotDuration' => '00:30:00',
+            'allDayText' => ⌯🗓️⌲',
+            'allDaySlot' => true,
+            'views' => [
+                'timeGridDay' => [
+                    'slotMinTime' => '06:00:00',
+                    'slotMaxTime' => '22:00:00',
+                ],
+                'timeGridWeek' => [
+                    'slotMinTime' => '06:00:00',
+                    'slotMaxTime' => '22:00:00',
+                ],
+            ],
+        ];
+    }
+
+    public function getFormSchema(): array
+    {
+        return [
+            Select::make('booking_client_id')
+                ->label('Client')
+                ->options(Client::pluck('name', 'id'))
+                ->searchable()
+                ->preload()
+                ->createOptionForm([
+                    TextInput::make('name')
+                        ->required()
+                        ->maxLength(255),
+                    TextInput::make('email')
+                        ->email()
+                        ->maxLength(255),
+                    TextInput::make('phone')
+                        ->tel()
+                        ->maxLength(255),
+                    TextInput::make('address')
+                        ->maxLength(255),
+                    TextInput::make('city')
+                        ->maxLength(255),
+                    TextInput::make('postal_code')
+                        ->maxLength(20),
+                    TextInput::make('country')
+                        ->default('Sweden')
+                        ->dehydrated(false)
+                        ->hidden(),
+                ])
+                ->createOptionUsing(function (array $data) {
+                    $data['country'] = 'Sweden';
+                    $client = Client::create($data);
+                    return $client->id;
+                })
+                ->required(),
+
+            Select::make('service_id')
+                ->label('Service')
+                ->options(Service::pluck('name', 'id'))
+                ->searchable()
+                ->preload()
+                ->required(),
+
+            Select::make('booking_location_id')
+                ->label('Location')
+                ->options(BookingLocation::where('is_active', true)->pluck('name', 'id'))
+                ->searchable()
+                ->preload()
+                ->required(),
+
+            Select::make('service_user_id')
+                ->label('Service Technician')
+                ->options(User::pluck('name', 'id'))
+                ->searchable()
+                ->preload(),
+
+            DatePicker::make('service_date')
+                ->label('Service Date')
+                ->required()
+                ->native(false),
+
+            TimePicker::make('start_time')
+                ->label('Start Time')
+                ->required()
+                ->seconds(false)
+                ->native(false),
+
+            TimePicker::make('end_time')
+                ->label('End Time')
+                ->required()
+                ->seconds(false)
+                ->native(false),
+
+            Select::make('status')
+                ->label('Status')
+                ->options(BookingStatus::class)
+                ->default(BookingStatus::New->value)
+                ->required(),
+
+            TextInput::make('total_price')
+                ->label('Total Price')
+                ->numeric()
+                ->prefix('SEK'),
+
+            Textarea::make('notes')
+                ->label('Notes')
+                ->rows(3),
+
+            Textarea::make('service_note')
+                ->label('Service Note')
+                ->rows(3),
+
+            Repeater::make('items')
+                ->label('Booking Items')
+                ->schema([
+                    Select::make('booking_service_id')
+                        ->label('Service')
+                        ->options(Service::pluck('name', 'id'))
+                        ->searchable()
+                        ->required(),
+
+                    TextInput::make('qty')
+                        ->label('Quantity')
+                        ->numeric()
+                        ->default(1)
+                        ->minValue(1)
+                        ->required(),
+
+                    TextInput::make('unit_price')
+                        ->label('Unit Price')
+                        ->numeric()
+                        ->prefix('SEK')
+                        ->default(0)
+                        ->required(),
+                ])
+                ->columns(3)
+                ->defaultItems(0)
+                ->collapsible(),
+        ];
+    }
+
+    protected function getEvents(FetchInfo $info): Collection|array|Builder
+    {
+        $start = $info->start->toMutable()->startOfDay();
+        $end = $info->end->toMutable()->endOfDay();
+
+        $bookings = Booking::query()
+            ->with(['client', 'service', 'serviceUser', 'bookingUser', 'location'])
+            ->where(function ($query) use ($start, $end) {
+                $query->whereBetween('service_date', [$start, $end])
+                    ->orWhereBetween('starts_at', [$start, $end]);
+            })
+            ->where('is_active', true)
+            ->get();
+
+        // Transform bookings to calendar events
+        return $bookings->map(fn (Booking $booking) => $booking->toCalendarEvent());
+    }
+
+    public function getHeaderActions(): array
+    {
+        return [
+            Actions\CreateAction::make()
+                ->label('New Booking')
+                ->form($this->getFormSchema())
+                ->mountUsing(function ($formOrSchema, array $arguments) {
+                    if ($formOrSchema instanceof Schema) {
+                        $formOrSchema->fill([]);
+                    } elseif (is_object($formOrSchema) && method_exists($formOrSchema, 'fill')) {
+                        $formOrSchema->fill([]);
+                    }
+
+                    if (!isset($arguments['start']) && !isset($arguments['service_date'])) {
+                        return;
+                    }
+
+                    $timezone = config('app.timezone');
+                    
+                    if (isset($arguments['service_date']) || isset($arguments['start_time'])) {
+                        $values = [
+                            'service_date' => $arguments['service_date'] ?? null,
+                            'start_time' => $arguments['start_time'] ?? null,
+                            'end_time' => $arguments['end_time'] ?? null,
+                        ];
+                    } else {
+                        $start = Carbon::parse($arguments['start'], $timezone);
+                        $values = ['service_date' => $start->format('Y-m-d')];
+
+                        if ($start->format('H:i:s') !== '00:00:00') {
+                            $values['start_time'] = $start->format('H:i');
+                        }
+
+                        if (isset($arguments['end'])) {
+                            $end = Carbon::parse($arguments['end'], $timezone);
+                            if ($end->format('H:i:s') !== '00:00:00') {
+                                $values['end_time'] = $end->format('H:i');
+                            }
+                        }
+                    }
+
+                    if ($formOrSchema instanceof Schema) {
+                        $formOrSchema->fillPartially($values, array_keys($values));
+                        return;
+                    }
+
+                    if (is_object($formOrSchema) && method_exists($formOrSchema, 'fill')) {
+                        $formOrSchema->fill($values);
+                        return;
+                    }
+                })
+                ->mutateDataUsing(function (array $data): array {
+                    $data['number'] = 'BK-' . now()->format('Ymd') . '-' . strtoupper(substr(uniqid(), -6));
+                    $data['booking_user_id'] = Auth::id();
+                    $data['currency'] = 'SEK';
+                    $data['is_active'] = true;
+
+                    if (isset($data['service_date']) && isset($data['start_time'])) {
+                        $data['starts_at'] = $data['service_date'] . ' ' . $data['start_time'];
+                    }
+                    if (isset($data['service_date']) && isset($data['end_time'])) {
+                        $data['ends_at'] = $data['service_date'] . ' ' . $data['end_time'];
+                    }
+
+                    return $data;
+                })
+                ->after(function (Booking $record, array $data) {
+                    if (isset($data['items']) && is_array($data['items'])) {
+                        foreach ($data['items'] as $item) {
+                            $record->items()->create([
+                                'booking_service_id' => $item['booking_service_id'],
+                                'qty' => $item['qty'] ?? 1,
+                                'unit_price' => $item['unit_price'] ?? 0,
+                            ]);
+                        }
+                    }
+                }),
+        ];
+    }
+
+    public function onDateSelect(string $start, ?string $end, bool $allDay, ?array $view, ?array $resource): void
+    {
+        $timezone = config('app.timezone');
+        $startCarbon = Carbon::parse($start, $timezone);
+        $endCarbon = $end ? Carbon::parse($end, $timezone) : $startCarbon->copy()->addHour();
+
+        $this->mountAction('create', [
+            'start' => $startCarbon->toIsoString(),
+            'end' => $endCarbon->toIsoString(),
+            'service_date' => $startCarbon->format('Y-m-d'),
+            'start_time' => $startCarbon->format('H:i'),
+            'end_time' => $endCarbon->format('H:i'),
+        ]);
+    }
+
+    protected function modalActions(): array
+    {
+        return [
+            Actions\EditAction::make()
+                ->mutateDataUsing(function (array $data): array {
+                    // Calculate starts_at and ends_at
+                    if (isset($data['service_date']) && isset($data['start_time'])) {
+                        $data['starts_at'] = $data['service_date'] . ' ' . $data['start_time'];
+                    }
+                    if (isset($data['service_date']) && isset($data['end_time'])) {
+                        $data['ends_at'] = $data['service_date'] . ' ' . $data['end_time'];
+                    }
+
+                    return $data;
+                })
+                ->after(function (Booking $record, array $data) {
+                    // Update items
+                    if (isset($data['items']) && is_array($data['items'])) {
+                        $record->items()->delete();
+                        foreach ($data['items'] as $item) {
+                            $record->items()->create([
+                                'booking_service_id' => $item['booking_service_id'],
+                                'qty' => $item['qty'] ?? 1,
+                                'unit_price' => $item['unit_price'] ?? 0,
+                            ]);
+                        }
+                    }
+                }),
+
+            Actions\DeleteAction::make(),
+
+            Actions\ViewAction::make(),
+        ];
+    }
+}

@@ -1,0 +1,145 @@
+div.fc-daygrid-day-events{
+    padding:0px!important;
+    margin:0px!important;
+    text-align: center;
+}
+.fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events {
+    min-height: 2em;
+    position: relative;
+    padding:0px!important;
+    margin:0px!important;
+    text-align: center;
+}
+
+.fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events{
+    padding:0px!important;
+    margin:0px!important;
+    text-align: center;
+}
+
+.fc .fc-daygrid-body-natural .fc-daygrid-day-events{
+    padding:0px!important;
+    margin:0px!important;
+    text-align: center;
+}
+
+div.fc-timegrid-divider{
+    position:absolute;
+}
+
+.fc .fc-dom-1{
+    font-size: 1.2rem;
+}
+
+
+
+
+div.fc-daygrid-day-events{
+    font-weight: 500;
+    padding:0.5rem!important;
+    margin:0px!important;
+}
+.fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events {
+    min-height: 2em;
+    position: relative;
+
+    margin:0px!important;
+}
+
+.fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events{
+
+    margin:0px!important;
+}
+
+.fc .fc-daygrid-body-natural .fc-daygrid-day-events{
+    font-weight: 500;
+   padding:0.5rem!important;
+    margin:0px!important;
+}
+.fc .fc-timegrid-slot{
+  cursor: pointer!important;
+}
+.fc-timegrid-slot .fc-timegrid-slot-lane{
+  cursor: pointer;
+}
+#fc-dom-1{
+    font-size: 1.2rem;
+}
+@media (max-width: 768px) {
+    #fc-dom-1{
+    font-size: 0rem;
+}
+}
+@media (max-width: 456px) {
+    .fc-today-button {
+   display:none!important;
+}
+}
+
+
+
+div.filament-fullcalendar{
+        max-height: 748px!important;
+}
+
+div.fc-daygrid-day-events{
+    font-weight: 500;
+
+   padding:5px!important;
+    margin:0px!important;
+        padding: 5px;
+}
+.fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events {
+    min-height: 2em;
+    position: relative;
+
+    margin:0px!important;
+}
+
+.fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events{
+
+    margin:0px!important;
+}
+
+.fc .fc-daygrid-body-natural .fc-daygrid-day-events{
+    font-weight: 500;
+
+    padding:0px!important;
+    margin:0px!important;
+
+}
+
+.fc .fc-timegrid-slot{
+  cursor: pointer!important;
+}
+.fc-timegrid-divider.fc-cell-shaded{
+   position: absolute!important;
+}
+
+#fc-dom-1{
+    font-size: 1.2rem;
+}
+@media (max-width: 768px) {
+    #fc-dom-1{
+    font-size: 0rem;
+}
+}
+@media (max-width: 456px) {
+    .fc-today-button {
+   display:none!important;
+}
+}
+
+.fc-event-start {
+    padding:3px!important;
+}
+.fc-event-time{
+    font-size: 12px;
+  margin-top: -4px;
+  font-weight: bold;
+}
+div.fc-event-time{
+    font-size: 12px;
+  margin-top: -4px;
+  font-weight: bold;
+}

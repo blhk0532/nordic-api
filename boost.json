@@ -9,7 +9,10 @@
     "packages": [
         "internachi/modular",
         "nativephp/mobile",
-        "filament/filament"
+        "filament/filament",
+        "laraveljutsu/zap",
+        "spatie/laravel-permission",
+        "spatie/laravel-query-builder"
     ],
     "sail": false,
     "skills": [
@@ -20,6 +23,8 @@
         "pest-testing",
         "tailwindcss-development",
         "modular",
-        "nativephp-mobile"
+        "nativephp-mobile",
+        "laravel-permission-development",
+        "laravel-query-builder"
     ]
 }

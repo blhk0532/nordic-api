@@ -1,0 +1,359 @@
+@source '../views/**/*.blade.php';
+@source '../../src/Livewire/**/*.php';
+
+@layer components {
+    /* Base styles for inputs, textareas, selects */
+    .wc-input,
+    .wc-textarea,
+    .wc-select,
+    .wc-multiselect {
+        appearance: none;
+        background-color: var(--color-white);
+        border: 1px solid var(--color-gray-500);
+        border-radius: 0;
+        padding: var(--spacing-2) var(--spacing-3);
+        font-size: var(--font-size-base);
+        line-height: var(--line-height-base);
+        box-shadow: var(--shadow-none);
+        &:focus {
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+            box-shadow: 0 0 0 1px var(--color-blue-600);
+            border-color: var(--color-blue-600);
+        }
+    }
+
+    /* Dark mode styles for inputs, textareas, selects */
+    .dark .wc-input,
+    .dark .wc-textarea,
+    .dark .wc-select,
+    .dark .wc-multiselect {
+        background-color: var(--color-zinc-900);
+    }
+
+    /* Placeholder styles */
+    .wc-input::placeholder,
+    .wc-textarea::placeholder {
+        color: var(--color-gray-500);
+        opacity: 1;
+    }
+
+    /* WebKit date/time input fixes */
+    .wc-input::-webkit-datetime-edit-fields-wrapper {
+        padding: 0;
+    }
+
+    .wc-input::-webkit-date-and-time-value {
+        min-height: 1.5em;
+        text-align: inherit;
+    }
+
+    .wc-input::-webkit-datetime-edit,
+    .wc-input::-webkit-datetime-edit-year-field,
+    .wc-input::-webkit-datetime-edit-month-field,
+    .wc-input::-webkit-datetime-edit-day-field,
+    .wc-input::-webkit-datetime-edit-hour-field,
+    .wc-input::-webkit-datetime-edit-minute-field,
+    .wc-input::-webkit-datetime-edit-second-field,
+    .wc-input::-webkit-datetime-edit-millisecond-field,
+    .wc-input::-webkit-datetime-edit-meridiem-field {
+        display: inline-flex;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    /* Select styles */
+    .wc-select {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+        background-position: right var(--spacing-2) center;
+        background-repeat: no-repeat;
+        background-size: 1.5em 1.5em;
+        padding-right: var(--spacing-10);
+        print-color-adjust: exact;
+    }
+
+    .wc-select[size]:not([size="1"]),
+    .wc-multiselect {
+        background-image: none;
+        background-position: initial;
+        background-repeat: unset;
+        background-size: initial;
+        padding-right: var(--spacing-3);
+        print-color-adjust: unset;
+    }
+
+    /* Checkbox and Radio styles */
+    .wc-checkbox,
+    .wc-radio {
+        appearance: none;
+        padding: 0;
+        print-color-adjust: exact;
+        display: inline-block;
+        vertical-align: middle;
+        background-origin: border-box;
+        user-select: none;
+        flex-shrink: 0;
+        height: var(--spacing-4);
+        width: var(--spacing-4);
+        color: var(--color-blue-600);
+        background-color: var(--color-white);
+        border: 1px solid var(--color-gray-500);
+        box-shadow: var(--shadow-none);
+    }
+
+    /* Dark mode styles for checkboxes and radios */
+    .dark .wc-checkbox,
+    .dark .wc-radio {
+        background-color: var(--color-zinc-900);
+    }
+
+    .wc-checkbox {
+        border-radius: 0;
+    }
+
+    .wc-radio {
+        border-radius: 100%;
+    }
+
+    .wc-checkbox:focus,
+    .wc-radio:focus {
+        outline: 2px solid transparent;
+        outline-offset: 2px;
+        box-shadow: 0 0 0 2px var(--color-white), 0 0 0 4px var(--color-blue-600);
+    }
+
+    .wc-checkbox:checked,
+    .wc-radio:checked {
+        border-color: transparent;
+        background-color: currentColor;
+        background-size: 100% 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .wc-checkbox:checked {
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3E%3C/svg%3E");
+    }
+
+    .wc-radio:checked {
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='8' cy='8' r='3'/%3E%3C/svg%3E");
+    }
+
+    .wc-checkbox:checked:hover,
+    .wc-checkbox:checked:focus,
+    .wc-radio:checked:hover,
+    .wc-radio:checked:focus {
+        @media (hover: hover) {
+            border-color: transparent;
+            background-color: currentColor;
+        }
+    }
+
+    .wc-checkbox:indeterminate {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 16 16'%3E%3Cpath stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 8h8'/%3E%3C/svg%3E");
+        border-color: transparent;
+        background-color: currentColor;
+        background-size: 100% 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .wc-checkbox:indeterminate:hover,
+    .wc-checkbox:indeterminate:focus {
+        @media (hover: hover) {
+            border-color: transparent;
+            background-color: currentColor;
+        }
+    }
+
+    /* File input styles */
+    .wc-file {
+        background: unset;
+        border-color: inherit;
+        border-width: 0;
+        border-radius: 0;
+        padding: 0;
+        font-size: unset;
+        line-height: inherit;
+    }
+
+    .wc-file:focus {
+        outline: 1px solid ButtonText;
+        outline: 1px auto -webkit-focus-ring-color;
+    }
+
+    /* Forced colors for accessibility */
+    @media (forced-colors: active) {
+        .wc-checkbox:checked,
+        .wc-radio:checked,
+        .wc-checkbox:indeterminate {
+            appearance: auto;
+        }
+    }
+}
+
+
+@layer utilities {
+    /* =========================
+     * BACKGROUND
+     * ========================= */
+    .wc-bg-primary       { @apply bg-[var(--wc-light-primary)]   dark:bg-[var(--wc-dark-primary)]; }
+    .wc-bg-secondary     { @apply bg-[var(--wc-light-secondary)] dark:bg-[var(--wc-dark-secondary)]; }
+    .wc-bg-accent        { @apply bg-[var(--wc-light-accent)]    dark:bg-[var(--wc-dark-accent)]; }
+    .wc-bg-brand         { @apply bg-[var(--wc-brand-primary)]; }
+
+    /* Hover states */
+    .wc-bg-primary-hover:hover   { @apply bg-[var(--wc-light-primary)]   dark:bg-[var(--wc-dark-primary)]; }
+    .wc-bg-secondary-hover:hover { @apply bg-[var(--wc-light-secondary)] dark:bg-[var(--wc-dark-secondary)]; }
+    .wc-bg-accent-hover:hover    { @apply bg-[var(--wc-light-accent)]    dark:bg-[var(--wc-dark-accent)]; }
+    .wc-bg-brand-hover:hover     { @apply bg-[var(--wc-brand-primary)]; }
+
+
+    /* Hover states */
+    .wc-text-primary-hover:hover   { @apply text-[var(--wc-light-primary)]   dark:text-[var(--wc-dark-primary)]; }
+    .wc-text-secondary-hover:hover { @apply text-[var(--wc-light-secondary)] dark:text-[var(--wc-dark-secondary)]; }
+    .wc-text-accent-hover:hover    { @apply text-[var(--wc-light-accent)]    dark:text-[var(--wc-dark-accent)]; }
+    .wc-text-brand-hover:hover     { @apply text-[var(--wc-brand-primary)]; }
+
+    /* =========================
+     * BORDER (color only)
+     * ========================= */
+
+    /* BORDER (only one token available) */
+    .wc-border-color {
+        @apply border-[var(--wc-light-border)] dark:border-[var(--wc-dark-border)];
+    }
+
+    .wc-border-primary   { @apply border-[var(--wc-light-primary)]   dark:border-[var(--wc-light-primary)]; }
+    .wc-border-secondary { @apply border-[var(--wc-light-secondary)] dark:border-[var(--wc-dark-secondary)]; }
+    .wc-border-accent    { @apply border-[var(--wc-light-accent)]    dark:border-[var(--wc-dark-accent)]; }
+
+    /* Hover states */
+    .wc-border-primary-hover:hover   { @apply border-[var(--wc-light-primary)]   dark:border-[var(--wc-light-primary)]; }
+    .wc-border-secondary-hover:hover { @apply border-[var(--wc-light-secondary)] dark:border-[var(--wc-dark-secondary)]; }
+    .wc-border-accent-hover:hover    { @apply border-[var(--wc-light-accent)]    dark:border-[var(--wc-dark-accent)]; }
+
+
+
+
+    /* =========================
+  * THEMED SCROLLBAR
+  * ========================= */
+    .wc-scrollbar-theme {
+        scrollbar-width: thin; /* Firefox */
+        scrollbar-color: var(--color-zinc-200) transparent;
+
+    }
+    .dark .wc-scrollbar-theme {
+        scrollbar-color: var(--color-zinc-700) transparent;
+    }
+
+    .wc-scrollbar-theme::-webkit-scrollbar {
+        width: 3px;
+        height: 8px;
+    }
+
+    /* =========================
+     * TRACK
+     * ========================= */
+    .wc-scrollbar-theme::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+    .dark .wc-scrollbar-theme::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    /* =========================
+     * SCROLLBAR BUTTONS
+     * ========================= */
+    .wc-scrollbar-theme::-webkit-scrollbar-button{
+       display: none;
+    }
+
+    /* =========================
+     * THUMB
+     * ========================= */
+    .wc-scrollbar-theme::-webkit-scrollbar-thumb {
+        background-color: var(--color-zinc-500);
+        border-radius: 6px;
+    }
+    .dark .wc-scrollbar-theme::-webkit-scrollbar-thumb {
+        background-color: var(--color-zinc-500);
+
+    }
+
+    /* =========================
+     * HIDE SCROLLBAR
+     * ========================= */
+    .wc-scrollbar-hide {
+        scrollbar-width: none !important; /* Firefox */
+    }
+    .wc-scrollbar-hide::-webkit-scrollbar {
+        display: none; /* WebKit */
+    }
+
+    /* =========================
+     * CHAT MESSAGE BUBBLES
+     * ========================= */
+    /* Remove border from chat message bubbles */
+    /* Target message bubble containers - match the exact class pattern from the template */
+    div.flex.flex-wrap.max-w-fit.border,
+    div[class*="flex flex-wrap max-w-fit"][class*="border"] {
+        border-width: 0px !important;
+        border: none !important;
+    }
+
+    /* =========================
+     * CHATS SIDEBAR MODAL
+     * ========================= */
+    /* Header is now shown in chats sidebar modal */
+    /* Removed CSS that was hiding the header */
+
+    /* Remove padding from chats sidebar modal content */
+    #chats-sidebar .modal.chats-sidebar.content,
+    #chats-sidebar .fi-modal-content,
+    #chats-sidebar .fi-modal-body,
+    #chats-sidebar [class*="modal"][class*="chats-sidebar"][class*="content"] {
+        padding: 0px !important;
+    }
+
+    div.fi-global-search{
+        min-width:262px!important;
+    }
+    @media (max-width: 500px) {
+        div.fi-global-search{
+            display: none!important;
+        }   
+     }
+
+    /* Force mobile-like overlay behavior for widget when inside chats-sidebar modal */
+    /* Override responsive classes to always use mobile behavior in modal (overlay mode) */
+    
+    /* When chat is open in modal: hide conversations list on ALL screen sizes (override md:flex) */
+    .chats-sidebar-modal-widget .wirechat-widget-container .chats-list-container.hidden.md\:flex {
+        display: none !important;
+    }
+
+    /* When chat is closed in modal: show conversations list on ALL screen sizes (override any hidden classes) */
+    .chats-sidebar-modal-widget .wirechat-widget-container .chats-list-container.flex {
+        display: flex !important;
+    }
+
+    /* When chat is open in modal: show chat window on ALL screen sizes (override hidden md:grid) */
+    .chats-sidebar-modal-widget .wirechat-widget-container .chat-window-container.grid {
+        display: grid !important;
+    }
+
+    /* When chat is closed in modal: hide chat window on ALL screen sizes (override hidden md:grid) */
+    .chats-sidebar-modal-widget .wirechat-widget-container .chat-window-container.hidden.md\:grid {
+        display: none !important;
+    }
+}
+
+
+        .wirechat-sidebar-modal{
+            top: 20%; right:0px; max-width: 500px;
+        }
+        .wirechat-widget-modal{
+            top: 20%; right:auto; left:auto; max-width: 500px;
+        }

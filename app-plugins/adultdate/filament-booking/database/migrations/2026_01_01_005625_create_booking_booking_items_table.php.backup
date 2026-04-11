@@ -1,0 +1,32 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('booking_booking_items', function (Blueprint $table): void {
+            $table->id();
+            $table->foreignId('booking_booking_id')->constrained('booking_bookings')->cascadeOnDelete();
+            $table->foreignId('booking_service_id')->constrained('booking_services')->cascadeOnDelete();
+            $table->integer('qty')->default(1);
+            $table->decimal('unit_price', 10, 2)->default(0);
+            $table->integer('sort')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('booking_booking_items');
+    }
+};
