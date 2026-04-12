@@ -90,9 +90,11 @@ class QueueMonitorWidget extends StatsOverviewWidget
         // Get job counts for the last 7 time periods
         $data = [];
         for ($i = 6; $i >= 0; $i--) {
+            $start = now()->subHours($i + 1)->timestamp;
+            $end = now()->subHours($i)->timestamp;
             $count = DB::table('jobs')
-                ->whereRaw('FROM_UNIXTIME(created_at) >= DATE_SUB(NOW(), INTERVAL ? HOUR)', [$i + 1])
-                ->whereRaw('FROM_UNIXTIME(created_at) < DATE_SUB(NOW(), INTERVAL ? HOUR)', [$i])
+                ->where('created_at', '>=', $start)
+                ->where('created_at', '<', $end)
                 ->count();
             $data[] = $count;
         }

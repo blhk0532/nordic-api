@@ -4,11 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages;
 
-use App\Filament\Widgets\DatabaseBackupWidget;
-use App\Filament\Widgets\GeoMapWidget;
-use App\Filament\Widgets\LocationMapPickerWidgetFull;
-use App\Filament\Widgets\MapPinsTableWidget;
-use Awcodes\Overlook\Widgets\OverlookWidget;
 use BackedEnum;
 use Filament\Pages\Dashboard as BaseDashboard;
 use Filament\Support\Enums\Width;
@@ -21,7 +16,6 @@ use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
 
 class AppDashboard extends BaseDashboard
 {
-
     protected static bool $isDiscoverable = false;
 
     protected static ?string $title = ' ';
@@ -51,7 +45,7 @@ class AppDashboard extends BaseDashboard
 
     public static function getNavigationLabel(): string
     {
-        return __('Dashboard');
+        return __('DASHBOARD');
     }
 
     public function getHeading(): string|Htmlable|null
@@ -90,7 +84,6 @@ class AppDashboard extends BaseDashboard
     {
         return [];
     }
-
 
     protected function getFooterWidgets(): array
     {

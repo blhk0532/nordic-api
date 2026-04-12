@@ -35,7 +35,7 @@ class ControlPanel extends CardsPage
 
     protected static ?string $slug = 'controlpanel';
 
-    protected static ?string $navigationLabel = 'Dashboard';
+    protected static ?string $navigationLabel = 'DASHBOARD';
 
     protected static ?int $navigationSort = -1;
 
@@ -169,7 +169,7 @@ class ControlPanel extends CardsPage
     protected function getHeaderWidgets(): array
     {
         return [
-            GeoMapWidget::class,
+            //  GeoMapWidget::class,
         ];
     }
 

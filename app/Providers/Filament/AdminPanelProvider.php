@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use AchyutN\FilamentLogViewer\FilamentLogViewer;
+use App\Filament\Pages\AuthLogin;
 use App\Filament\Pages\Tenancy\EditTeamProfile;
 use App\Http\Middleware\ApplyTenantScopes;
 use App\Http\Middleware\CurrentTenant;
@@ -13,6 +14,8 @@ use Awcodes\Overlook\OverlookPlugin;
 use BezhanSalleh\FilamentExceptions\FilamentExceptionsPlugin;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use BinaryBuilds\FilamentFailedJobs\FilamentFailedJobsPlugin;
+use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
+use Caresome\FilamentAuthDesigner\Enums\MediaPosition;
 use Devletes\FilamentPinnableNavigation\PinnableNavigationPlugin;
 use DutchCodingCompany\FilamentSocialite\FilamentSocialitePlugin;
 use Filament\Actions\Action;
@@ -22,15 +25,16 @@ use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\NavigationGroup;
-use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Support\Enums\Width;
 // use Flexpik\FilamentStudio\FilamentStudioPlugin;
+use Filament\Support\Enums\Width;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
 use Flexpik\FilamentStudio\Resources\DynamicCollectionResource;
+use Hammadzafar05\MobileBottomNav\MobileBottomNav;
+use Hammadzafar05\MobileBottomNav\MobileBottomNavItem;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -75,7 +79,7 @@ class AdminPanelProvider extends PanelProvider
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->brandName('Noridic Digital')
             ->defaultThemeMode(ThemeMode::Dark)
-             ->breadcrumbs(false)
+            ->breadcrumbs(false)
             ->revealablePasswords(true)
             ->unsavedChangesAlerts()
             ->passwordReset()
@@ -160,6 +164,41 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+            ])
+            ->plugin(
+                AuthDesignerPlugin::make()
+                    ->defaults(
+                        fn ($config) => $config
+                            ->media(asset('assets/auth-bg.jpg'))
+                            ->mediaPosition(MediaPosition::Cover)
+                            ->blur(10)
+                    )
+                    ->login(
+                        fn ($config) => $config
+                            ->media(asset('video/853789-hd_1920_1080_25fps.mp4'))
+                            ->usingPage(AuthLogin::class)
+                    )
+                    ->passwordReset()
+                    ->emailVerification()
+                    ->themeToggle()
+            )
+            ->plugins([
+                MobileBottomNav::make()
+                    ->items([
+                        MobileBottomNavItem::make('Home')
+                            ->icon('heroicon-o-home')
+                            ->activeIcon('heroicon-s-home')
+                            ->url('/admin')
+                            ->isActive(fn () => request()->is('admin')),
+                        MobileBottomNavItem::make('Inbox')
+                            ->icon('heroicon-o-inbox')
+                            ->url('/admin/inbox')
+                            ->badge(5, 'danger'),
+                        MobileBottomNavItem::make('Profile')
+                            ->icon('heroicon-o-user')
+                            ->url(fn () => EditProfilePage::getUrl()),
+                    ]),
+
             ])
             ->plugin(
                 FilamentSocialitePlugin::make()

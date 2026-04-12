@@ -70,13 +70,13 @@ aside.fi-sidebar.fi-main-sidebar.fi-sidebar-opened{
     width: 100%;
     min-width: 0;
     padding-inline-end: 0rem!important;
-    padding-left:0px;
+    padding-left:4px;
     padding-top: 8px;
 }
 
 .fi-sidebar-open .fi-sidebar-item-btn-with-pin{
     padding-inline-end: 2.5rem!important;
-        padding-left: 7px;
+        padding-left: 8px;
          padding-top: 7px;
 }
 
@@ -191,4 +191,10 @@ min-width: 312px!important;
 
 .fi-sidebar-item-btn.fi-sidebar-item-btn-with-pin{
     z-index: 10;
+}
+.fi-tenant-menu-trigger {
+    padding-left:2px!important;
+}
+.fi-sidebar-open .fi-tenant-menu-trigger {
+    padding-left:10px!important;
 }

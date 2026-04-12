@@ -103,7 +103,7 @@ class Dashboard extends BaseDashboard
         return [
             //  DatabaseBackupWidget::class,
             //    LocationMapPickerWidgetFull::class,
-            GeoMapWidget::class,
+            // GeoMapWidget::class,
         ];
     }
 

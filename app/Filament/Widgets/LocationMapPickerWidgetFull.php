@@ -200,7 +200,7 @@ class LocationMapPickerWidgetFull extends Widget implements HasForms
                                     ->extraAttributes(['style' => 'background-color:#232326;color:#fff;'])
                                     ->columnSpan(4),
                                 TextInput::make('address_search')
-                                ->extraAttributes(['style' => 'position:relative;left:150px;'])
+                                    ->extraAttributes(['style' => 'position:relative;left:150px;'])
                                     ->label('Sök address eller område')
                                     ->placeholder('Search')
                                     ->extraAttributes(['style' => 'background-color:#232326;color:#fff;margin-left: 120px;'])

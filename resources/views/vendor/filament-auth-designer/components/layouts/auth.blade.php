@@ -1,10 +1,13 @@
 @php
     use Caresome\FilamentAuthDesigner\View\AuthDesignerRenderHook;
+    use Filament\Support\Facades\FilamentView;
+    use Filament\View\PanelsRenderHook;
 
-    $config = $authDesignerConfig;
+    $config = $livewire->getAuthDesignerConfig();
     $hasMedia = $config->hasMedia();
     $position = $config->position;
     $isCover = $config->isCover();
+    $renderHookScopes = $livewire?->getRenderHookScopes();
 @endphp
 
 <x-filament-panels::layout.base :livewire="$livewire">
@@ -25,11 +28,15 @@
             $layoutStyles[] = "--ad-blur: {$config->blur}px; --blur-overlay: {$config->getBlurOverlay()}; --blur-content: {$config->getBlurContent()}";
         }
     @endphp
- <style>
-h1.fi-simple-header-heading{
-    display: none!important;
-}
-</style>
+
+    <style>
+        h1.fi-simple-header-heading {
+            display: none !important;
+        }
+    </style>
+
+    {{ FilamentView::renderHook(PanelsRenderHook::SIMPLE_LAYOUT_START, scopes: $renderHookScopes) }}
+
     <div class="fi-auth-layout {{ $hasMedia ? 'has-media' : 'no-media' }} {{ $position ? 'media-' . $position->value : '' }}"
         @if (count($layoutStyles)) style="{{ implode(';', $layoutStyles) }}" @endif>
         @if ($hasMedia)
@@ -64,4 +71,7 @@ h1.fi-simple-header-heading{
             @endif
         </div>
     </div>
+
+    {{ FilamentView::renderHook(PanelsRenderHook::FOOTER, scopes: $renderHookScopes) }}
+    {{ FilamentView::renderHook(PanelsRenderHook::SIMPLE_LAYOUT_END, scopes: $renderHookScopes) }}
 </x-filament-panels::layout.base>
