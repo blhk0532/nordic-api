@@ -399,7 +399,7 @@ async function main() {
 
         if (filters.postnummer) {
             queryParams.push(filters.postnummer);
-            whereClauses.push(`post_nummer = $${queryParams.length}`);
+            whereClauses.push(`postnummer = $${queryParams.length}`);
         }
 
         if (filters.kommun) {
@@ -413,7 +413,7 @@ async function main() {
 		if (isApiOnlyQueue) {
 			console.log('API-only mode is active. Fetching queued sweden_postnummer rows from the API.');
 		} else {
-const query = `SELECT id, post_nummer AS postnummer, post_ort AS postort, kommun, lan, ratsit_link
+const query = `SELECT id, postnummer AS postnummer, post_ort AS postort, kommun, lan, ratsit_link
 			 FROM sweden_postnummer
 			 WHERE ${whereClauses.join(' AND ')}
 			 ORDER BY id`;
