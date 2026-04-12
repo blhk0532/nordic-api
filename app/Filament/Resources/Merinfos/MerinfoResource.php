@@ -16,14 +16,15 @@ class MerinfoResource extends Resource
 {
     protected static ?string $model = Merinfo::class;
 
+    protected static bool $isScopedToTenant = false;
+
     protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-user';
 
-    protected static \UnitEnum|string|null $navigationGroup = 'Database SE';
+    protected static \UnitEnum|string|null $navigationGroup = 'Database NR';
 
     protected static ?string $navigationLabel = 'Merinfo NEW';
 
-
-                        public static function getModelLabel(): string
+    public static function getModelLabel(): string
     {
         return __('DB Merinfos');
     }

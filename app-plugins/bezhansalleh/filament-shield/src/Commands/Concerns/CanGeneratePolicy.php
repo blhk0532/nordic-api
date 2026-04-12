@@ -71,9 +71,9 @@ trait CanGeneratePolicy
             ? Utils::resolveNamespaceFromPath(Utils::getPolicyPath())
             : Str::of($namespace)->replace('Models', $policyNamespace)->toString(); /** @phpstan-ignore-line */
         $stubVariables['model_name'] = $entity['model'];
-        $stubVariables['model_fqcn'] = $namespace . '\\' . $entity['model'];
+        $stubVariables['model_fqcn'] = $namespace.'\\'.$entity['model'];
         $stubVariables['model_variable'] = Str::of($entity['model'])->camel();
-        $stubVariables['modelPolicy'] = $entity['model'] . 'Policy';
+        $stubVariables['modelPolicy'] = $entity['model'].'Policy';
 
         return $stubVariables;
     }

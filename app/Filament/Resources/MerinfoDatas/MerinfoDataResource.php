@@ -21,9 +21,11 @@ class MerinfoDataResource extends Resource
 {
     protected static ?string $model = MerinfoData::class;
 
+    protected static bool $isScopedToTenant = false;
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUser;
 
-    protected static \UnitEnum|string|null $navigationGroup = 'Database SE';
+    protected static \UnitEnum|string|null $navigationGroup = 'Database NR';
 
     protected static ?string $navigationLabel = 'Merinfo Datas';
 
@@ -38,7 +40,7 @@ class MerinfoDataResource extends Resource
     // place resource under Databaser cluster
     protected static ?string $slug = 'databaser/merinfo-data';
 
-            public static function getModelLabel(): string
+    public static function getModelLabel(): string
     {
         return __('DB Merinfo');
     }

@@ -23,11 +23,13 @@ class SwedenKommunerResource extends Resource
 {
     protected static ?string $model = SwedenKommuner::class;
 
+    protected static bool $isScopedToTenant = false;
+
     protected static ?int $navigationSort = 1;
 
     protected static ?string $navigationLabel = 'Kommuner';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Sweden GEO';
+    protected static string|UnitEnum|null $navigationGroup = 'Sverige GEO';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMapPin;
 
@@ -93,7 +95,7 @@ class SwedenKommunerResource extends Resource
         return (string) self::getModel()::count();
     }
 
-                public static function getModelLabel(): string
+    public static function getModelLabel(): string
     {
         return __('DB Kommuner');
     }
@@ -102,5 +104,4 @@ class SwedenKommunerResource extends Resource
     {
         return __('DB Kommuner');
     }
-
 }

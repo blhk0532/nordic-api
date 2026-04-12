@@ -21,13 +21,15 @@ class SwedenPostorterResource extends Resource
 {
     protected static ?string $model = SwedenPostorter::class;
 
+    protected static bool $isScopedToTenant = false;
+
     protected static ?string $navigationLabel = 'Postorter';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMapPin;
 
     protected static ?int $navigationSort = 2;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Sweden GEO';
+    protected static string|UnitEnum|null $navigationGroup = 'Sverige GEO';
 
     protected static bool $shouldRegisterNavigation = false;
 
@@ -82,6 +84,4 @@ class SwedenPostorterResource extends Resource
     {
         return (string) self::getModel()::count();
     }
-
-
 }

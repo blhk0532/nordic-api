@@ -70,7 +70,7 @@ return [
     'navigation' => [
         'terminal' => 'Terminal',
         'terminal_logs' => 'Terminal Logs',
-        'tools' => 'System DEV',
+        'tools' => 'Systems DEV',
     ],
 
     /*

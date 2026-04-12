@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
+use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use MWGuerra\WebTerminal\Models\TerminalLog;
-use Illuminate\Auth\Access\HandlesAuthorization;
 
 class TerminalLogPolicy
 {
     use HandlesAuthorization;
-    
+
     public function viewAny(AuthUser $authUser): bool
     {
         return $authUser->can('ViewAny:TerminalLog');
@@ -71,5 +71,4 @@ class TerminalLogPolicy
     {
         return $authUser->can('Reorder:TerminalLog');
     }
-
 }

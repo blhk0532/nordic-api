@@ -10,15 +10,15 @@ trait HasLabels
 {
     use HasPluginDefaults;
 
-    protected string | Closure | null $modelLabel = null;
+    protected string|Closure|null $modelLabel = null;
 
-    protected string | Closure | null $pluralModelLabel = null;
+    protected string|Closure|null $pluralModelLabel = null;
 
-    protected string | Closure | null $recordTitleAttribute = null;
+    protected string|Closure|null $recordTitleAttribute = null;
 
-    protected bool | Closure $hasTitleCaseModelLabel = true;
+    protected bool|Closure $hasTitleCaseModelLabel = true;
 
-    public function modelLabel(string | Closure | null $label): static
+    public function modelLabel(string|Closure|null $label): static
     {
         if (method_exists($this, 'setContextualProperty')) {
             return $this->setContextualProperty('modelLabel', $label);
@@ -30,7 +30,7 @@ trait HasLabels
         return $this;
     }
 
-    public function pluralModelLabel(string | Closure | null $label): static
+    public function pluralModelLabel(string|Closure|null $label): static
     {
         if (method_exists($this, 'setContextualProperty')) {
             return $this->setContextualProperty('pluralModelLabel', $label);
@@ -42,7 +42,7 @@ trait HasLabels
         return $this;
     }
 
-    public function titleCaseModelLabel(bool | Closure $condition = true): static
+    public function titleCaseModelLabel(bool|Closure $condition = true): static
     {
         if (method_exists($this, 'setContextualProperty')) {
             return $this->setContextualProperty('hasTitleCaseModelLabel', $condition);
@@ -54,7 +54,7 @@ trait HasLabels
         return $this;
     }
 
-    public function recordTitleAttribute(string | Closure | null $attribute): static
+    public function recordTitleAttribute(string|Closure|null $attribute): static
     {
         if (method_exists($this, 'setContextualProperty')) {
             return $this->setContextualProperty('recordTitleAttribute', $attribute);

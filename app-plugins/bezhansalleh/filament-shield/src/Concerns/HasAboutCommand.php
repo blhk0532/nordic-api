@@ -14,7 +14,7 @@ trait HasAboutCommand
     public function initAboutCommand(): void
     {
         AboutCommand::add('Shield', [
-            'Auth Provider' => Utils::getAuthProviderFQCN() . '|' . static::authProviderConfigured(),
+            'Auth Provider' => Utils::getAuthProviderFQCN().'|'.static::authProviderConfigured(),
             // 'Resource' => Utils::isResourcePublished(Filament::getCurrentPanel()) ? '<fg=red;options=bold>PUBLISHED</>' : '<fg=green;options=bold>NOT PUBLISHED</>',
             // 'Resource Slug' => Utils::getResourceSlug(),
             // 'Resource Sort' => Utils::getResourceNavigationSort(),

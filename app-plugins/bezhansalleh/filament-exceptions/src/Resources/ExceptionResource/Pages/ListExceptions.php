@@ -11,6 +11,8 @@ class ListExceptions extends ListRecords
 {
     protected static string $resource = ExceptionResource::class;
 
+    protected static bool $isScopedToTenant = false;
+
     protected function getTableEmptyStateIcon(): ?string
     {
         return static::$resource::getNavigationIcon();

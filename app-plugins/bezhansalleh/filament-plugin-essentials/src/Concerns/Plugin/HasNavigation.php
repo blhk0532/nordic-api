@@ -14,29 +14,29 @@ trait HasNavigation
 {
     use HasPluginDefaults;
 
-    protected Closure | null | SubNavigationPosition $subNavigationPosition = null;
+    protected Closure|null|SubNavigationPosition $subNavigationPosition = null;
 
-    protected bool | Closure $shouldRegisterNavigation = true;
+    protected bool|Closure $shouldRegisterNavigation = true;
 
-    protected Closure | null | string $navigationBadgeTooltip = null;
+    protected Closure|null|string $navigationBadgeTooltip = null;
 
-    protected Closure | null | string | UnitEnum $navigationGroup = null;
+    protected Closure|null|string|UnitEnum $navigationGroup = null;
 
-    protected array | Closure | null | string $navigationBadgeColor = null;
+    protected array|Closure|null|string $navigationBadgeColor = null;
 
-    protected Closure | string | null $navigationBadge = null;
+    protected Closure|string|null $navigationBadge = null;
 
-    protected Closure | string | null $navigationParentItem = null;
+    protected Closure|string|null $navigationParentItem = null;
 
-    protected BackedEnum | Closure | null | string $navigationIcon = null;
+    protected BackedEnum|Closure|null|string $navigationIcon = null;
 
-    protected BackedEnum | Closure | null | string $activeNavigationIcon = null;
+    protected BackedEnum|Closure|null|string $activeNavigationIcon = null;
 
-    protected Closure | null | string $navigationLabel = null;
+    protected Closure|null|string $navigationLabel = null;
 
-    protected Closure | int | null $navigationSort = null;
+    protected Closure|int|null $navigationSort = null;
 
-    public function subNavigationPosition(Closure | SubNavigationPosition $subNavigationPosition): static
+    public function subNavigationPosition(Closure|SubNavigationPosition $subNavigationPosition): static
     {
         if (method_exists($this, 'setContextualProperty')) {
             return $this->setContextualProperty('subNavigationPosition', $subNavigationPosition);
@@ -48,7 +48,7 @@ trait HasNavigation
         return $this;
     }
 
-    public function registerNavigation(bool | Closure $shouldRegisterNavigation): static
+    public function registerNavigation(bool|Closure $shouldRegisterNavigation): static
     {
         if (method_exists($this, 'setContextualProperty')) {
             return $this->setContextualProperty('shouldRegisterNavigation', $shouldRegisterNavigation);
@@ -60,7 +60,7 @@ trait HasNavigation
         return $this;
     }
 
-    public function navigationBadgeTooltip(string | Closure | null $tooltip): static
+    public function navigationBadgeTooltip(string|Closure|null $tooltip): static
     {
         if (method_exists($this, 'setContextualProperty')) {
             return $this->setContextualProperty('navigationBadgeTooltip', $tooltip);
@@ -72,7 +72,7 @@ trait HasNavigation
         return $this;
     }
 
-    public function navigationBadge(Closure | null | string $value = null): static
+    public function navigationBadge(Closure|null|string $value = null): static
     {
         if (method_exists($this, 'setContextualProperty')) {
             return $this->setContextualProperty('navigationBadge', $value);
@@ -84,7 +84,7 @@ trait HasNavigation
         return $this;
     }
 
-    public function navigationBadgeColor(array | Closure | string $color): static
+    public function navigationBadgeColor(array|Closure|string $color): static
     {
         if (method_exists($this, 'setContextualProperty')) {
             return $this->setContextualProperty('navigationBadgeColor', $color);
@@ -96,7 +96,7 @@ trait HasNavigation
         return $this;
     }
 
-    public function navigationGroup(Closure | null | string | UnitEnum $group): static
+    public function navigationGroup(Closure|null|string|UnitEnum $group): static
     {
         if (method_exists($this, 'setContextualProperty')) {
             return $this->setContextualProperty('navigationGroup', $group);
@@ -108,7 +108,7 @@ trait HasNavigation
         return $this;
     }
 
-    public function navigationParentItem(string | Closure | null $item): static
+    public function navigationParentItem(string|Closure|null $item): static
     {
         if (method_exists($this, 'setContextualProperty')) {
             return $this->setContextualProperty('navigationParentItem', $item);
@@ -120,7 +120,7 @@ trait HasNavigation
         return $this;
     }
 
-    public function navigationIcon(BackedEnum | Closure | null | string $icon): static
+    public function navigationIcon(BackedEnum|Closure|null|string $icon): static
     {
         if (method_exists($this, 'setContextualProperty')) {
             return $this->setContextualProperty('navigationIcon', $icon);
@@ -132,7 +132,7 @@ trait HasNavigation
         return $this;
     }
 
-    public function activeNavigationIcon(BackedEnum | Closure | null | string $icon): static
+    public function activeNavigationIcon(BackedEnum|Closure|null|string $icon): static
     {
         if (method_exists($this, 'setContextualProperty')) {
             return $this->setContextualProperty('activeNavigationIcon', $icon);
@@ -144,7 +144,7 @@ trait HasNavigation
         return $this;
     }
 
-    public function navigationLabel(Closure | null | string $label): static
+    public function navigationLabel(Closure|null|string $label): static
     {
         if (method_exists($this, 'setContextualProperty')) {
             return $this->setContextualProperty('navigationLabel', $label);
@@ -156,7 +156,7 @@ trait HasNavigation
         return $this;
     }
 
-    public function navigationSort(int | Closure | null $sort): static
+    public function navigationSort(int|Closure|null $sort): static
     {
         if (method_exists($this, 'setContextualProperty')) {
             return $this->setContextualProperty('navigationSort', $sort);
@@ -192,12 +192,12 @@ trait HasNavigation
         return $this->getPropertyWithDefaults('navigationBadge', $resourceClass);
     }
 
-    public function getNavigationBadgeColor(?string $resourceClass = null): array | string | null
+    public function getNavigationBadgeColor(?string $resourceClass = null): array|string|null
     {
         return $this->getPropertyWithDefaults('navigationBadgeColor', $resourceClass);
     }
 
-    public function getNavigationGroup(?string $resourceClass = null): string | UnitEnum | null
+    public function getNavigationGroup(?string $resourceClass = null): string|UnitEnum|null
     {
         return $this->getPropertyWithDefaults('navigationGroup', $resourceClass);
     }
@@ -207,12 +207,12 @@ trait HasNavigation
         return $this->getPropertyWithDefaults('navigationParentItem', $resourceClass);
     }
 
-    public function getNavigationIcon(?string $resourceClass = null): BackedEnum | Htmlable | null | string
+    public function getNavigationIcon(?string $resourceClass = null): BackedEnum|Htmlable|null|string
     {
         return $this->getPropertyWithDefaults('navigationIcon', $resourceClass);
     }
 
-    public function getActiveNavigationIcon(?string $resourceClass = null): BackedEnum | Htmlable | null | string
+    public function getActiveNavigationIcon(?string $resourceClass = null): BackedEnum|Htmlable|null|string
     {
         return $this->getPropertyWithDefaults('activeNavigationIcon', $resourceClass);
     }

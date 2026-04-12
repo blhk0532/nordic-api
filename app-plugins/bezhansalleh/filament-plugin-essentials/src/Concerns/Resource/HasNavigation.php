@@ -25,7 +25,7 @@ trait HasNavigation
             : static::getParentResult('getNavigationLabel');
     }
 
-    public static function getNavigationIcon(): string | BackedEnum | Htmlable | null
+    public static function getNavigationIcon(): string|BackedEnum|Htmlable|null
     {
         $pluginResult = static::delegateToPlugin(
             'HasNavigation',
@@ -37,7 +37,7 @@ trait HasNavigation
             : $pluginResult;
     }
 
-    public static function getActiveNavigationIcon(): BackedEnum | Htmlable | null | string
+    public static function getActiveNavigationIcon(): BackedEnum|Htmlable|null|string
     {
         $pluginResult = static::delegateToPlugin(
             'HasNavigation',
@@ -49,7 +49,7 @@ trait HasNavigation
             : $pluginResult;
     }
 
-    public static function getNavigationGroup(): string | UnitEnum | null
+    public static function getNavigationGroup(): string|UnitEnum|null
     {
         $pluginResult = static::delegateToPlugin(
             'HasNavigation',
@@ -85,7 +85,7 @@ trait HasNavigation
             : $pluginResult;
     }
 
-    public static function getNavigationBadgeColor(): string | array | null
+    public static function getNavigationBadgeColor(): string|array|null
     {
         $pluginResult = static::delegateToPlugin(
             'HasNavigation',

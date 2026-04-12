@@ -35,7 +35,7 @@
         "php": ">=8.2",
         "filament/filament": "^5",
         "livewire/livewire": "^4",
-        "phiki/phiki": "^2.0"
+        "phiki/phiki": "*"
     },
     "require-dev": {
         "larastan/larastan": "^3.8",

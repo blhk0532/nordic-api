@@ -55,11 +55,11 @@ trait HasEntityTransformers
     public function transformWidgets(): ?array
     {
         return $this->discoverWidgets()
-            ->reject(fn (string | WidgetConfiguration $widget): bool => in_array(
+            ->reject(fn (string|WidgetConfiguration $widget): bool => in_array(
                 needle: $this->getWidgetInstanceFromWidgetConfiguration($widget),
                 haystack: Utils::getConfig()->widgets->exclude
             ))
-            ->mapWithKeys(fn (string | WidgetConfiguration $widget): array => [
+            ->mapWithKeys(fn (string|WidgetConfiguration $widget): array => [
                 $widget => [
                     'widgetFqcn' => $this->getWidgetInstanceFromWidgetConfiguration($widget),
                     'permissions' => $this->getDefaultPermissionKeys($widget, Utils::getConfig()->widgets->prefix),
@@ -74,7 +74,7 @@ trait HasEntityTransformers
         $permissionCase = Utils::getConfig()->permissions->case;
 
         return collect(Utils::getConfig()->custom_permissions)
-            ->mapWithKeys(function (string $label, int | string $key) use ($localized, $permissionCase): array {
+            ->mapWithKeys(function (string $label, int|string $key) use ($localized, $permissionCase): array {
                 $permission = is_numeric($key) ? $label : $key;
                 $configLabel = is_numeric($key) ? null : $label;
 
@@ -113,7 +113,7 @@ trait HasEntityTransformers
             ->toArray();
     }
 
-    protected function getWidgetInstanceFromWidgetConfiguration(string | WidgetConfiguration $widget): string
+    protected function getWidgetInstanceFromWidgetConfiguration(string|WidgetConfiguration $widget): string
     {
         return $widget instanceof WidgetConfiguration
             ? $widget->widget

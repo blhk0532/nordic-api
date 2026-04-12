@@ -66,7 +66,7 @@ class TranslationCommand extends Command implements PromptsForMissingInput
 
         $this->writeTranslationsFile($path, $translations);
 
-        $this->components->info('Translations file generated at: ' . $path);
+        $this->components->info('Translations file generated at: '.$path);
 
         return Command::SUCCESS;
     }

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
-use Illuminate\Foundation\Auth\User as AuthUser;
 use App\Models\SwedenPostnummer;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Foundation\Auth\User as AuthUser;
 
 class SwedenPostnummerPolicy
 {
     use HandlesAuthorization;
-    
+
     public function viewAny(AuthUser $authUser): bool
     {
         return $authUser->can('ViewAny:SwedenPostnummer');
@@ -71,5 +71,4 @@ class SwedenPostnummerPolicy
     {
         return $authUser->can('Reorder:SwedenPostnummer');
     }
-
 }

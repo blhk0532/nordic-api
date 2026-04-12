@@ -12,11 +12,11 @@ trait HasGlobalSearch
 
     protected int $globalSearchResultsLimit = 50;
 
-    protected bool | Closure $isGloballySearchable = true;
+    protected bool|Closure $isGloballySearchable = true;
 
-    protected bool | Closure | null $isGlobalSearchForcedCaseInsensitive = null;
+    protected bool|Closure|null $isGlobalSearchForcedCaseInsensitive = null;
 
-    protected bool | Closure $shouldSplitGlobalSearchTerms = false;
+    protected bool|Closure $shouldSplitGlobalSearchTerms = false;
 
     public function globalSearchResultsLimit(int $limit): static
     {
@@ -30,7 +30,7 @@ trait HasGlobalSearch
         return $this;
     }
 
-    public function globallySearchable(bool | Closure $condition = true): static
+    public function globallySearchable(bool|Closure $condition = true): static
     {
         if (method_exists($this, 'setContextualProperty')) {
             return $this->setContextualProperty('isGloballySearchable', $condition);
@@ -42,7 +42,7 @@ trait HasGlobalSearch
         return $this;
     }
 
-    public function forceGlobalSearchCaseInsensitive(bool | Closure | null $condition = true): static
+    public function forceGlobalSearchCaseInsensitive(bool|Closure|null $condition = true): static
     {
         if (method_exists($this, 'setContextualProperty')) {
             return $this->setContextualProperty('isGlobalSearchForcedCaseInsensitive', $condition);
@@ -54,7 +54,7 @@ trait HasGlobalSearch
         return $this;
     }
 
-    public function splitGlobalSearchTerms(bool | Closure $condition = true): static
+    public function splitGlobalSearchTerms(bool|Closure $condition = true): static
     {
         if (method_exists($this, 'setContextualProperty')) {
             return $this->setContextualProperty('shouldSplitGlobalSearchTerms', $condition);

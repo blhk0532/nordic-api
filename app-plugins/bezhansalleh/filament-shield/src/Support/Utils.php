@@ -131,7 +131,7 @@ class Utils
     public static function getRolePolicyPath(): ?string
     {
         $filesystem = new Filesystem;
-        $path = static::getPolicyPath() . DIRECTORY_SEPARATOR . 'RolePolicy.php';
+        $path = static::getPolicyPath().DIRECTORY_SEPARATOR.'RolePolicy.php';
 
         return $filesystem->exists($path) ? Str::of(static::resolveNamespaceFromPath($path))->before('.php')->toString() : null;
     }
@@ -180,7 +180,7 @@ class Utils
         return static::getConfig()->tenant_model ?? null;
     }
 
-    public static function createRole(?string $name = null, int | string | null $tenantId = null): Role
+    public static function createRole(?string $name = null, int|string|null $tenantId = null): Role
     {
         $guardName = static::getFilamentAuthGuard();
 
@@ -209,7 +209,7 @@ class Utils
         )->name;
     }
 
-    public static function giveSuperAdminPermission(string | array | Collection $permissions): void
+    public static function giveSuperAdminPermission(string|array|Collection $permissions): void
     {
         if (! static::isSuperAdminDefinedViaGate() && static::isSuperAdminEnabled()) {
 
@@ -275,11 +275,11 @@ class Utils
         }
 
         // Normalize and prepare for comparison
-        $checkPath = rtrim($configuredPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $checkPath = rtrim($configuredPath, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
         $checkPathLower = strtolower($checkPath);
 
         foreach (static::$psr4Cache as $namespace => $base) {
-            $basePath = rtrim(base_path(str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $base)), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+            $basePath = rtrim(base_path(str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $base)), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
             $basePathLower = strtolower($basePath);
 
             // Fast path: exact match
@@ -294,14 +294,14 @@ class Utils
 
                 $ns = rtrim((string) $namespace, '\\');
                 if ($relative !== '') {
-                    $ns .= '\\' . str_replace(DIRECTORY_SEPARATOR, '\\', $relative);
+                    $ns .= '\\'.str_replace(DIRECTORY_SEPARATOR, '\\', $relative);
                 }
 
                 return $ns;
             }
         }
 
-        throw new RuntimeException('Configured path does not match any PSR-4 mapping: ' . $configuredPath);
+        throw new RuntimeException('Configured path does not match any PSR-4 mapping: '.$configuredPath);
     }
 
     /**

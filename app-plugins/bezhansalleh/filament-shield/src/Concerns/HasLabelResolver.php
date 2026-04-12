@@ -18,7 +18,7 @@ trait HasLabelResolver
     /**
      * Get resource label from Filament's getModelLabel().
      */
-    public function getLocalizedResourceLabel(Resource | string $resource): string
+    public function getLocalizedResourceLabel(Resource|string $resource): string
     {
         $resource = is_string($resource) ? resolve($resource) : $resource;
 
@@ -28,7 +28,7 @@ trait HasLabelResolver
     /**
      * Get page label using Filament's methods with fallback chain.
      */
-    public function getLocalizedPageLabel(Page | string $page): string
+    public function getLocalizedPageLabel(Page|string $page): string
     {
         $page = is_string($page) ? resolve($page) : $page;
 
@@ -41,7 +41,7 @@ trait HasLabelResolver
     /**
      * Get widget label using Filament's methods with fallback chain.
      */
-    public function getLocalizedWidgetLabel(Widget | string $widget): string
+    public function getLocalizedWidgetLabel(Widget|string $widget): string
     {
         $widget = is_string($widget) ? resolve($widget) : $widget;
 
@@ -77,7 +77,7 @@ trait HasLabelResolver
         }
 
         // 2. Package's default translations for affixes
-        $packageKey = 'filament-shield::filament-shield.resource_permission_prefixes_labels.' . $localizationKey;
+        $packageKey = 'filament-shield::filament-shield.resource_permission_prefixes_labels.'.$localizationKey;
         if (Lang::has($packageKey)) {
             return __($packageKey);
         }

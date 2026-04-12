@@ -21,6 +21,8 @@ class HittaDataResource extends Resource
 {
     protected static ?string $model = HittaData::class;
 
+    protected static bool $isScopedToTenant = false;
+
     protected static ?string $recordTitleAttribute = 'personnamn';
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-user';
@@ -31,14 +33,14 @@ class HittaDataResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Hitta Databaser';
 
-    protected static UnitEnum|string|null $navigationGroup = 'Database SE';
+    protected static UnitEnum|string|null $navigationGroup = 'Database NR';
 
     protected static ?int $navigationSort = 5;
 
     // place resource under Databaser cluster
     protected static ?string $slug = 'databaser/hitta-data';
 
-        public static function getModelLabel(): string
+    public static function getModelLabel(): string
     {
         return __('DB Hitta');
     }

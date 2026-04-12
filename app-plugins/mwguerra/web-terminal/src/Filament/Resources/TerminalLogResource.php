@@ -20,6 +20,8 @@ class TerminalLogResource extends Resource
 {
     protected static ?string $model = TerminalLog::class;
 
+    protected static bool $isScopedToTenant = false;
+
     protected static ?string $slug = 'terminal-logs';
 
     public static function getModelLabel(): string

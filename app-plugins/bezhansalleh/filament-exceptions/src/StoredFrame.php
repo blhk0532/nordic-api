@@ -78,7 +78,7 @@ class StoredFrame
         return match (true) {
             ! isset($file) => '[internal function]',
             ! is_string($file) => '[unknown file]',
-            default => str_replace($this->basePath . DIRECTORY_SEPARATOR, '', $file),
+            default => str_replace($this->basePath.DIRECTORY_SEPARATOR, '', $file),
         };
     }
 
@@ -169,7 +169,7 @@ class StoredFrame
         $file = $this->frame['file'] ?? '';
 
         return ! str_starts_with($file, $this->basePath)
-            || str_starts_with($file, $this->basePath . DIRECTORY_SEPARATOR . 'vendor');
+            || str_starts_with($file, $this->basePath.DIRECTORY_SEPARATOR.'vendor');
     }
 
     /**

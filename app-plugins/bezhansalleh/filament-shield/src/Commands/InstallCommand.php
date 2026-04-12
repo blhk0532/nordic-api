@@ -63,13 +63,13 @@ class InstallCommand extends Command implements PromptsForMissingInput
             (string) str($panel->getId())
                 ->studly()
                 ->append('PanelProvider')
-                ->prepend('Providers' . DIRECTORY_SEPARATOR . 'Filament' . DIRECTORY_SEPARATOR)
+                ->prepend('Providers'.DIRECTORY_SEPARATOR.'Filament'.DIRECTORY_SEPARATOR)
                 ->replace(['\\', '/'], DIRECTORY_SEPARATOR)
                 ->append('.php'),
         );
 
         if (! $this->fileExists($panelPath)) {
-            $this->error('Panel not found: ' . $panelPath);
+            $this->error('Panel not found: '.$panelPath);
 
             return Command::FAILURE;
         }
@@ -100,7 +100,7 @@ class InstallCommand extends Command implements PromptsForMissingInput
             );
         }
 
-        Process::run('php artisan shield:generate --resource=RoleResource --panel=' . $panel->getId());
+        Process::run('php artisan shield:generate --resource=RoleResource --panel='.$panel->getId());
 
         return Command::SUCCESS;
     }

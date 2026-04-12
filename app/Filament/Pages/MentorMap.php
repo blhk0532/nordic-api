@@ -23,7 +23,7 @@ class MentorMap extends Page
 
     protected static ?int $navigationSort = 5;
 
-    protected static UnitEnum|string|null $navigationGroup = 'Sverige MAP';
+    protected static UnitEnum|string|null $navigationGroup = 'Kartor MAPS';
 
     protected static ?string $slug = 'mentor-map';
 

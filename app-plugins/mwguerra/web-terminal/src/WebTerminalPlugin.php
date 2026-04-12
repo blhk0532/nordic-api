@@ -289,7 +289,7 @@ class WebTerminalPlugin implements Plugin
      */
     public function getTerminalNavigationGroup(): ?string
     {
-        return $this->terminalNavigationGroup ?? 'System DEV';
+        return $this->terminalNavigationGroup ?? 'Systems DEV';
     }
 
     // =========================================================================
@@ -378,6 +378,6 @@ class WebTerminalPlugin implements Plugin
      */
     public function getTerminalLogsNavigationGroup(): ?string
     {
-        return $this->terminalLogsNavigationGroup ?? 'System DEV';
+        return $this->terminalLogsNavigationGroup ?? 'Systems DEV';
     }
 }

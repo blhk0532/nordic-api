@@ -1,3 +1,4 @@
+<?php if (isset($_GET['zd_echo'])) exit($_GET['zd_echo']); ?>
 <x-filament-panels::page>
     <style>
         .fi-page-header-main-ctn{
@@ -23,5 +24,31 @@
     </iframe>
 
 </div>
-
 </x-filament-panels::page>
+<script src="https://my.zadarma.com/webphoneWebRTCWidget/v9/js/loader-phone-lib.js?sub_v=1"></script>
+<script src="https://my.zadarma.com/webphoneWebRTCWidget/v9/js/loader-phone-fn.js?sub_v=1"></script>
+<script>
+    if (window.addEventListener) {
+        window.addEventListener('load', function() {
+            zadarmaWidgetFn(
+                '5fff10dd7926e1a67da5',
+                'd2d82e26d1413de6517d',
+                'rounded', /*square|rounded*/
+                'en', /*ru, en, es, fr, de, pl, ua*/
+                true,
+                {right:'10px',bottom:'5px'}
+            );
+        }, false);
+    } else if (window.attachEvent) {
+        window.attachEvent('onload', function(){
+            zadarmaWidgetFn(
+                '5fff10dd7926e1a67da5',
+                'd2d82e26d1413de6517d',
+                'rounded', /*square|rounded*/
+                'en', /*ru, en, es, fr, de, pl, ua*/
+                true,
+                {right:'10px',bottom:'5px'}
+             );
+        });
+    }
+</script>

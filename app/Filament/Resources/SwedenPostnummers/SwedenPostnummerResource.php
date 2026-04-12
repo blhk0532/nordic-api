@@ -24,9 +24,11 @@ class SwedenPostnummerResource extends Resource
 
     protected static ?string $navigationLabel = 'Postnummer';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Sweden GEO';
+    protected static string|UnitEnum|null $navigationGroup = 'Sverige GEO';
 
     protected static ?string $model = SwedenPostnummer::class;
+
+    protected static bool $isScopedToTenant = false;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMapPin;
 
@@ -75,7 +77,7 @@ class SwedenPostnummerResource extends Resource
         return (string) self::getModel()::count();
     }
 
-                    public static function getModelLabel(): string
+    public static function getModelLabel(): string
     {
         return __('DB Postnummer');
     }

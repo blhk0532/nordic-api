@@ -12,6 +12,7 @@
         "php": "^8.4",
         "achyutn/filament-log-viewer": "@dev",
         "adultdate/filament-booking": "@dev",
+        "andrewdwallo/filament-companies": "@dev",
         "anish/text-input-entry": "*",
         "asmit/resized-column": "^3.0",
         "awcodes/overlook": "^4.0",
@@ -24,22 +25,29 @@
         "deldius/filament-user-field": "^1.1",
         "devletes/filament-pinnable-navigation": "^1.0",
         "devletes/filament-progress-bar": "^1.0",
+        "dutchcodingcompany/filament-socialite": "^3.2",
         "eduardoribeirodev/filament-leaflet": "@dev",
         "eightynine/filament-excel-import": "dev-main",
         "fahiem/filament-pinpoint": "^1.1",
         "filament/filament": "^5.4",
+        "flexpik/filament-studio": "^1.1",
         "gheith3/filament-relation-pages": "^1.0",
         "hammadzafar05/mobile-bottom-nav": "^1.2",
         "harvirsidhu/filament-cards": "^1.0",
+        "inerba/filament-db-config": "^1.3",
         "internachi/modular": "^3.0",
         "joaopaulolndev/filament-edit-profile": "^3.0",
+        "joaopaulolndev/filament-general-settings": "^3.0",
+        "joaopaulolndev/filament-world-clock": "^3.0",
         "laravel/fortify": "^1.34",
         "laravel/framework": "^13.0",
+        "laravel/horizon": "^5.45",
         "laravel/octane": "^2.17",
         "laravel/sanctum": "^4.3",
         "laravel/tinker": "^3.0",
         "laraveljutsu/zap": "^1.15",
         "leandrocfe/filament-apex-charts": "^5.1",
+        "livewire/blaze": "^1.0",
         "livewire/flux": "^2.12.0",
         "livewire/livewire": "^4.1",
         "modules/filament": "*",
@@ -54,6 +62,7 @@
         "spatie/laravel-query-builder": "^7.2",
         "spiral/roadrunner-cli": "^2.6.0",
         "spiral/roadrunner-http": "^3.3.0",
+        "stechstudio/filament-impersonate": "^5.2",
         "wallacemartinss/filament-icon-picker": "^2.0",
         "zvizvi/user-fields": "^0.0.4"
     },
@@ -156,19 +165,26 @@
         },
         {
             "type": "path",
+            "url": "app-plugins/andrewdwallo/filament-companies",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
             "url": "app-plugins/bezhansalleh/filament-exceptions",
             "options": {
                 "symlink": true
             }
         },
-                {
+        {
             "type": "path",
             "url": "app-plugins/adultdate/filament-booking",
             "options": {
                 "symlink": true
             }
         },
-                {
+        {
             "type": "path",
             "url": "app-plugins/adultdate/filament-wirechat",
             "options": {

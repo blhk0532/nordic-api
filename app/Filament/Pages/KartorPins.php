@@ -32,7 +32,7 @@ class KartorPins extends BasePage
 
     protected static string|BackedEnum|null $activeNavigationIcon = 'heroicon-s-map';
 
-    protected static UnitEnum|string|null $navigationGroup = 'Sverige MAP';
+    protected static UnitEnum|string|null $navigationGroup = 'Kartor MAPS';
 
     //   protected static string|BackedEnum|null $navigationIcon = Remix::RiCalendarScheduleLine;
     //   protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiCalendarScheduleFill;

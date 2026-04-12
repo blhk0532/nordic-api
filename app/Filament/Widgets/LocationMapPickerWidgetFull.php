@@ -144,25 +144,25 @@ class LocationMapPickerWidgetFull extends Widget implements HasForms
 
                                 TextInput::make('state')
                                     ->label(' ')
-                                    ->extraAttributes(['style' => 'background-color:#232326;color:#fff;'])
+                                    ->extraAttributes(['style' => 'background-color:#232326;color:#fff;width: 156px;'])
                                     ->maxLength(255)
                                     ->columnSpan(1)
                                     ->readOnly(),
                                 TextInput::make('city')
                                     ->label(' ')
-                                    ->extraAttributes(['style' => 'background-color:#232326;color:#fff;'])
+                                    ->extraAttributes(['style' => 'background-color:#232326;color:#fff;width: 156px;'])
                                     ->maxLength(255)
                                     ->columnSpan(1)
                                     ->readOnly(),
                                 TextInput::make('zip')
                                     ->label(' ')
-                                    ->extraAttributes(['style' => 'background-color:#232326;color:#fff;'])
+                                    ->extraAttributes(['style' => 'background-color:#232326;color:#fff;width: 156px;'])
                                     ->columnSpan(1)
                                     ->maxLength(50)
                                     ->readOnly(),
                                 TextInput::make('street')
                                     ->label(' ')
-                                    ->extraAttributes(['style' => 'background-color:#232326;color:#fff;'])
+                                    ->extraAttributes(['style' => 'background-color:#232326;color:#fff;width: 156px;'])
                                     ->maxLength(255)
                                     ->columnSpan(1)
                                     ->readOnly(),
@@ -187,28 +187,28 @@ class LocationMapPickerWidgetFull extends Widget implements HasForms
                         Section::make('Pin Location')
                             ->label(' ')
                             ->heading(null)
-                            ->extraAttributes(['class' => 'pin-location-section absolute z-10', 'style' => 'background-color:transparent;border:none;bottom:20px;left:0px;opacity:1;'])
+                            ->extraAttributes(['class' => 'pin-location-section absolute z-10', 'style' => 'background-color:transparent;border:none;bottom:20px;left:0px;opacity:1;width:420px;'])
                             ->schema([
-
-                                ColorPicker::make('pin_color')
-                                    ->label('Pin Color')
-                                    ->placeholder('Color')
-                                    ->extraAttributes(['style' => 'background-color:#232326;color:#fff;'])
-                                    ->columnSpan(1),
                                 TextInput::make('pin_name')
                                     ->label('Pin Name / Note')
                                     ->placeholder('Name')
                                     ->extraAttributes(['style' => 'background-color:#232326;color:#fff;'])
-                                    ->columnSpan(1),
+                                    ->columnSpan(8),
+                                ColorPicker::make('pin_color')
+                                    ->label('Pin Color')
+                                    ->placeholder('Color')
+                                    ->extraAttributes(['style' => 'background-color:#232326;color:#fff;'])
+                                    ->columnSpan(4),
                                 TextInput::make('address_search')
+                                ->extraAttributes(['style' => 'position:relative;left:150px;'])
                                     ->label('Sök address eller område')
                                     ->placeholder('Search')
-                                    ->extraAttributes(['style' => 'background-color:#232326;color:#fff;margin-right: 120px;'])
-                                    ->columnSpan(2)
+                                    ->extraAttributes(['style' => 'background-color:#232326;color:#fff;margin-left: 120px;'])
+                                    ->columnSpan(12)
                                     ->maxLength(255),
 
                             ])
-                            ->columns(2),
+                            ->columns(12),
 
                     ])
                     ->columns(5)

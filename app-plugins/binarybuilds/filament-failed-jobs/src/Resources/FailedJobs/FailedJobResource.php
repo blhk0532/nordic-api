@@ -24,6 +24,8 @@ class FailedJobResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = null;
 
+    protected static bool $isScopedToTenant = false;
+
     public static function infolist(Schema $schema): Schema
     {
         return FailedJobInfolist::configure($schema);

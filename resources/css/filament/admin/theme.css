@@ -70,13 +70,13 @@ aside.fi-sidebar.fi-main-sidebar.fi-sidebar-opened{
     width: 100%;
     min-width: 0;
     padding-inline-end: 0rem!important;
-    padding-left:4px;
+    padding-left:0px;
     padding-top: 8px;
 }
 
 .fi-sidebar-open .fi-sidebar-item-btn-with-pin{
     padding-inline-end: 2.5rem!important;
-        padding-left: 10px;
+        padding-left: 7px;
          padding-top: 7px;
 }
 
@@ -84,6 +84,111 @@ aside.fi-sidebar.fi-main-sidebar.fi-sidebar-opened{
     display: none !important;
 }
 
-.fi-sidebar-open .fi-sidebar-pin-btn{
+.fi-sidebar-pin-btn{
     display: flex !important;
+}
+
+
+.fi-tenant-menu{
+    margin-left: 0px!important;
+    margin-right: 0px!important;
+}
+
+.fi-sidebar-open  .fi-tenant-menu{
+    margin-left: 12px!important;
+     margin-right: 8px!important;
+}
+
+li.fi-sidebar-group.fi-localstorage-pinned-group.fi-collapsible{
+    display: none!important;
+}
+
+.fi-sidebar-open li.fi-sidebar-group.fi-localstorage-pinned-group.fi-collapsible{
+    display: block!important;
+}
+
+li.fi-sidebar-item.fi-active.fi-sidebar-item-has-url{
+    width:36px;
+}
+
+.fi-sidebar-open li.fi-sidebar-item.fi-active.fi-sidebar-item-has-url{
+    width:100%!important;
+}
+
+.fi-sidebar-group.fi-localstorage-pinned-group.fi-collapsible .fi-sidebar-group-btn{
+
+    display: flex!important;
+     justify-content: right!important;
+
+}
+
+.fi-sidebar-group.fi-localstorage-pinned-group.fi-collapsible .fi-sidebar-group-btn .fi-sidebar-group-label{
+    display: none!important;
+}
+
+.fi-sidebar-group.fi-localstorage-pinned-group.fi-collapsible .fi-sidebar-group-btn .fi-icon.fi-size-lg{
+    display: none!important;
+}
+
+.fi-sidebar-group.fi-localstorage-pinned-group.fi-collapsible .fi-sidebar-group-btn .fi-icon-btn.fi-size-md.fi-sidebar-group-collapse-btn{
+    position: relative;
+    top:-5px;
+}
+
+.fi-sidebar-group.fi-localstorage-pinned-group.fi-collapsible .fi-sidebar-group-btn {
+   position: relative;
+  top: -48px;
+  margin-bottom: -48px;
+}
+
+.fi-sidebar-group.fi-active.fi-collapsible{
+    z-index: 8;
+}
+
+.fi-icon-btn.fi-size-md.fi-sidebar-group-collapse-btn{
+     z-index: 12;
+}
+.fi-icon-btn{
+  z-index: 12;
+}
+.fi-sidebar-pin-btn{
+  z-index: 12;
+}
+.fi-icon-btn.fi-size-md.fi-sidebar-pin-btn{
+   z-index: 12;
+}
+.fi-icon-btn.fi-size-md.fi-sidebar-group-collapse-btn :hover{
+   background: oklab(1 0 5.96046e-8 / 0.05);
+   border-radius: 12px;
+}
+.fi-sidebar-group.fi-localstorage-pinned-group.fi-collapsible.fi-collapsed{
+    margin-bottom: -17px;
+}
+
+.fi-tenant-menu-trigger .fi-icon.fi-size-md{
+    position: relative!important;
+  right: 18px!important;
+}
+
+.fi-dropdown.fi-tenant-menu{
+      margin-bottom: 0px;
+      z-index: 20;
+}
+.fi-dropdown.fi-tenant-menu .fi-dropdown-panel.fi-scrollable{
+min-width: 312px!important;
+}
+
+.fi-sidebar-nav{
+  padding-top: 12px;
+  margin-top: 0rem;
+  scrollbar-width: thin !important;
+}
+
+.fi-dropdown.fi-tenant-menu .fi-dropdown-panel.fi-scrollable .fi-dropdown-list{
+    padding: 8px 4px;
+   background: oklab(1 0 5.96046e-8 / 0.05);
+}
+
+.fi-sidebar-item-btn.fi-sidebar-item-btn-with-pin{
+    z-index: 10;
 }

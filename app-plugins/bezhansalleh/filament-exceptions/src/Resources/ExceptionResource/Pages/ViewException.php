@@ -16,6 +16,8 @@ class ViewException extends ViewRecord
 {
     protected static string $resource = ExceptionResource::class;
 
+    protected static bool $isScopedToTenant = false;
+
     protected string $view = 'filament-exceptions::view-exception';
 
     protected ?StoredException $storedException = null;
@@ -39,7 +41,7 @@ class ViewException extends ViewRecord
         return $this->storedException;
     }
 
-    public function getHeading(): string | Htmlable | null
+    public function getHeading(): string|Htmlable|null
     {
         return null; // $this->heading ?? $this->getTitle();
     }
@@ -49,7 +51,7 @@ class ViewException extends ViewRecord
         return null;
     }
 
-    public function getMaxContentWidth(): Width | string | null
+    public function getMaxContentWidth(): Width|string|null
     {
         return Width::SixExtraLarge;
     }

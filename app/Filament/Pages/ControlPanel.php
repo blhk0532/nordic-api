@@ -4,25 +4,22 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages;
 
+use App\Filament\Resources\Merinfos\MerinfoResource;
+use App\Filament\Resources\People\PersonResource;
 use App\Filament\Resources\SwedenAdressers\SwedenAdresserResource;
 use App\Filament\Resources\SwedenGators\SwedenGatorResource;
 use App\Filament\Resources\SwedenKommuners\SwedenKommunerResource;
 use App\Filament\Resources\SwedenPersoners\SwedenPersonerResource;
 use App\Filament\Resources\SwedenPostnummers\SwedenPostnummerResource;
 use App\Filament\Resources\SwedenPostorters\SwedenPostorterResource;
-use App\Filament\Resources\Merinfos\MerinfoResource;
-use App\Filament\Resources\People\PersonResource;
+use App\Filament\Widgets\GeoMapWidget;
+use Awcodes\Overlook\Widgets\OverlookWidget;
 use BackedEnum;
 use Harvirsidhu\FilamentCards\CardGroup;
 use Harvirsidhu\FilamentCards\CardItem;
 use Harvirsidhu\FilamentCards\Filament\Pages\CardsPage;
 use Illuminate\Support\Facades\Auth;
 use UnitEnum;
-use App\Filament\Widgets\SEBackupWidget;
-use App\Filament\Widgets\GeoMapWidget;
-use App\Filament\Widgets\LocationMapPickerWidgetFull;
-use App\Filament\Widgets\MapPinsTableWidget;
-use Awcodes\Overlook\Widgets\OverlookWidget;
 
 class ControlPanel extends CardsPage
 {
@@ -36,9 +33,9 @@ class ControlPanel extends CardsPage
 
     protected static ?string $title = '';
 
-    protected static ?string $slug = 'dashboards';
+    protected static ?string $slug = 'controlpanel';
 
-    protected static ?string $navigationLabel = 'Dashboards';
+    protected static ?string $navigationLabel = 'Dashboard';
 
     protected static ?int $navigationSort = -1;
 
@@ -64,7 +61,7 @@ class ControlPanel extends CardsPage
                         ->icon('heroicon-o-map')
                         ->label('Kommuner')
                         ->color('primary')
-                        ->badge(fn() => (string) SwedenKommunerResource::getModel()::count())
+                        ->badge(fn () => (string) SwedenKommunerResource::getModel()::count())
                         ->extraAttributes([
                             'style' => 'background:#18181b;padding-top:2rem;padding-bottom:2rem;',
                         ])
@@ -75,7 +72,7 @@ class ControlPanel extends CardsPage
                         ->icon('heroicon-o-envelope')
                         ->label('Postorter')
                         ->color('primary')
-                        ->badge(fn() => (string) SwedenPostorterResource::getModel()::count())
+                        ->badge(fn () => (string) SwedenPostorterResource::getModel()::count())
                         ->extraAttributes([
                             'style' => 'background:#18181b;padding-top:2rem;padding-bottom:2rem;',
                         ])
@@ -86,7 +83,7 @@ class ControlPanel extends CardsPage
                         ->icon('heroicon-o-map-pin')
                         ->label('Postnummer')
                         ->color('primary')
-                        ->badge(fn() => (string) SwedenPostnummerResource::getModel()::count())
+                        ->badge(fn () => (string) SwedenPostnummerResource::getModel()::count())
                         ->extraAttributes([
                             'style' => 'background:#18181b;padding-top:2rem;padding-bottom:2rem;',
                         ])
@@ -97,7 +94,7 @@ class ControlPanel extends CardsPage
                         ->icon('heroicon-o-home-modern')
                         ->label('Gator')
                         ->color('primary')
-                        ->badge(fn() => (string) SwedenGatorResource::getModel()::count())
+                        ->badge(fn () => (string) SwedenGatorResource::getModel()::count())
                         ->extraAttributes([
                             'style' => 'background:#18181b;padding-top:2rem;padding-bottom:2rem;',
                         ])
@@ -108,7 +105,7 @@ class ControlPanel extends CardsPage
                         ->icon('heroicon-o-home')
                         ->label('Adresser')
                         ->color('primary')
-                        ->badge(fn() => (string) SwedenAdresserResource::getModel()::count())
+                        ->badge(fn () => (string) SwedenAdresserResource::getModel()::count())
                         ->extraAttributes([
                             'style' => 'background:#18181b;padding-top:2rem;padding-bottom:2rem;',
                         ])
@@ -119,7 +116,7 @@ class ControlPanel extends CardsPage
                         ->icon('heroicon-o-users')
                         ->label('Personer')
                         ->color('primary')
-                        ->badge(fn() => (string) SwedenPersonerResource::getModel()::count())
+                        ->badge(fn () => (string) SwedenPersonerResource::getModel()::count())
                         ->extraAttributes([
                             'style' => 'background:#18181b;padding-top:2rem;padding-bottom:2rem;',
                         ])
@@ -135,7 +132,7 @@ class ControlPanel extends CardsPage
                         ->icon('heroicon-o-users')
                         ->label('Merinfo')
                         ->color('success')
-                        ->badge(fn() => (string) MerinfoResource::getModel()::count())
+                        ->badge(fn () => (string) MerinfoResource::getModel()::count())
                         ->extraAttributes([
                             'style' => 'background:#18181b;padding-top:2rem;padding-bottom:2rem;',
                         ])
@@ -146,7 +143,7 @@ class ControlPanel extends CardsPage
                         ->icon('heroicon-o-users')
                         ->label('Personer')
                         ->color('success')
-                        ->badge(fn() => (string) PersonResource::getModel()::count())
+                        ->badge(fn () => (string) PersonResource::getModel()::count())
                         ->extraAttributes([
                             'style' => 'background:#18181b;padding-top:2rem;padding-bottom:2rem;',
                         ])
@@ -165,7 +162,7 @@ class ControlPanel extends CardsPage
     protected function getFooterWidgets(): array
     {
         return [
-            OverlookWidget::class,
+            // OverlookWidget::class,
         ];
     }
 

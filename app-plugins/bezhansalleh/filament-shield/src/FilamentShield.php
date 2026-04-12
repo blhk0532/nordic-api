@@ -52,10 +52,10 @@ class FilamentShield
 
     public function defaultPermissionKeyBuilder(string $affix, string $separator, string $subject, string $case): string
     {
-        return $this->format($case, $affix) . $separator . $this->format($case, $subject);
+        return $this->format($case, $affix).$separator.$this->format($case, $subject);
     }
 
-    public function getDefaultPermissionKeys(string $entity, string | array $affixes): array
+    public function getDefaultPermissionKeys(string $entity, string|array $affixes): array
     {
         $subject = $this->resolveSubject($entity);
 

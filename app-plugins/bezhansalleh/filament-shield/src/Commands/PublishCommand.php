@@ -47,7 +47,7 @@ class PublishCommand extends Command
         $this->configureResourcesLocation(question: 'Which namespace would you like to publish the shield resource in?');
         $this->configureParentResource();
 
-        $roleResourcePath = str(DIRECTORY_SEPARATOR . 'Roles/RoleResource.php')
+        $roleResourcePath = str(DIRECTORY_SEPARATOR.'Roles/RoleResource.php')
             ->prepend($this->resourcesDirectory)
             ->replace(['\\', '/'], DIRECTORY_SEPARATOR)
             ->toString();
@@ -59,32 +59,32 @@ class PublishCommand extends Command
             }
         }
 
-        $resourcePath = $this->resourcesDirectory . '/Roles';
-        $filesystem->ensureDirectoryExists($resourcePath . '/Pages');
+        $resourcePath = $this->resourcesDirectory.'/Roles';
+        $filesystem->ensureDirectoryExists($resourcePath.'/Pages');
 
-        $sourcePath = __DIR__ . '/../Resources/Roles';
+        $sourcePath = __DIR__.'/../Resources/Roles';
 
         $filesystem->copy(
-            $sourcePath . '/RoleResource.php',
-            $resourcePath . '/RoleResource.php'
+            $sourcePath.'/RoleResource.php',
+            $resourcePath.'/RoleResource.php'
         );
 
         $filesystem->copyDirectory(
-            $sourcePath . '/Pages',
-            $resourcePath . '/Pages'
+            $sourcePath.'/Pages',
+            $resourcePath.'/Pages'
         );
 
         $this->replaceInFile(
-            $resourcePath . '/RoleResource.php',
+            $resourcePath.'/RoleResource.php',
             'BezhanSalleh\\FilamentShield\\Resources\\Roles',
-            $this->resourcesNamespace . '\\Roles'
+            $this->resourcesNamespace.'\\Roles'
         );
 
         foreach (['CreateRole', 'EditRole', 'ListRoles', 'ViewRole'] as $page) {
             $this->replaceInFile(
-                $resourcePath . sprintf('/Pages/%s.php', $page),
+                $resourcePath.sprintf('/Pages/%s.php', $page),
                 'BezhanSalleh\\FilamentShield\\Resources\\Roles',
-                $this->resourcesNamespace . '\\Roles'
+                $this->resourcesNamespace.'\\Roles'
             );
         }
 
@@ -185,7 +185,7 @@ class PublishCommand extends Command
             return;
         }
 
-        $this->resourcesNamespace = $this->parentResourceFqn . '\Resources';
+        $this->resourcesNamespace = $this->parentResourceFqn.'\Resources';
         $this->resourcesDirectory = (string) str((new ReflectionClass($this->parentResourceFqn))->getFileName())
             ->beforeLast('.')
             ->append('/Resources');

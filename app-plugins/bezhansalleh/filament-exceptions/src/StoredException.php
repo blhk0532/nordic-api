@@ -65,7 +65,7 @@ class StoredException
     /**
      * Get the exception code.
      */
-    public function code(): int | string
+    public function code(): int|string
     {
         return $this->record->code ?? 0;
     }
@@ -169,7 +169,7 @@ class StoredException
         $headers = $this->record->headers ?? [];
 
         return array_map(
-            fn (array | string $header): string => is_array($header) ? implode(', ', $header) : $header,
+            fn (array|string $header): string => is_array($header) ? implode(', ', $header) : $header,
             $headers
         );
     }
@@ -261,8 +261,8 @@ class StoredException
         $lines[] = '';
         $lines[] = $this->message();
         $lines[] = '';
-        $lines[] = 'PHP ' . PHP_VERSION;
-        $lines[] = 'Laravel ' . app()->version();
+        $lines[] = 'PHP '.PHP_VERSION;
+        $lines[] = 'Laravel '.app()->version();
         $lines[] = $this->request()->httpHost();
         $lines[] = '';
 
@@ -279,7 +279,7 @@ class StoredException
         $lines[] = '## Request';
         $lines[] = '';
         $path = $this->request()->path();
-        $lines[] = $this->request()->method() . ' ' . (str_starts_with($path, '/') ? $path : '/' . $path);
+        $lines[] = $this->request()->method().' '.(str_starts_with($path, '/') ? $path : '/'.$path);
         $lines[] = '';
 
         // Headers
@@ -339,7 +339,7 @@ class StoredException
     protected function createRequest(): Request
     {
         $request = Request::create(
-            uri: '/' . ltrim($this->record->path ?? '', '/'),
+            uri: '/'.ltrim($this->record->path ?? '', '/'),
             method: $this->record->method ?? 'GET',
             server: [
                 'REMOTE_ADDR' => $this->record->ip ?? '127.0.0.1',

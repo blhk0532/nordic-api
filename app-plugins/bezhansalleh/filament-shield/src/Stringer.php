@@ -29,7 +29,7 @@ class Stringer
         $content = file_get_contents($this->filePath);
 
         if ($content === false) {
-            throw new RuntimeException('Could not read file: ' . $this->filePath);
+            throw new RuntimeException('Could not read file: '.$this->filePath);
         }
 
         // Normalize line endings to \n for cross-platform compatibility
@@ -71,11 +71,11 @@ class Stringer
 
             // Get the line indentation
             $lineInfo = $this->findLine($needle);
-            $indentation = $lineInfo['indentation'] . $this->getIndentation();
+            $indentation = $lineInfo['indentation'].$this->getIndentation();
             // Format the new content based on the newLine flag
             $formattedReplacement = $this->addNewLine
-                ? "\n" . $indentation . trim($contentToPrepend)
-                : $indentation . trim($contentToPrepend);
+                ? "\n".$indentation.trim($contentToPrepend)
+                : $indentation.trim($contentToPrepend);
             $this->addNewLine = false;
             // Reset flag
             // Insert the formatted replacement before the opening parenthesis
@@ -83,9 +83,9 @@ class Stringer
         } elseif (($lineInfo = $this->findLine($needle)) !== null && ($lineInfo = $this->findLine($needle)) !== []) {
             // Normal prepend logic
             // Prepend the content with proper indentation
-            $newContent = $lineInfo['indentation'] . $this->getIndentation() . trim($contentToPrepend);
+            $newContent = $lineInfo['indentation'].$this->getIndentation().trim($contentToPrepend);
             if ($this->addNewLine) {
-                $newContent = "\n" . $newContent;
+                $newContent = "\n".$newContent;
                 $this->addNewLine = false; // Reset the flag
             }
 
@@ -127,22 +127,22 @@ class Stringer
 
             // Get the line indentation
             $lineInfo = $this->findLine($needle);
-            $indentation = $lineInfo['indentation'] . $this->getIndentation();
+            $indentation = $lineInfo['indentation'].$this->getIndentation();
             // Format the new content based on the newLine flag
             $formattedReplacement = $this->addNewLine
-                ? $indentation . trim($contentToAppend) . "\n"
-                : $indentation . trim($contentToAppend);
+                ? $indentation.trim($contentToAppend)."\n"
+                : $indentation.trim($contentToAppend);
             $this->addNewLine = false;
             // Reset flag
             // If the closing parenthesis has a semicolon, move it to a new line with indentation
             if ($this->content[$closingParenPos + 1] === ';') {
                 $this->content = substr_replace(
                     $this->content,
-                    "\n" . $indentation . ';',
+                    "\n".$indentation.';',
                     $closingParenPos + 1,
                     0
                 );
-                $closingParenPos += strlen("\n" . $indentation . ';'); // Adjust closing position
+                $closingParenPos += strlen("\n".$indentation.';'); // Adjust closing position
             }
 
             // Insert the formatted replacement after the closing parenthesis
@@ -150,7 +150,7 @@ class Stringer
         } elseif (($lineInfo = $this->findLine($needle)) !== null && ($lineInfo = $this->findLine($needle)) !== []) {
             // Normal append logic
             // Append the content with proper indentation
-            $newContent = $lineInfo['indentation'] . $this->getIndentation() . trim($contentToAppend);
+            $newContent = $lineInfo['indentation'].$this->getIndentation().trim($contentToAppend);
             if ($this->addNewLine) {
                 $newContent .= "\n";
                 $this->addNewLine = false; // Reset the flag
@@ -173,7 +173,7 @@ class Stringer
             // Replace the entire line containing the needle
             $this->content = substr_replace(
                 $this->content,
-                $lineInfo['indentation'] . trim($replacement),
+                $lineInfo['indentation'].trim($replacement),
                 $lineInfo['start'],
                 strlen(substr($this->content, $lineInfo['start'], $lineInfo['end'] - $lineInfo['start']))
             );
@@ -210,7 +210,7 @@ class Stringer
             // Strip the `*` characters for partial matching
             $needle = trim($needle, '*');
 
-            return (bool) preg_match('/' . preg_quote($needle, '/') . '/', $this->content);
+            return (bool) preg_match('/'.preg_quote($needle, '/').'/', $this->content);
         }
 
         // Perform an exact search
@@ -246,14 +246,14 @@ class Stringer
             preg_match('/^\s*/', $line, $matches);
             $originalIndentation = $matches[0] ?? '';
 
-            $formattedReplacement = $this->getIndentation() . trim($replacement);
+            $formattedReplacement = $this->getIndentation().trim($replacement);
             if ($this->addNewLine) {
-                $formattedReplacement = "\n" . $formattedReplacement . "\n";
+                $formattedReplacement = "\n".$formattedReplacement."\n";
             }
 
             $this->addNewLine = false;
 
-            $this->content = substr_replace($this->content, $originalIndentation . $formattedReplacement, $lineStartPos, 0);
+            $this->content = substr_replace($this->content, $originalIndentation.$formattedReplacement, $lineStartPos, 0);
         }
 
         return $this;
@@ -346,7 +346,7 @@ class Stringer
 
             // Calculate proper indentation
             $methodIndent = $lineInfo['indentation'];
-            $contentIndent = $methodIndent . str_repeat(' ', 4); // One level deeper than method
+            $contentIndent = $methodIndent.str_repeat(' ', 4); // One level deeper than method
 
             // Format the content to append
             $contentLines = explode("\n", trim($contentToAppend));
@@ -361,7 +361,7 @@ class Stringer
                     continue;
                 }
 
-                $formattedContent .= ($index > 0 ? "\n" . $methodIndent : '') . $contentIndent . $trimmedLine;
+                $formattedContent .= ($index > 0 ? "\n".$methodIndent : '').$contentIndent.$trimmedLine;
             }
 
             // Add new line if flag is set
@@ -379,15 +379,15 @@ class Stringer
             // Insert the formatted content
             $this->content = substr_replace(
                 $this->content,
-                $formattedContent . "\n\n",
+                $formattedContent."\n\n",
                 $insertPos,
                 0
             );
         } else {
             // Original append logic
-            $newContent = $lineInfo['indentation'] . $this->getIndentation() . trim($contentToAppend);
+            $newContent = $lineInfo['indentation'].$this->getIndentation().trim($contentToAppend);
             if ($this->addNewLine) {
-                $newContent = "\n" . $newContent;
+                $newContent = "\n".$newContent;
                 $this->addNewLine = false;
             }
 
@@ -435,7 +435,7 @@ class Stringer
         $normalizedPath = preg_replace('/[\\\\\/]+/', DIRECTORY_SEPARATOR, $normalizedPath);
 
         // Handle current directory references (./)
-        $normalizedPath = str_replace(DIRECTORY_SEPARATOR . '.' . DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, $normalizedPath);
+        $normalizedPath = str_replace(DIRECTORY_SEPARATOR.'.'.DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, $normalizedPath);
 
         // Handle parent directory references (../) by splitting and processing parts
         $parts = explode(DIRECTORY_SEPARATOR, $normalizedPath);
@@ -461,11 +461,11 @@ class Stringer
             // On Windows, preserve drive letter (e.g., C:)
             if (preg_match('/^[a-zA-Z]:/', $path) && in_array(preg_match('/^[a-zA-Z]:/', $normalizedPath), [0, false], true)) {
                 $driveLetter = substr($path, 0, 2);
-                $normalizedPath = $driveLetter . DIRECTORY_SEPARATOR . ltrim($normalizedPath, DIRECTORY_SEPARATOR);
+                $normalizedPath = $driveLetter.DIRECTORY_SEPARATOR.ltrim($normalizedPath, DIRECTORY_SEPARATOR);
             }
         } elseif (str_starts_with($path, '/') && ! str_starts_with($normalizedPath, DIRECTORY_SEPARATOR)) {
             // On Unix-like systems, preserve leading slash for absolute paths
-            $normalizedPath = DIRECTORY_SEPARATOR . $normalizedPath;
+            $normalizedPath = DIRECTORY_SEPARATOR.$normalizedPath;
         }
 
         return $normalizedPath;

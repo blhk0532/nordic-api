@@ -20,7 +20,7 @@ class SwedenPostorter extends Page
 
     protected static ?int $navigationSort = 2;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Sweden GEO';
+    protected static string|UnitEnum|null $navigationGroup = 'Sverige GEO';
 
     protected static ?string $navigationLabel = 'Postorter';
 

@@ -1,0 +1,69 @@
+{
+    "name": "andrewdwallo/filament-companies",
+    "description": "A comprehensive Laravel authentication and authorization system designed for Filament, focusing on multi-tenant company management.",
+    "keywords": [
+        "andrewdwallo",
+        "filament-companies",
+        "filament companies",
+        "laravel",
+        "socialite",
+        "authentication",
+        "filament",
+        "multi-tenant",
+        "company management",
+        "erp",
+        "saas",
+        "crm",
+        "business management"
+    ],
+    "homepage": "https://github.com/andrewdwallo/filament-companies",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Andrew Wallo",
+            "email": "andrewdwallo@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "ext-json": "*",
+        "filament/filament": "^5.0",
+        "illuminate/console": "^11.0|^12.0|^13.0",
+        "illuminate/contracts": "^11.0|^12.0|^13.0",
+        "illuminate/support": "^11.0|^12.0|^13.0",
+        "laravel/socialite": "^5.12",
+        "matomo/device-detector": "^6.1"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.14",
+        "laravel/sanctum": "^4.0",
+        "livewire/livewire": "^3.4.9",
+        "mockery/mockery": "^1.6",
+        "orchestra/testbench": "^9.0|^10.0",
+        "phpunit/phpunit": "^10.5|^11.5.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Wallo\\FilamentCompanies\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\": "stubs/app/",
+            "Database\\Factories\\": "database/factories/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Wallo\\FilamentCompanies\\FilamentCompaniesServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

@@ -38,18 +38,18 @@ class Dashboard extends BaseDashboard
 
     // protected static UnitEnum|string|null $navigationGroup = 'Dashboard';
 
-    //   protected static UnitEnum|string|null $navigationGroup = 'Sverige MAP';
+    //   protected static UnitEnum|string|null $navigationGroup = 'Kartor MAPS';
 
     //   protected static string|BackedEnum|null $navigationIcon = Remix::RiCalendarScheduleLine;
     //   protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiCalendarScheduleFill;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Dashboards';
+    protected static string|UnitEnum|null $navigationGroup = 'Dashboard';
 
     protected static ?int $navigationSort = -20;
 
     public static function getNavigationLabel(): string
     {
-        return __('Dashboards');
+        return __('Dashboard');
     }
 
     public static function getNavigationBadgeColor(): string|array|null

@@ -11,6 +11,8 @@ use MWGuerra\WebTerminal\Filament\Resources\TerminalLogResource as BaseTerminalL
 
 class TerminalLogResource extends BaseTerminalLogResource
 {
+    protected static bool $isScopedToTenant = false;
+
     public static function getNavigationIcon(): string|BackedEnum|null
     {
         return 'heroicon-o-clipboard-document-list';

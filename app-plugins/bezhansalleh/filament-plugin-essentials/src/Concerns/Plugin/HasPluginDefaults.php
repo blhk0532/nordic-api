@@ -67,7 +67,7 @@ trait HasPluginDefaults
     protected function getPluginDefault(string $property, ?string $resourceClass = null): mixed
     {
         // Try specific method first (e.g., getDefaultNavigationIcon)
-        $specificMethod = 'getDefault' . ucfirst($property);
+        $specificMethod = 'getDefault'.ucfirst($property);
         if (method_exists($this, $specificMethod)) {
             return $this->$specificMethod($resourceClass);
         }

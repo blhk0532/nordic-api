@@ -27,7 +27,7 @@ class SwedenPersonerResource extends Resource
 
     protected static ?string $navigationLabel = 'Personer';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Sweden GEO';
+    protected static string|UnitEnum|null $navigationGroup = 'Sverige GEO';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMapPin;
 
@@ -35,7 +35,7 @@ class SwedenPersonerResource extends Resource
 
     protected static bool $isScopedToTenant = false;
 
-                public static function getModelLabel(): string
+    public static function getModelLabel(): string
     {
         return __('DB Persons');
     }

@@ -308,11 +308,11 @@ class GenerateCommand extends Command
                 collect($resources)->map(fn (array $resource, int $key): array => [
                     '#' => $key + 1,
                     'Resource' => $resource['model'],
-                    'Policy' => $resource['model'] . 'Policy.php' . ($this->generatorOption !== 'permissions' ? ' ✅' : ' ❌'),
+                    'Policy' => $resource['model'].'Policy.php'.($this->generatorOption !== 'permissions' ? ' ✅' : ' ❌'),
                     'Permissions' => implode(
-                        ',' . PHP_EOL,
+                        ','.PHP_EOL,
                         FilamentShield::getResourcePermissions($resource['resourceFqcn'])
-                    ) . ($this->generatorOption !== 'policies' ? ' ✅' : ' ❌'),
+                    ).($this->generatorOption !== 'policies' ? ' ✅' : ' ❌'),
                 ])
             );
         }

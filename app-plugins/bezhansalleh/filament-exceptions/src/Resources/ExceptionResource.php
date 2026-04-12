@@ -15,10 +15,11 @@ use Filament\Panel;
 use Filament\Resources\Resource;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class ExceptionResource extends Resource
 {
+    protected static bool $isScopedToTenant = false;
+
     public static function getCluster(): ?string
     {
         return FilamentExceptions::getCluster();
@@ -109,7 +110,7 @@ class ExceptionResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn (Builder $query) => $query->select('id', 'path', 'method', 'type', 'code', 'ip', 'created_at'))
+            ->modifyQueryUsing(fn ($query) => $query->select('id', 'path', 'method', 'type', 'code', 'ip', 'created_at'))
             ->columns([
                 TextColumn::make('method')
                     ->label(fn (): string => __('filament-exceptions::filament-exceptions.columns.method'))

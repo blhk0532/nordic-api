@@ -31,7 +31,7 @@ class RatsitDataResource extends Resource
 
     protected static ?string $navigationLabel = 'Ratsit Databas';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Database SE';
+    protected static string|UnitEnum|null $navigationGroup = 'Database NR';
 
     protected static ?int $navigationSort = 9;
 
@@ -39,9 +39,9 @@ class RatsitDataResource extends Resource
     protected static ?string $slug = 'databaser/ratsit-data';
 
     // Make this resource global (not tenant-scoped) since Ratsit data is public information
-    protected static ?string $tenantOwnershipRelationshipName = null;
+    protected static bool $isScopedToTenant = false;
 
-                public static function getModelLabel(): string
+    public static function getModelLabel(): string
     {
         return __('DB Ratsit');
     }

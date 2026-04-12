@@ -117,15 +117,15 @@ class SetupCommand extends Command
 
         $makePanelTenantable = $this->shouldConfigureTenancy && confirm(sprintf("Would you like to make the '%s' panel tenantable?", $panel), false);
 
-        $this->runProcessSafely(sprintf('php artisan shield:install %s ', $panel) . ($makePanelTenantable ? '--tenant' : ''));
+        $this->runProcessSafely(sprintf('php artisan shield:install %s ', $panel).($makePanelTenantable ? '--tenant' : ''));
 
         if (confirm(sprintf("Would you like to run 'shield:generate' for '%s' Panel?", $panel), true)) {
-            $this->runProcessSafely('php artisan shield:generate --all --panel=' . $panel);
+            $this->runProcessSafely('php artisan shield:generate --all --panel='.$panel);
         }
 
         if (confirm(sprintf("Would you like to run 'shield:super-admin' for '%s' Panel?", $panel), true)) {
             $this->newLine();
-            $this->runProcessSafely('php artisan shield:super-admin --panel=' . $panel);
+            $this->runProcessSafely('php artisan shield:super-admin --panel='.$panel);
         }
     }
 
@@ -161,23 +161,23 @@ class SetupCommand extends Command
             }
 
             $shieldConfig
-                ->append('tenant_model', "'tenant_model' => '" . $tenantModel::class . "',")
+                ->append('tenant_model', "'tenant_model' => '".$tenantModel::class."',")
                 ->deleteLine('tenant_model')
                 ->deleteLine("'tenant_model' => null,")
                 ->save();
 
             Stringer::for(config_path('permission.php'))
                 ->replace("'teams' => false,", "'teams' => true,")
-                ->replace("'team_foreign_key' => 'team_id',", "'team_foreign_key' => '" . $tenantModel->getForeignKey() . "',")
+                ->replace("'team_foreign_key' => 'team_id',", "'team_foreign_key' => '".$tenantModel->getForeignKey()."',")
                 ->save();
 
             config()->set('permission.teams', true);
 
-            $source = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Support' . DIRECTORY_SEPARATOR;
+            $source = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'Support'.DIRECTORY_SEPARATOR;
             $destination = app_path('Models');
 
-            $this->copy($source . 'Role.php', $destination . DIRECTORY_SEPARATOR . 'Role.php');
-            $this->copy($source . 'Permission.php', $destination . DIRECTORY_SEPARATOR . 'Permission.php');
+            $this->copy($source.'Role.php', $destination.DIRECTORY_SEPARATOR.'Role.php');
+            $this->copy($source.'Permission.php', $destination.DIRECTORY_SEPARATOR.'Permission.php');
 
             $appServiceProvider = Stringer::for(app_path('Providers/AppServiceProvider.php'));
             if (
@@ -233,7 +233,7 @@ class SetupCommand extends Command
             if (config('database.default') === 'pgsql') {
                 $this->getTables()->each(fn (string $table) => DB::statement(sprintf('DROP TABLE IF EXISTS %s CASCADE', $table)));
             } else {
-                $this->getTables()->each(fn (string $table) => DB::statement('DROP TABLE IF EXISTS ' . $table));
+                $this->getTables()->each(fn (string $table) => DB::statement('DROP TABLE IF EXISTS '.$table));
             }
 
             Schema::enableForeignKeyConstraints();
@@ -260,7 +260,7 @@ class SetupCommand extends Command
                 ->toString();
 
         if (! class_exists($model) || ! (app($model) instanceof Model)) {
-            $this->components->error('Model not found: ' . $model);
+            $this->components->error('Model not found: '.$model);
             exit();
         }
 

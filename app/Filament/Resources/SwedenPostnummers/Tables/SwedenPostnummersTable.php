@@ -36,6 +36,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Bus;
 
 class SwedenPostnummersTable
@@ -372,7 +373,7 @@ class SwedenPostnummersTable
                     }),
                 ExportAction::make()
                     ->label('Export')
-                    ->visible(fn () => auth()->user()->role === 'super')
+                    ->visible(fn () => Auth::user()->role === 'super')
                     ->exporter(PeopleExporter::class)
                     ->icon('heroicon-o-arrow-up-tray')
                     ->color('danger'),

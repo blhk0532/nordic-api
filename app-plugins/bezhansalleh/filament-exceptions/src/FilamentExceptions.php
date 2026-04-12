@@ -19,6 +19,8 @@ class FilamentExceptions
     /** @var class-string<Cluster>|null */
     protected static ?string $cluster = null;
 
+    protected static bool $isScopedToTenant = false;
+
     protected static bool $isRecording = true;
 
     protected static ?Closure $shouldRecordCallback = null;
@@ -169,7 +171,7 @@ class FilamentExceptions
 
     public static function renderCss(): string
     {
-        $css = file_get_contents(__DIR__ . '/../resources/dist/styles.css');
+        $css = file_get_contents(__DIR__.'/../resources/dist/styles.css');
 
         // Override Tailwind colors to use Filament's theme variables
         // This must come after the main CSS to win in the cascade
@@ -217,7 +219,7 @@ class FilamentExceptions
             }
         ';
 
-        return '<style>' . $css . $colorOverrides . '</style>';
+        return '<style>'.$css.$colorOverrides.'</style>';
     }
 
     /**
@@ -225,6 +227,6 @@ class FilamentExceptions
      */
     public static function renderJs(): string
     {
-        return '<script type="module">' . file_get_contents(__DIR__ . '/../resources/dist/scripts.js') . '</script>';
+        return '<script type="module">'.file_get_contents(__DIR__.'/../resources/dist/scripts.js').'</script>';
     }
 }
