@@ -28,7 +28,7 @@ async function createDbConnection() {
 		host: '127.0.0.1',
 		port: 5432,
 		user: 'postgres',
-		password: 'qToo81p82TFrWDLWtdNF',
+		password: 'bkkbkk',
 		database: 'nordic',
 	});
 	await client.connect();
