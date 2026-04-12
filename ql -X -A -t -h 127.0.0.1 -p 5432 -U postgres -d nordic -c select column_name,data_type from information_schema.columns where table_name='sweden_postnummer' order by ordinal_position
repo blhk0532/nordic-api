@@ -1,0 +1,31 @@
+                                                Table "public.sweden_postnummer"
+         Column         |              Type              | Collation | Nullable |                    Default                    
+------------------------+--------------------------------+-----------+----------+-----------------------------------------------
+ id                     | bigint                         |           | not null | nextval('sweden_postnummer_id_seq'::regclass)
+ csv_id                 | integer                        |           |          | 
+ post_nummer            | character varying(255)         |           | not null | 
+ post_ort               | character varying(255)         |           |          | 
+ lan                    | character varying(255)         |           |          | 
+ kommun                 | character varying(255)         |           |          | 
+ country                | character varying(2)           |           |          | 
+ latitude               | numeric(10,7)                  |           |          | 
+ longitude              | numeric(10,7)                  |           |          | 
+ personer               | integer                        |           |          | 
+ foretag                | integer                        |           |          | 
+ personer_saved         | timestamp(0) without time zone |           |          | 
+ foretag_saved          | timestamp(0) without time zone |           |          | 
+ created_at             | timestamp(0) without time zone |           |          | 
+ updated_at             | timestamp(0) without time zone |           |          | 
+ personer_merinfo_saved | character varying(255)         |           |          | 
+ personer_merinfo_queue | integer                        |           |          | 0
+ personer_ratsit_queue  | integer                        |           |          | 0
+ personer_hitta_queue   | integer                        |           |          | 0
+Indexes:
+    "sweden_postnummer_pkey" PRIMARY KEY, btree (id)
+    "sweden_postnummer_country_index" btree (country)
+    "sweden_postnummer_csv_id_index" btree (csv_id)
+    "sweden_postnummer_kommun_index" btree (kommun)
+    "sweden_postnummer_lan_index" btree (lan)
+    "sweden_postnummer_post_nummer_unique" UNIQUE CONSTRAINT, btree (post_nummer)
+    "sweden_postnummer_post_ort_index" btree (post_ort)
+

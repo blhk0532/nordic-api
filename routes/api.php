@@ -24,6 +24,10 @@ use App\Http\Controllers\Api\RatsitForetagQueueController;
 use App\Http\Controllers\Api\RatsitKommunApiController;
 use App\Http\Controllers\Api\RatsitQueueController;
 use App\Http\Controllers\Api\SwedenPostnummerApiController;
+use App\Http\Controllers\Api\SwedenPostnummerQueueController;
+use App\Http\Controllers\Api\SwedenPersonerQueueController;
+use App\Http\Controllers\Api\SwedenGatorQueueController;
+use App\Http\Controllers\Api\SwedenAdresserQueueController;
 use App\Http\Controllers\Api\UpplysningDataController;
 use App\Http\Controllers\RingaDataOutcomeController;
 use Illuminate\Http\Request;
@@ -70,9 +74,23 @@ Route::post('/data-private/bulk', [DataPrivateController::class, 'bulkStore']);
 
 // SwedenPersoner bulk import endpoints
 use App\Http\Controllers\Api\SwedenPersonerImportController;
+use App\Http\Controllers\Api\SwedenAdresserImportController;
+use App\Http\Controllers\Api\SwedenGatorImportController;
 
 Route::post('/sweden-personer/import-json', [SwedenPersonerImportController::class, 'importJson']);
 Route::post('/sweden-personer/import-file', [SwedenPersonerImportController::class, 'importFile']);
+Route::post('/sweden-personer/scraped', [SwedenPersonerImportController::class, 'importScraped']);
+Route::post('/sweden-adresser/scraped', [SwedenAdresserImportController::class, 'importScraped']);
+Route::post('/sweden-gator/scraped', [SwedenGatorImportController::class, 'importScraped']);
+
+Route::get('/sweden-gator/next', [SwedenGatorQueueController::class, 'next']);
+Route::post('/sweden-gator/processed', [SwedenGatorQueueController::class, 'markProcessed']);
+Route::get('/sweden-adresser/next', [SwedenAdresserQueueController::class, 'next']);
+Route::post('/sweden-adresser/processed', [SwedenAdresserQueueController::class, 'markProcessed']);
+Route::get('/sweden-postnummer/next', [SwedenPostnummerQueueController::class, 'next']);
+Route::post('/sweden-postnummer/processed', [SwedenPostnummerQueueController::class, 'markProcessed']);
+Route::get('/sweden-personer/next', [SwedenPersonerQueueController::class, 'next']);
+Route::post('/sweden-personer/processed', [SwedenPersonerQueueController::class, 'markProcessed']);
 
 // Public API routes (no authentication required)
 // Use only the manual POST/GET routes for custom batch/bulk handlers

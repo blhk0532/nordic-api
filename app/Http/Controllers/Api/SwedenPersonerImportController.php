@@ -53,6 +53,108 @@ class SwedenPersonerImportController extends Controller
         return response()->json(['success' => true, 'created' => $created]);
     }
 
+    public function importScraped(Request $request): JsonResponse
+    {
+        $data = $request->all();
+
+        if (isset($data['records']) && is_array($data['records'])) {
+            foreach ($data['records'] as $index => $record) {
+                if (isset($record['alder']) && is_numeric($record['alder'])) {
+                    $data['records'][$index]['alder'] = (string) $record['alder'];
+                }
+            }
+        }
+
+        $validator = Validator::make($data, [
+            'records' => 'required|array|min:1|max:1000',
+            'records.*.id' => 'nullable|integer|exists:sweden_personer,id',
+            'records.*.adress' => 'nullable|string|max:255',
+            'records.*.fornamn' => 'nullable|string|max:255',
+            'records.*.efternamn' => 'nullable|string|max:255',
+            'records.*.personnamn' => 'nullable|string|max:255',
+            'records.*.postnummer' => 'nullable|string|max:50',
+            'records.*.postort' => 'nullable|string|max:255',
+            'records.*.kommun' => 'nullable|string|max:255',
+            'records.*.lan' => 'nullable|string|max:255',
+            'records.*.kon' => 'nullable|string|max:50',
+            'records.*.civilstand' => 'nullable|string|max:255',
+            'records.*.alder' => 'nullable|string|max:50',
+            'records.*.ratsit_link' => 'nullable|string|max:255',
+            'records.*.ratsit_data' => 'nullable',
+            'records.*.is_queue' => 'boolean',
+            'records.*.is_done' => 'boolean',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $validated = $validator->validated();
+
+        $created = 0;
+        $updated = 0;
+        $errors = [];
+
+        foreach ($validated['records'] as $index => $record) {
+            try {
+                $record['is_queue'] = $record['is_queue'] ?? true;
+
+                if (! empty($record['id'])) {
+                    $model = SwedenPersoner::find($record['id']);
+                    $recordId = $record['id'];
+                    unset($record['id']);
+
+                    if ($model) {
+                        $model->update($record);
+                    } else {
+                        $model = SwedenPersoner::create($record);
+                    }
+                } elseif (! empty($record['personnummer'])) {
+                    $model = SwedenPersoner::updateOrCreate(
+                        ['personnummer' => $record['personnummer']],
+                        $record
+                    );
+                } else {
+                    $model = SwedenPersoner::updateOrCreate(
+                        [
+                            'adress' => $record['adress'],
+                            'fornamn' => $record['fornamn'],
+                            'efternamn' => $record['efternamn'],
+                        ],
+                        $record
+                    );
+                }
+
+                if ($model->wasRecentlyCreated) {
+                    $created++;
+                } else {
+                    $updated++;
+                }
+            } catch (\Exception $e) {
+                $errors[] = [
+                    'index' => $index,
+                    'record' => [
+                        'adress' => $record['adress'] ?? null,
+                        'fornamn' => $record['fornamn'] ?? null,
+                        'efternamn' => $record['efternamn'] ?? null,
+                    ],
+                    'error' => $e->getMessage(),
+                ];
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'summary' => [
+                'total' => count($validated['records']),
+                'created' => $created,
+                'updated' => $updated,
+                'failed' => count($errors),
+            ],
+            'errors' => $errors,
+        ]);
+    }
+
     // File import: expects CSV or Excel file
     public function importFile(Request $request): JsonResponse
     {

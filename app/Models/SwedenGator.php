@@ -13,7 +13,7 @@ class SwedenGator extends Model
 
     /** @var array<int, string> */
     protected $fillable = [
-        'gata', 'postnummer', 'postort', 'kommun', 'lan', 'latitude', 'longitude', 'personer', 'foretag',
+        'gata', 'postnummer', 'postort', 'kommun', 'lan', 'latitude', 'longitude', 'personer', 'foretag', 'ratsit_link', 'is_queue', 'is_done',
     ];
 
     /**

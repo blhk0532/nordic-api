@@ -49,13 +49,102 @@ function parseIntOrNull(value) {
 	return Number.isNaN(parsed) ? null : parsed;
 }
 
+const API_BASE_URL =
+	process.env.SWEDEN_PERSONER_API_URL ||
+	process.env.SWEDEN_API_URL ||
+	'https://ekoll.se/api';
+
+async function parseJsonResponse(response) {
+	const responseText = await response.text();
+	try {
+		return JSON.parse(responseText);
+	} catch (error) {
+		throw new Error(`Failed to parse API JSON response (status ${response.status}): ${responseText.slice(0, 1024)}`);
+	}
+}
+
+function buildQueryString(params) {
+	const searchParams = new URLSearchParams();
+	for (const [key, value] of Object.entries(params)) {
+		if (value !== null && value !== undefined && value !== '') {
+			searchParams.set(key, value);
+		}
+	}
+
+	return searchParams.toString();
+}
+
+async function fetchNextPersonRow(filters) {
+	const query = buildQueryString({
+		postort: filters.postort,
+		postnummer: filters.postnummer,
+		kommun: filters.kommun,
+		lan: filters.lan,
+	});
+
+	const response = await fetch(`${API_BASE_URL}/sweden-personer/next${query ? `?${query}` : ''}`, {
+		headers: {
+			Accept: 'application/json',
+		},
+	});
+
+	if (response.status === 204) {
+		return null;
+	}
+
+	if (!response.ok) {
+		const text = await response.text();
+		throw new Error(`API request failed with status ${response.status}: ${text}`);
+	}
+
+	const data = await parseJsonResponse(response);
+	return data.data || null;
+}
+
+async function markPersonProcessed(id) {
+	const response = await fetch(`${API_BASE_URL}/sweden-personer/processed`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Accept: 'application/json',
+		},
+		body: JSON.stringify({ id, is_done: true, is_queue: false }),
+	});
+
+	if (!response.ok) {
+		const text = await response.text();
+		throw new Error(`API request failed with status ${response.status}: ${text}`);
+	}
+
+	return parseJsonResponse(response);
+}
+
+async function postScrapedPersons(records) {
+	const response = await fetch(`${API_BASE_URL}/sweden-personer/scraped`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Accept: 'application/json',
+		},
+		body: JSON.stringify({ records }),
+	});
+
+	if (!response.ok) {
+		const text = await response.text();
+		throw new Error(`API request failed with status ${response.status}: ${text}`);
+	}
+
+	return parseJsonResponse(response);
+}
+
 function parseCliFilters(argv) {
 	const args = Array.isArray(argv) ? argv : [];
 	let postort = null;
 	let postnummer = null;
 	let kommun = null;
 	let lan = null;
-    let order = null;
+	let order = null;
+	let apiOnly = false;
 
 	for (let i = 0; i < args.length; i++) {
 		const arg = args[i];
@@ -105,6 +194,11 @@ function parseCliFilters(argv) {
 			i++;
 		}
 
+		if (arg === '--api-only' || arg === '--only-api') {
+			apiOnly = true;
+			continue;
+		}
+
 		if (arg.startsWith('--order=')) {
 		   order = arg.slice('--order='.length).trim().toLowerCase() || null;
 		   continue;
@@ -116,8 +210,8 @@ function parseCliFilters(argv) {
 	   }
 	}
 
-	return { postort, postnummer, kommun, lan, order};
-}
+	return { postort, postnummer, kommun, lan, order, apiOnly };
+}aaa
 
 function loadRatsitCookies() {
 	const cookieCandidates = [
@@ -623,7 +717,38 @@ class SwedenPersonerRatsitScraper {
 	}
 }
 
-async function processPersonRow(scraper, row, connection) {
+function buildPersonPayload(scraped, row, extractedAlder, telefonnummer, personerCount, isHus) {
+	return {
+		id: row.id,
+		adress: scraped.bo_gatuadress || row.adress || null,
+		postnummer: normalizePostnummer(scraped.bo_postnummer || row.postnummer) || null,
+		postort: scraped.bo_postort || row.postort || null,
+		kommun: scraped.bo_kommun || row.kommun || null,
+		lan: scraped.bo_lan || null,
+		fornamn: scraped.ps_fornamn || null,
+		efternamn: scraped.ps_efternamn || null,
+		personnamn: scraped.ps_personnamn || row.personnamn || null,
+		personnummer: scraped.ps_personnummer || null,
+		telefon: scraped.ps_telefon || null,
+		telefonnummer: telefonnummer || null,
+		alder: extractedAlder !== null ? String(extractedAlder) : null,
+		kon: scraped.ps_kon || null,
+		civilstand: scraped.ps_civilstand || null,
+		adressandring: scraped.adressandring || null,
+		bostadstyp: scraped.bo_bostadstyp || null,
+		agandeform: scraped.bo_agandeform || null,
+		boarea: scraped.bo_boarea || null,
+		byggar: scraped.bo_byggar || null,
+		personer: personerCount,
+		is_hus: isHus,
+		ratsit_link: row.ratsit_link || null,
+		ratsit_data: scraped,
+		is_queue: true,
+		is_done: false,
+	};
+}
+
+async function processPersonRow(scraper, row, connection, apiOnly = false) {
 	console.log(`\nScraping: ${row.ratsit_link} (${row.personnamn || `${row.fornamn || ''} ${row.efternamn || ''}`.trim()})`);
 
 	let browser = null;
@@ -698,6 +823,16 @@ async function processPersonRow(scraper, row, connection) {
 			google_streetview: scraped.google_streetview || null,
 			raw_personer_section: scraped.bo_personer || [],
 		};
+
+		if (apiOnly) {
+			const payload = buildPersonPayload(scraped, row, extractedAlder, telefonnummer, personerCount, isHus);
+			await postScrapedPersons([payload]);
+			await markPersonProcessed(row.id);
+			console.log(
+				`  ✓ Sent ${scraped.ps_personnamn || row.personnamn || row.id} to API (personnummer=${scraped.ps_personnummer || 'n/a'}, personer=${personerCount ?? 'n/a'}, is_hus=${isHus ? 1 : 0})`,
+			);
+			return true;
+		}
 
 		await connection.query(
 			`UPDATE sweden_personer
@@ -812,73 +947,107 @@ async function processPersonRow(scraper, row, connection) {
 async function main() {
 	console.log('Starting Ratsit detail enrichment from sweden_personer...\n');
 	const filters = parseCliFilters(process.argv.slice(2));
-
-	const connection = await createDbConnection();
 	const scraper = new SwedenPersonerRatsitScraper();
+	let connection = null;
 
-	   try {
-		   const whereClauses = [
-			   `ratsit_link IS NOT NULL`,
-			   `ratsit_link != ''`,
-			   `is_done = false`,
-			   `is_queue = true`,
-		   ];
-		   const queryParams = [];
-		   const orderParams = ` ORDER BY id ${filters.order === 'asc' ? 'ASC' : 'DESC'}`;
+	if (!filters.apiOnly) {
+		connection = await createDbConnection();
+	}
+
+	try {
+		if (filters.apiOnly) {
+			let successCount = 0;
+			let failCount = 0;
+			let index = 0;
+
+			while (true) {
+				const row = await fetchNextPersonRow(filters);
+				if (!row) {
+					break;
+				}
+
+				index++;
+				console.log(
+					`[${index}] Processing: ${row.personnamn || `${row.fornamn || ''} ${row.efternamn || ''}`.trim()} (${row.postnummer || ''} ${row.postort || ''})`,
+				);
+
+				const ok = await processPersonRow(scraper, row, connection, true);
+				if (ok) {
+					successCount++;
+				} else {
+					failCount++;
+				}
+			}
+
+			console.log('\nAll sweden_personer rows processed via API.');
+			console.log(`  Success: ${successCount}`);
+			console.log(`  Failed:  ${failCount}`);
+			return;
+		}
+
+		const whereClauses = [
+			`ratsit_link IS NOT NULL`,
+			`ratsit_link != ''`,
+			`is_done = false`,
+			`is_queue = true`,
+		];
+		const queryParams = [];
+		const orderParams = ` ORDER BY id ${filters.order === 'asc' ? 'ASC' : 'DESC'}`;
 
 		if (filters.postort) {
 			queryParams.push(filters.postort);
 			whereClauses.push(`postort = $${queryParams.length}`);
 		}
 
-		   if (filters.postnummer) {
-			   queryParams.push(filters.postnummer);
-			   whereClauses.push(`postnummer = $${queryParams.length}`);
-		   }
+		if (filters.postnummer) {
+			queryParams.push(filters.postnummer);
+			whereClauses.push(`postnummer = $${queryParams.length}`);
+		}
 
-		   if (filters.kommun) {
-			   queryParams.push(filters.kommun);
-			   whereClauses.push(`kommun = $${queryParams.length}`);
-		   }
+		if (filters.kommun) {
+			queryParams.push(filters.kommun);
+			whereClauses.push(`kommun = $${queryParams.length}`);
+		}
 
-		   // Removed lan filter as column does not exist
+		// Removed lan filter as column does not exist
 
-		   const query = `SELECT id, adress, postnummer, postort, kommun, fornamn, efternamn, personnamn, ratsit_link
-				FROM sweden_personer
-				WHERE ${whereClauses.join(' AND ')} AND ratsit_data IS NULL
-				${orderParams}`;
+		const query = `SELECT id, adress, postnummer, postort, kommun, fornamn, efternamn, personnamn, ratsit_link
+			FROM sweden_personer
+			WHERE ${whereClauses.join(' AND ')} AND ratsit_data IS NULL
+			${orderParams}`;
 
-		   const { rows } = await connection.query(query, queryParams);
+		const { rows } = await connection.query(query, queryParams);
 
-		   if (filters.postort || filters.postnummer || filters.kommun) {
-			   console.log(`Applied filters: postort=${filters.postort || '-'} postnummer=${filters.postnummer || '-'} kommun=${filters.kommun || '-'}`);
-		   }
+		if (filters.postort || filters.postnummer || filters.kommun) {
+			console.log(`Applied filters: postort=${filters.postort || '-'} postnummer=${filters.postnummer || '-'} kommun=${filters.kommun || '-'}`);
+		}
 
-		   console.log(`Found ${rows.length} person rows to process.\n`);
+		console.log(`Found ${rows.length} person rows to process.\n`);
 
-		   let successCount = 0;
-		   let failCount = 0;
+		let successCount = 0;
+		let failCount = 0;
 
-		   for (const [index, row] of rows.entries()) {
-			   console.log(
-				   `[${index + 1}/${rows.length}] Processing: ${row.personnamn || `${row.fornamn || ''} ${row.efternamn || ''}`.trim()} (${row.postnummer || ''} ${row.postort || ''})`,
-			   );
+		for (const [index, row] of rows.entries()) {
+			console.log(
+				`[${index + 1}/${rows.length}] Processing: ${row.personnamn || `${row.fornamn || ''} ${row.efternamn || ''}`.trim()} (${row.postnummer || ''} ${row.postort || ''})`,
+			);
 
-			   const ok = await processPersonRow(scraper, row, connection);
-			   if (ok) {
-				   successCount++;
-			   } else {
-				   failCount++;
-			   }
-		   }
+			const ok = await processPersonRow(scraper, row, connection);
+			if (ok) {
+				successCount++;
+			} else {
+				failCount++;
+			}
+		}
 
-		   console.log('\nAll sweden_personer rows processed.');
-		   console.log(`  Success: ${successCount}`);
-		   console.log(`  Failed:  ${failCount}`);
-	   }
-	   finally {
-		   await connection.end();
-	   }
+		console.log('\nAll sweden_personer rows processed.');
+		console.log(`  Success: ${successCount}`);
+		console.log(`  Failed:  ${failCount}`);
+	} finally {
+		if (connection) {
+			await connection.end();
+		}
+	}
 }
 
 main().catch((err) => {

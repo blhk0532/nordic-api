@@ -19,12 +19,27 @@ function normalizePostnummer(value) {
 	return String(value || '').replace(/\D/g, '');
 }
 
+const API_BASE_URL =
+	process.env.SWEDEN_POSTNUMMER_API_URL ||
+	process.env.SWEDEN_API_URL ||
+	'https://ekoll.se/api';
+
+async function parseJsonResponse(response) {
+	const responseText = await response.text();
+	try {
+		return JSON.parse(responseText);
+	} catch (error) {
+		throw new Error(`Failed to parse API JSON response (status ${response.status}): ${responseText.slice(0, 1024)}`);
+	}
+}
+
 function parseCliFilters(argv) {
 	const args = Array.isArray(argv) ? argv : [];
 	let postort = null;
 	let postnummer = null;
 	let kommun = null;
 	let lan = null;
+	let apiOnly = false;
 
 	for (let i = 0; i < args.length; i++) {
 		const arg = args[i];
@@ -70,13 +85,97 @@ function parseCliFilters(argv) {
 		if (arg === '--lan' && args[i + 1]) {
 			lan = String(args[i + 1]).trim() || null;
 			i++;
+			continue;
+		}
+
+		if (arg === '--api-only' || arg === '--only-api') {
+			apiOnly = true;
+			continue;
 		}
 	}
 
-	return { postort, postnummer, kommun, lan };
+	return { postort, postnummer, kommun, lan, apiOnly };
 }
 
-async function scrapeRatsitGator(url, row, connection) {
+function buildQueryString(params) {
+	const searchParams = new URLSearchParams();
+	for (const [key, value] of Object.entries(params)) {
+		if (value !== null && value !== undefined && value !== '') {
+			searchParams.set(key, value);
+		}
+	}
+	return searchParams.toString();
+}
+
+async function fetchNextPostnummerRow(filters) {
+	const query = buildQueryString({
+		postort: filters.postort,
+		postnummer: filters.postnummer,
+		kommun: filters.kommun,
+		lan: filters.lan,
+	});
+
+	const response = await fetch(`${API_BASE_URL}/sweden-postnummer/next${query ? `?${query}` : ''}`, {
+		headers: {
+			Accept: 'application/json',
+		},
+	});
+
+	if (response.status === 204) {
+		return null;
+	}
+
+	if (!response.ok) {
+		const text = await response.text();
+		throw new Error(`API request failed with status ${response.status}: ${text}`);
+	}
+
+	const data = await parseJsonResponse(response);
+	return data.data || null;
+}
+
+async function markPostnummerProcessed(id, gatorCount = null) {
+	const payload = { id, is_done: true, is_queue: false };
+	if (gatorCount !== null) {
+		payload.gator = gatorCount;
+	}
+
+	const response = await fetch(`${API_BASE_URL}/sweden-postnummer/processed`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Accept: 'application/json',
+		},
+		body: JSON.stringify(payload),
+	});
+
+	if (!response.ok) {
+		const text = await response.text();
+		throw new Error(`API request failed with status ${response.status}: ${text}`);
+	}
+
+	return parseJsonResponse(response);
+}
+
+async function postScrapedGator(records) {
+	const response = await fetch(`${API_BASE_URL}/sweden-gator/scraped`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Accept: 'application/json',
+		},
+		body: JSON.stringify({ records }),
+	});
+
+	if (!response.ok) {
+		const text = await response.text();
+		throw new Error(`API request failed with status ${response.status}: ${text}`);
+	}
+
+	return parseJsonResponse(response);
+}
+
+async function scrapeRatsitGator(url, row, connection, apiOnly = false) {
 	console.log(`\nScraping: ${url} (${row.postnummer} ${row.postort || ''})`);
 
 	let browser = null;
@@ -195,22 +294,43 @@ async function scrapeRatsitGator(url, row, connection) {
 			}
 		}
 
-const normalizedPostnummer = normalizePostnummer(row.postnummer);
+		const normalizedPostnummer = normalizePostnummer(row.postnummer);
+
+		if (apiOnly) {
+			const records = Array.from(gatorMap.values()).map((gataRow) => ({
+				gata: gataRow.gata,
+				postnummer: normalizedPostnummer,
+				postort: row.postort,
+				kommun: row.kommun,
+				lan: row.lan,
+				personer: gataRow.personer,
+				ratsit_link: gataRow.ratsit_link,
+				is_queue: true,
+				is_done: false,
+			}));
+
+			if (records.length === 0) {
+				return 0;
+			}
+
+			const apiResponse = await postScrapedGator(records);
+			return (apiResponse.summary.created ?? 0) + (apiResponse.summary.updated ?? 0) || records.length;
+		}
 
 		for (const gataRow of gatorMap.values()) {
 			try {
-			const { rows: existingRows } = await connection.query(
-				`SELECT id
-				 FROM sweden_gator
-				 WHERE gata = $1 AND postnummer = $2 AND postort = $3 AND kommun = $4
-				 LIMIT 1`,
-				[
-					gataRow.gata,
-					normalizedPostnummer,
-					row.postort,
-					row.kommun,
-				],
-			);
+				const { rows: existingRows } = await connection.query(
+					`SELECT id
+					 FROM sweden_gator
+					 WHERE gata = $1 AND postnummer = $2 AND postort = $3 AND kommun = $4
+					 LIMIT 1`,
+					[
+						gataRow.gata,
+						normalizedPostnummer,
+						row.postort,
+						row.kommun,
+					],
+				);
 
 				if (existingRows.length > 0) {
 					await connection.query(
@@ -262,8 +382,7 @@ const normalizedPostnummer = normalizePostnummer(row.postnummer);
 async function main() {
 	console.log('Starting Ratsit gator scrape from sweden_postnummer...\n');
 	const filters = parseCliFilters(process.argv.slice(2));
-
-	const connection = await createDbConnection();
+	const connection = filters.apiOnly ? null : await createDbConnection();
 
 	try {
 		const whereClauses = [
@@ -275,46 +394,78 @@ async function main() {
 
 		if (filters.postort) {
 			queryParams.push(filters.postort);
-			whereClauses.push(`postort = $${queryParams.length}`);
-		}
+            whereClauses.push(`post_ort = $${queryParams.length}`);
+        }
 
-		if (filters.postnummer) {
-			queryParams.push(filters.postnummer);
-			whereClauses.push(`postnummer = $${queryParams.length}`);
-		}
+        if (filters.postnummer) {
+            queryParams.push(filters.postnummer);
+            whereClauses.push(`post_nummer = $${queryParams.length}`);
+        }
 
-		if (filters.kommun) {
-			queryParams.push(filters.kommun);
-			whereClauses.push(`kommun = $${queryParams.length}`);
-		}
+        if (filters.kommun) {
+            queryParams.push(filters.kommun);
+            whereClauses.push(`kommun = $${queryParams.length}`);
+        }
 
-		if (filters.lan) {
-			queryParams.push(filters.lan);
-			whereClauses.push(`lan = $${queryParams.length}`);
-		}
+		let postnummerRows = [];
+		const isApiOnlyQueue = filters.apiOnly;
 
-		const query = `SELECT id, postnummer, postort, kommun, lan, ratsit_link
+		if (isApiOnlyQueue) {
+			console.log('API-only mode is active. Fetching queued sweden_postnummer rows from the API.');
+		} else {
+const query = `SELECT id, post_nummer AS postnummer, post_ort AS postort, kommun, lan, ratsit_link
 			 FROM sweden_postnummer
 			 WHERE ${whereClauses.join(' AND ')}
 			 ORDER BY id`;
 
-		const { rows: postnummerRows } = await connection.query(query, queryParams);
+			const { rows } = await connection.query(query, queryParams);
+			postnummerRows = rows;
 
-		if (filters.postort || filters.postnummer || filters.kommun || filters.lan) {
-			console.log(`Applied filters: postort=${filters.postort || '-'} postnummer=${filters.postnummer || '-'} kommun=${filters.kommun || '-'} lan=${filters.lan || '-'}`);
+			if (filters.postort || filters.postnummer || filters.kommun || filters.lan) {
+				console.log(`Applied filters: postort=${filters.postort || '-'} postnummer=${filters.postnummer || '-'} kommun=${filters.kommun || '-'} lan=${filters.lan || '-'}`);
+			}
+
+			console.log(`Found ${postnummerRows.length} postnummer rows to process.\n`);
 		}
-
-		console.log(`Found ${postnummerRows.length} postnummer rows to process.\n`);
 
 		let successCount = 0;
 		let failCount = 0;
+
+		if (isApiOnlyQueue) {
+			let index = 0;
+			while (true) {
+				const row = await fetchNextPostnummerRow(filters);
+				if (!row) {
+					break;
+				}
+
+				index += 1;
+				console.log(`Processing API queue row #${index}: ${row.postnummer || ''} ${row.postort || ''} (${row.kommun || ''})`);
+
+				const gatorCount = await scrapeRatsitGator(row.ratsit_link, row, connection, filters.apiOnly);
+
+				if (gatorCount !== null) {
+					await markPostnummerProcessed(row.id, gatorCount);
+					console.log(`  ✓ Done. gator=${gatorCount}. API-only mode, notified API that row ${row.id} is processed.\n`);
+					successCount++;
+				} else {
+					console.log('  ✗ Failed. Skipping is_done update.\n');
+					failCount++;
+				}
+			}
+
+			console.log('\nAll postnummer rows processed.');
+			console.log(`  Success: ${successCount}`);
+			console.log(`  Failed:  ${failCount}`);
+			return;
+		}
 
 		for (const [index, row] of postnummerRows.entries()) {
 			console.log(
 				`[${index + 1}/${postnummerRows.length}] Processing: ${row.postnummer} ${row.postort || ''} (${row.kommun || ''})`,
 			);
 
-		const gatorCount = await scrapeRatsitGator(row.ratsit_link, row, connection);
+			const gatorCount = await scrapeRatsitGator(row.ratsit_link, row, connection, filters.apiOnly);
 
 			if (gatorCount !== null) {
 				await connection.query(
@@ -334,7 +485,9 @@ async function main() {
 		console.log(`  Success: ${successCount}`);
 		console.log(`  Failed:  ${failCount}`);
 	} finally {
-		await connection.end();
+		if (connection) {
+			await connection.end();
+		}
 	}
 }
 
