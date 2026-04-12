@@ -1,0 +1,97 @@
+{
+    "name": "shahkochaki/ami-laravel-asterisk-manager-interface",
+    "version": "v2.2.6",
+    "description": "A modern Laravel package for connecting to VOIP servers on Asterisk/Issabel platform via AMI with advanced system management. Supports PHP 8+ and Laravel 9-13.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "asterisk",
+        "issabel",
+        "ami",
+        "voip",
+        "sms",
+        "ussd",
+        "chan-dongle",
+        "pbx",
+        "telephony",
+        "system-management",
+        "server-control",
+        "shutdown",
+        "restart",
+        "queue-jobs",
+        "php8",
+        "laravel9",
+        "laravel10",
+        "laravel11",
+        "laravel12"
+    ],
+    "homepage": "https://github.com/shahkochaki/ami-laravel-asterisk-manager-interface",
+    "authors": [
+        {
+            "name": "Ali Shahkochaki",
+            "email": "ali.shahkochaki7@gmail.com",
+            "homepage": "https://shahkochaki.ir",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=8.0",
+        "ext-mbstring": "*",
+        "illuminate/support": "^9.0|^10.0|^11.0|^12.0|^13.0",
+        "illuminate/console": "^9.0|^10.0|^11.0|^12.0|^13.0",
+        "illuminate/events": "^9.0|^10.0|^11.0|^12.0|^13.0",
+        "illuminate/contracts": "^9.0|^10.0|^11.0|^12.0|^13.0",
+        "react/socket": "^1.0",
+        "react/dns": "^1.0",
+        "clue/ami-react": "^0.5|^1.0",
+        "jackkum/phppdu": "^1.2"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "phpunit/phpunit": "^9.0|^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Shahkochaki\\Ami\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Shahkochaki\\Ami\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": [
+            "@phpunit",
+            "@phpcs"
+        ],
+        "test-coverage": "php vendor/bin/phpunit --coverage-html coverage",
+        "phpunit": "php vendor/bin/phpunit",
+        "phpcs": "php vendor/bin/php-cs-fixer --diff --dry-run -v fix",
+        "phpcs-fix": "php vendor/bin/php-cs-fixer fix"
+    },
+    "bin": [
+        "bin/ami"
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Shahkochaki\\Ami\\Providers\\AmiServiceProvider"
+            ]
+        },
+        "branch-alias": {
+            "dev-master": "2.0-dev"
+        },
+        "patches": {}
+    },
+    "config": {
+        "allow-plugins": {
+            "cweagans/composer-patches": false
+        },
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
