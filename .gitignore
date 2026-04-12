@@ -25,3 +25,5 @@ rr
 .rr.yaml
 /temp
 /tmp
+app-plugins/shahkochaki/ami-laravel-asterisk-manager-interface/vendor
+app-plugins/shahkochaki/ami-laravel-asterisk-manager-interface/composer.lock
