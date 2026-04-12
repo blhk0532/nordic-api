@@ -21,7 +21,7 @@ async function createDbPool() {
 		host: '127.0.0.1',
 		port: 5432,
 		user: 'postgres',
-		password: 'bkkbkk',
+		password: 'qToo81p82TFrWDLWtdNF',
 		database: 'nordic',
 		max: Math.max(6, MAX_CONCURRENCY + 2),
 	});
