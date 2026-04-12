@@ -24,6 +24,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Enums\Width;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Facades\Schema as SchemaFacade;
 use UnitEnum;
 
 class DialerControl extends Page implements HasForms
@@ -48,7 +49,7 @@ class DialerControl extends Page implements HasForms
 
     public ?array $leadImportData = [];
 
-    public function getHeading(): \Illuminate\Contracts\Support\Htmlable|string|null
+    public function getHeading(): Htmlable|string|null
     {
         return null;
     }
@@ -249,6 +250,10 @@ class DialerControl extends Page implements HasForms
 
     public static function getNavigationBadge(): ?string
     {
+        if (! SchemaFacade::hasTable((new DialerCampaign)->getTable())) {
+            return null;
+        }
+
         return (string) DialerCampaign::query()->where('status', DialerCampaignStatus::Running->value)->count();
     }
 
