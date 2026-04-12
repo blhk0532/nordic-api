@@ -105,8 +105,8 @@ class OverlookWidget extends Widget
             return null;
         })
             ->filter()
-            ->when($plugin->shouldSortAlphabetical(), fn ($collection) => $collection->sortBy('raw_count', SORT_DESC)->sortBy('name'))
-             ->when(! $plugin->shouldSortAlphabetical(), fn ($collection) => $collection->sortBy('count', SORT_DESC))
+            ->when($plugin->shouldSortAlphabetical(), fn ($collection) => $collection->sortBy('count', SORT_ASC)->sortBy('name'))
+             ->when(! $plugin->shouldSortAlphabetical(), fn ($collection) => $collection->sortBy('count', SORT_ASC))
             ->values()
             ->toArray();
     }

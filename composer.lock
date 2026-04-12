@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "947d701face3cdca970c7d4f80d26ac9",
+    "content-hash": "910f50f2ab0fd4cd15bb6b18c2333fe6",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -23115,7 +23115,8 @@
         "muazzam/slick-scrollbar": 20,
         "mwguerra/web-terminal": 20,
         "usamamuneerchaudhary/filament-notifier": 20,
-        "wallacemartinss/filament-whatsapp-conector": 20
+        "wallacemartinss/filament-whatsapp-conector": 20,
+        "wezlo/filament-workspace-tabs": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
