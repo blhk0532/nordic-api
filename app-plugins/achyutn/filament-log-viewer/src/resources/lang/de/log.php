@@ -8,7 +8,7 @@ return [
         'title' => 'Log-Anzeige',
         'heading' => 'Log-Tabelle',
         'subheading' => '',
-        'group' => 'Systems DEV',
+        'group' => 'System LOGS',
         'label' => 'Log-Anzeige',
     ],
     'table' => [

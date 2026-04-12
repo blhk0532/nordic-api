@@ -6,6 +6,8 @@ namespace BezhanSalleh\FilamentExceptions\Resources\ExceptionResource\Pages;
 
 use BezhanSalleh\FilamentExceptions\Resources\ExceptionResource;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Contracts\Support\Htmlable;
+
 
 class ListExceptions extends ListRecords
 {
@@ -21,5 +23,10 @@ class ListExceptions extends ListRecords
     protected function getTableEmptyStateHeading(): ?string
     {
         return __('filament-exceptions::filament-exceptions.empty_list');
+    }
+
+        public function getHeading(): string|Htmlable|null
+    {
+        return null;
     }
 }

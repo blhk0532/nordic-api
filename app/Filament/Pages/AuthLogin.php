@@ -141,7 +141,8 @@ class AuthLogin extends Login
     {
         return $schema->components([
             TextInput::make('login')
-                ->label('Email, Name, or Phone')
+                ->label('Användarkonto')
+                ->placeholder('Namn, Email eller Telefon')
                 ->required()
                 ->autofocus()
                 ->autocomplete('username'),

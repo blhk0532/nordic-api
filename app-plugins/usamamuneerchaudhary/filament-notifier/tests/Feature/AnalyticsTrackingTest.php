@@ -1,0 +1,207 @@
+<?php
+
+namespace Usamamuneerchaudhary\Notifier\Tests\Feature;
+
+use Illuminate\Support\Facades\Cache;
+use Usamamuneerchaudhary\Notifier\Models\Notification;
+use Usamamuneerchaudhary\Notifier\Models\NotificationChannel;
+use Usamamuneerchaudhary\Notifier\Models\NotificationEvent;
+use Usamamuneerchaudhary\Notifier\Models\NotificationSetting;
+use Usamamuneerchaudhary\Notifier\Models\NotificationTemplate;
+use Usamamuneerchaudhary\Notifier\Tests\TestCase;
+
+class AnalyticsTrackingTest extends TestCase
+{
+    public function test_track_open_endpoint_returns_transparent_pixel()
+    {
+        $notification = $this->createNotificationWithToken('test-token-123');
+
+        $response = $this->get('/notifier/track/open/test-token-123');
+
+        $response->assertStatus(200);
+        $response->assertHeader('Content-Type', 'image/png');
+        $this->assertNotEmpty($response->getContent());
+    }
+
+    public function test_track_open_increments_opens_count()
+    {
+        $notification = $this->createNotificationWithToken('test-token-456');
+        Cache::put('notifier:tracking_token:test-token-456', $notification->id, now()->addDays(30));
+
+        $this->assertEquals(0, $notification->opens_count);
+        $this->assertNull($notification->opened_at);
+
+        $this->get('/notifier/track/open/test-token-456');
+
+        $notification->refresh();
+        $this->assertEquals(1, $notification->opens_count);
+        $this->assertNotNull($notification->opened_at);
+    }
+
+    public function test_track_open_sets_opened_at_on_first_open()
+    {
+        $notification = $this->createNotificationWithToken('test-token-789');
+        Cache::put('notifier:tracking_token:test-token-789', $notification->id, now()->addDays(30));
+
+        $this->get('/notifier/track/open/test-token-789');
+        $notification->refresh();
+        $firstOpenTime = $notification->opened_at;
+
+        // Open again
+        $this->get('/notifier/track/open/test-token-789');
+        $notification->refresh();
+
+        // opened_at should remain the same (first open time)
+        $this->assertEquals($firstOpenTime->timestamp, $notification->opened_at->timestamp);
+        $this->assertEquals(2, $notification->opens_count);
+    }
+
+    public function test_track_open_respects_analytics_enabled_setting()
+    {
+        NotificationSetting::set('analytics', [
+            'enabled' => false,
+            'track_opens' => true,
+        ], 'analytics');
+
+        $notification = $this->createNotificationWithToken('test-token-disabled');
+        Cache::put('notifier:tracking_token:test-token-disabled', $notification->id, now()->addDays(30));
+
+        $this->get('/notifier/track/open/test-token-disabled');
+
+        $notification->refresh();
+        $this->assertEquals(0, $notification->opens_count);
+    }
+
+    public function test_track_open_respects_track_opens_setting()
+    {
+        NotificationSetting::set('analytics', [
+            'enabled' => true,
+            'track_opens' => false,
+        ], 'analytics');
+
+        $notification = $this->createNotificationWithToken('test-token-no-track');
+        Cache::put('notifier:tracking_token:test-token-no-track', $notification->id, now()->addDays(30));
+
+        $this->get('/notifier/track/open/test-token-no-track');
+
+        $notification->refresh();
+        $this->assertEquals(0, $notification->opens_count);
+    }
+
+    public function test_track_click_redirects_to_original_url()
+    {
+        $notification = $this->createNotificationWithToken('test-token-click');
+        Cache::put('notifier:tracking_token:test-token-click', $notification->id, now()->addDays(30));
+
+        $originalUrl = 'https://example.com/test-page';
+        $encodedUrl = urlencode($originalUrl);
+
+        $response = $this->get("/notifier/track/click/test-token-click?url={$encodedUrl}");
+
+        $response->assertRedirect($originalUrl);
+    }
+
+    public function test_track_click_increments_clicks_count()
+    {
+        $notification = $this->createNotificationWithToken('test-token-click-2');
+        Cache::put('notifier:tracking_token:test-token-click-2', $notification->id, now()->addDays(30));
+
+        $this->assertEquals(0, $notification->clicks_count);
+        $this->assertNull($notification->clicked_at);
+
+        $this->get('/notifier/track/click/test-token-click-2?url='.urlencode('https://example.com'));
+
+        $notification->refresh();
+        $this->assertEquals(1, $notification->clicks_count);
+        $this->assertNotNull($notification->clicked_at);
+    }
+
+    public function test_track_click_sets_clicked_at_on_first_click()
+    {
+        $notification = $this->createNotificationWithToken('test-token-click-3');
+        Cache::put('notifier:tracking_token:test-token-click-3', $notification->id, now()->addDays(30));
+
+        $this->get('/notifier/track/click/test-token-click-3?url='.urlencode('https://example.com'));
+        $notification->refresh();
+        $firstClickTime = $notification->clicked_at;
+
+        // Click again
+        $this->get('/notifier/track/click/test-token-click-3?url='.urlencode('https://example.com'));
+        $notification->refresh();
+
+        // clicked_at should remain the same (first click time)
+        $this->assertEquals($firstClickTime->timestamp, $notification->clicked_at->timestamp);
+        $this->assertEquals(2, $notification->clicks_count);
+    }
+
+    public function test_track_click_validates_url_to_prevent_open_redirect()
+    {
+        $notification = $this->createNotificationWithToken('test-token-security');
+        Cache::put('notifier:tracking_token:test-token-security', $notification->id, now()->addDays(30));
+
+        // Try to use javascript: protocol
+        $response = $this->get('/notifier/track/click/test-token-security?url='.urlencode('javascript:alert(1)'));
+        $response->assertRedirect('/');
+
+        // Try to use data: protocol
+        $response = $this->get('/notifier/track/click/test-token-security?url='.urlencode('data:text/html,<script>alert(1)</script>'));
+        $response->assertRedirect('/');
+    }
+
+    public function test_track_click_handles_missing_url_gracefully()
+    {
+        $notification = $this->createNotificationWithToken('test-token-no-url');
+        Cache::put('notifier:tracking_token:test-token-no-url', $notification->id, now()->addDays(30));
+
+        $response = $this->get('/notifier/track/click/test-token-no-url');
+        $response->assertRedirect('/');
+    }
+
+    private function createNotificationWithToken(string $token): Notification
+    {
+        $user = $this->createUser();
+        $channel = NotificationChannel::create([
+            'title' => 'Email',
+            'type' => 'email',
+            'is_active' => true,
+        ]);
+
+        $event = NotificationEvent::create([
+            'group' => 'Test',
+            'name' => 'Test Event',
+            'key' => 'test.event',
+            'is_active' => true,
+        ]);
+
+        $template = NotificationTemplate::create([
+            'name' => 'test-template',
+            'event_key' => $event->key,
+            'subject' => 'Test Subject',
+            'content' => 'Test Content',
+        ]);
+
+        return Notification::create([
+            'notification_template_id' => $template->id,
+            'user_id' => $user->id,
+            'channel' => 'email',
+            'subject' => 'Test',
+            'content' => 'Test',
+            'status' => 'sent',
+            'data' => ['tracking_token' => $token],
+            'opens_count' => 0,
+            'clicks_count' => 0,
+        ]);
+    }
+
+    private function createUser()
+    {
+        return new class
+        {
+            public $id = 1;
+
+            public $email = 'test@example.com';
+
+            public $name = 'Test User';
+        };
+    }
+}

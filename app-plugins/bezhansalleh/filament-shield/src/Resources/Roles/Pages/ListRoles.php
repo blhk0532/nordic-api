@@ -15,7 +15,12 @@ class ListRoles extends ListRecords
     protected function getActions(): array
     {
         return [
-            CreateAction::make(),
+         //   CreateAction::make(),
         ];
+    }
+
+            public function getHeading(): \Illuminate\Contracts\Support\Htmlable|string|null
+    {
+        return null;
     }
 }

@@ -80,7 +80,7 @@ return [
     */
     'pages' => [
         'terminal' => [
-            'title' => 'Terminal',
+            'title' => ' ',
             'local_terminal' => 'Terminal Local',
             'local_terminal_description' => 'Execute comandos no sistema local.',
         ],

@@ -20,7 +20,7 @@ A secure web terminal package for Laravel with Filament integration. Execute all
 - **Comprehensive logging**: Audit trail for connections, commands, outputs, and errors
 - **Multi-tenant support**: Built-in tenant isolation for SaaS applications
 - **Session management**: Inactivity timeout, disconnect-on-navigate, and session statistics
-- **Filament integration**: Terminal page and Terminal Logs resource with stats widgets
+- **Filament integration**: Terminal page and Shell Logs resource with stats widgets
 - **Embeddable**: Use as Livewire component or Filament Schema component in any page
 - **Clipboard integration**: Copy All button, per-block copy on hover, multi-line paste with confirmation
 - **Security by design**: Credential protection, input sanitization, rate limiting
@@ -296,7 +296,7 @@ WebTerminal::make()
 
 The package provides a Filament plugin that adds:
 - **Terminal Page**: A demo page with local terminal functionality
-- **Terminal Logs Resource**: Browse and search terminal session logs with stats widgets
+- **Shell Logs Resource**: Browse and search terminal session logs with stats widgets
 
 ### Register the Plugin
 
@@ -336,10 +336,10 @@ WebTerminalPlugin::make()
         sort: 100,
         group: 'Tools',
     )
-    // Configure Terminal Logs resource navigation
+    // Configure Shell Logs resource navigation
     ->terminalLogsNavigation(
         icon: 'heroicon-o-clipboard-document-list',
-        label: 'Terminal Logs',
+        label: 'Shell Logs',
         sort: 101,
         group: 'Tools',
     )
@@ -352,7 +352,7 @@ WebTerminalPlugin::make()
 WebTerminalPlugin::make()
     ->withoutTerminalPage()
 
-// Disable Terminal Logs resource (only show terminal)
+// Disable Shell Logs resource (only show terminal)
 WebTerminalPlugin::make()
     ->withoutTerminalLogs()
 
@@ -1274,7 +1274,7 @@ Script::make('server-status')
 
 The package includes comprehensive logging for terminal sessions, connections, and command execution.
 
-![Terminal Logs Resource](https://raw.githubusercontent.com/mwguerra/web-terminal/main/docs/images/terminal-log-resource.jpg)
+![Shell Logs Resource](https://raw.githubusercontent.com/mwguerra/web-terminal/main/docs/images/terminal-log-resource.jpg)
 
 ### Configuration
 

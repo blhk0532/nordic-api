@@ -69,8 +69,8 @@ return [
     */
     'navigation' => [
         'terminal' => 'Terminal',
-        'terminal_logs' => 'Terminal Logs',
-        'tools' => 'Systems DEV',
+        'terminal_logs' => 'Shell Logs',
+        'tools' => 'System LOGS',
     ],
 
     /*
@@ -93,7 +93,7 @@ return [
     */
     'resource' => [
         'label' => 'Terminal Log',
-        'plural_label' => 'Terminal Logs',
+        'plural_label' => 'Shell Logs',
         'back' => 'Back',
     ],
 

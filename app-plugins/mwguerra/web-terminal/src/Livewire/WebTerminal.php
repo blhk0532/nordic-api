@@ -139,7 +139,7 @@ class WebTerminal extends Component
     /**
      * The terminal title displayed in the header bar.
      */
-    public string $title = 'Terminal';
+    public string $title = ' ';
 
     /**
      * Whether to show window control buttons (the three colored dots).

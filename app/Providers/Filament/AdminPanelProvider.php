@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use AchyutN\FilamentLogViewer\FilamentLogViewer;
+use Adultdate\FilamentBooking\FilamentBookingPlugin;
 use App\Filament\Pages\AuthLogin;
 use App\Filament\Pages\Tenancy\EditTeamProfile;
 use App\Http\Middleware\ApplyTenantScopes;
@@ -13,6 +14,7 @@ use Asmit\ResizedColumn\ResizedColumnPlugin;
 use Awcodes\Overlook\OverlookPlugin;
 use BezhanSalleh\FilamentExceptions\FilamentExceptionsPlugin;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
+use BinaryBuilds\CommandRunner\CommandRunnerPlugin;
 use BinaryBuilds\FilamentFailedJobs\FilamentFailedJobsPlugin;
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
 use Caresome\FilamentAuthDesigner\Enums\MediaPosition;
@@ -27,8 +29,8 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\NavigationGroup;
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\Support\Colors\Color;
 // use Flexpik\FilamentStudio\FilamentStudioPlugin;
+use Filament\Support\Colors\Color;
 use Filament\Support\Enums\Width;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
@@ -49,9 +51,12 @@ use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
 use Joaopaulolndev\FilamentGeneralSettings\FilamentGeneralSettingsPlugin;
 use Laravel\Socialite\Contracts\User as SocialiteUserContract;
 use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
+use MmesDesign\FilamentFileManager\FileManagerPlugin;
 use Muazzam\SlickScrollbar\SlickScrollbarPlugin;
 use MWGuerra\WebTerminal\WebTerminalPlugin;
-
+use Wezlo\FilamentWorkspaceTabs\WorkspaceTabsPlugin;
+use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
+use Usamamuneerchaudhary\Notifier\FilamentNotifierPlugin;
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -130,9 +135,12 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make('Database NR')
                     ->collapsed(true)
                     ->icon('heroicon-o-chart-pie'),
-                NavigationGroup::make('Systems DEV')
+                NavigationGroup::make('System LOGS')
                     ->collapsed(true)
-                    ->icon('heroicon-o-code-bracket-square'),
+                    ->icon('heroicon-o-megaphone'),
+                            NavigationGroup::make('Notifications')
+                    ->collapsed(true)
+                    ->icon('heroicon-o-bell'),
 
             ])
             ->userMenuItems([
@@ -169,13 +177,13 @@ class AdminPanelProvider extends PanelProvider
                 AuthDesignerPlugin::make()
                     ->defaults(
                         fn ($config) => $config
-                            ->media(asset('assets/auth-bg.jpg'))
+                            ->media(asset('assets/pattaya.webp'))
                             ->mediaPosition(MediaPosition::Cover)
-                            ->blur(10)
+                            ->blur(1)
                     )
                     ->login(
                         fn ($config) => $config
-                            ->media(asset('video/853789-hd_1920_1080_25fps.mp4'))
+                            ->media(asset('video/beach-at-sunset.1920x1080.mp4'))
                             ->usingPage(AuthLogin::class)
                     )
                     ->passwordReset()
@@ -189,16 +197,32 @@ class AdminPanelProvider extends PanelProvider
                             ->icon('heroicon-o-home')
                             ->activeIcon('heroicon-s-home')
                             ->url('/admin')
-                            ->isActive(fn () => request()->is('admin')),
+                            ->isActive(true),
                         MobileBottomNavItem::make('Inbox')
                             ->icon('heroicon-o-inbox')
-                            ->url('/admin/inbox')
+                            ->url('/chats')
                             ->badge(5, 'danger'),
                         MobileBottomNavItem::make('Profile')
                             ->icon('heroicon-o-user')
                             ->url(fn () => EditProfilePage::getUrl()),
                     ]),
 
+            ])
+            ->plugin(CommandRunnerPlugin::make())
+            ->plugins([
+                FileManagerPlugin::make()
+                    ->defaultDisk('public')
+                    ->navigationGroup('System LOGS')
+                    ->navigationIcon('heroicon-o-folder')
+                    ->navigationSort(5),
+            ])
+            ->plugins([
+                WorkspaceTabsPlugin::make(),
+                FilamentIconPickerPlugin::make(),
+                 FilamentNotifierPlugin::make()
+            ])
+            ->plugins([
+                FilamentBookingPlugin::make(),
             ])
             ->plugin(
                 FilamentSocialitePlugin::make()
@@ -263,7 +287,7 @@ class AdminPanelProvider extends PanelProvider
             ->plugin(
                 FilamentExceptionsPlugin::make()
                     ->scopeToTenant(false)
-                    ->navigationGroup('Systems DEV')
+                    ->navigationGroup('System LOGS')
             )
             ->plugins([
                 WebTerminalPlugin::make()
@@ -271,7 +295,7 @@ class AdminPanelProvider extends PanelProvider
                         icon: 'heroicon-o-command-line',
                         label: 'Terminal',
                         sort: 100,
-                        group: 'Systems DEV',
+                        group: 'System LOGS',
                     ),
             ])
             ->plugins([

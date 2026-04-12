@@ -33,7 +33,7 @@ class Terminal extends Page implements HasSchemas
 
     public function getTitle(): string|Htmlable
     {
-        return __('web-terminal::terminal.pages.terminal.title');
+        return __(' ');
     }
 
     public static function getNavigationLabel(): string

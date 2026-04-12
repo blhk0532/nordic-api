@@ -1,4 +1,4 @@
-  <div className="ml-1 grid flex-1 text-left text-sm" style="width:222px;display: flex;;opacity:0.8;cursor:pointer;">
+  <div className="ml-1 grid flex-1 text-left text-sm" style="width:222px;display: flex;opacity:0.8;cursor:pointer;">
 <a href="{{ config('app.url') }}" className="mb-0.5 truncate leading-tight font-semibold flex" style="opacity:0.6;height:32px;width:96px;margin-top:8px;margin-left:2px;margin-right:18px;display:flex;">
                     <svg
                         version="1.2"
@@ -55,9 +55,9 @@
 <a href="{{ config('app.url') . '/admin' }}"  class="flex" style="width:96px;">
 <svg viewBox="0 0 724 160" fill="none" width="200" height="44" xmlns="http://www.w3.org/2000/svg">
     <title>{{ config('app.name') }}</title>
-    
+
 	<style>
-		.s0 { fill: currentColor } 
+		.s0 { fill: currentColor }
 	</style>
 	<g id="layer1">
 		<g id="g2571">

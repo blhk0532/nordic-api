@@ -6,9 +6,9 @@ return [
     'placeholder' => 'N/A',
     'navigation' => [
         'title' => 'Log Viewer',
-        'heading' => 'Log Table',
+        'heading' => ' ',
         'subheading' => '',
-        'group' => 'Systems DEV',
+        'group' => 'System LOGS',
         'label' => 'Log Viewer',
     ],
     'table' => [

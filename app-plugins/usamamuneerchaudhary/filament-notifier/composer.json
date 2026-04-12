@@ -1,0 +1,62 @@
+{
+    "name": "usamamuneerchaudhary/filament-notifier",
+    "description": "A powerful notification system for FilamentPHP that handles multi-channel notifications with template management, scheduling, and real-time delivery. Built for developers who need enterprise-grade notifications without the complexity.",
+    "keywords": [
+        "usamamuneerchaudhary",
+        "laravel",
+        "filament",
+        "notifications",
+        "php",
+        "filamentphp"
+    ],
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Usama Muneer",
+            "email": "hello@usamamuneer.me",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Usamamuneerchaudhary\\Notifier\\": "src"
+        }
+    },
+    "require": {
+        "php": "^8.2",
+        "spatie/laravel-package-tools": "^1.19",
+        "filament/filament": "^4.0|^5.0",
+        "symfony/mailer": "^7.2",
+        "guzzlehttp/guzzle": "^7.9",
+        "illuminate/contracts": "^11.0|^12.0|^13.0",
+        "illuminate/support": "^11.0|^12.0|^13.0",
+        "league/commonmark": "^2.6"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Usamamuneerchaudhary\\Notifier\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Usamamuneerchaudhary\\Notifier\\NotifierServiceProvider"
+            ],
+            "aliases": {
+                "Preference": "Usamamuneerchaudhary\\Notifier\\Facades\\Preference",
+                "Analytics": "Usamamuneerchaudhary\\Notifier\\Facades\\Analytics",
+                "UrlTracking": "Usamamuneerchaudhary\\Notifier\\Facades\\UrlTracking",
+                "NotificationRepo": "Usamamuneerchaudhary\\Notifier\\Facades\\NotificationRepo"
+            }
+        }
+    },
+    "require-dev": {
+        "orchestra/testbench": "^9.11",
+        "phpunit/phpunit": "^11.5",
+        "nunomaduro/collision": "^8.6"
+    }
+}

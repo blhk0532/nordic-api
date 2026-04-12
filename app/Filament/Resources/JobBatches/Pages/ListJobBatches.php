@@ -15,7 +15,12 @@ class ListJobBatches extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+           // CreateAction::make(),
         ];
+    }
+
+        public function getHeading(): \Illuminate\Contracts\Support\Htmlable|string|null
+    {
+        return null;
     }
 }

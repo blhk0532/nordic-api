@@ -212,16 +212,8 @@ final class LogTable extends Page implements HasTable
                         ->columnSpan(1),
                 ]
             )
-            ->filtersFormWidth(Width::Large)
-            ->filtersFormColumns(3)
-            ->deferFilters(false)
-            ->deferColumnManager(false);
-    }
-
-    protected function getHeaderActions(): array
-    {
-        return [
-            Action::make('refresh')
+            ->toolbarActions([
+                 Action::make('refresh')
                 ->label(__('filament-log-viewer::log.table.actions.refresh.label'))
                 ->icon(Heroicon::ArrowPath)
                 ->outlined()
@@ -241,6 +233,17 @@ final class LogTable extends Page implements HasTable
                         ->success()
                         ->send();
                 }),
+            ])
+            ->filtersFormWidth(Width::Large)
+            ->filtersFormColumns(3)
+            ->deferFilters(false)
+            ->deferColumnManager(false);
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+
         ];
     }
 

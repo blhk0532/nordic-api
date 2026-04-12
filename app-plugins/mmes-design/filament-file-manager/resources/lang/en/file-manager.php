@@ -1,0 +1,139 @@
+<?php
+
+return [
+
+    'page' => [
+        'title' => 'File Manager',
+        'navigation_label' => 'File Manager',
+    ],
+
+    'toolbar' => [
+        'upload' => 'Upload',
+        'new_folder' => 'New folder',
+        'refresh' => 'Refresh',
+        'deselect' => 'Deselect',
+        'sort_name' => 'Name',
+        'sort_size' => 'Size',
+        'sort_date' => 'Date',
+        'sort_type' => 'Type',
+        'sort_asc' => 'Ascending order',
+        'sort_desc' => 'Descending order',
+        'selected_count' => ':count selected item|:count selected items',
+    ],
+
+    'actions' => [
+        'rename' => 'Rename',
+        'delete' => 'Delete',
+        'preview' => 'Preview',
+        'full_preview' => 'Full preview',
+        'download' => 'Download',
+        'open' => 'Open',
+        'upload_files' => 'Upload files',
+        'new_folder' => 'New folder',
+        'move_selected' => 'Move selected',
+        'delete_selected' => 'Delete selected',
+        'confirm_selection' => 'Confirm selection',
+        'browse' => 'Browse',
+        'select_file' => 'Select file',
+        'check_updates' => 'Check for updates',
+        'update_available_title' => 'Update available',
+        'update_available_body' => 'Version :latest is available (current: :current).',
+        'up_to_date_title' => 'Up to date',
+        'up_to_date_body' => 'You are running the latest version (:current).',
+        'update_check_failed_title' => 'Check failed',
+        'update_check_failed_body' => 'Unable to check for updates. Please try again later.',
+    ],
+
+    'messages' => [
+        'files_uploaded' => ':count file uploaded|:count files uploaded',
+        'some_files_not_uploaded' => 'Some files could not be uploaded',
+        'folder_created' => "Folder ':name' created",
+        'renamed_successfully' => 'Renamed successfully',
+        'item_deleted' => "':name' deleted",
+        'items_deleted' => ':count items deleted',
+        'items_moved' => ':count items moved',
+        'item_moved' => "':name' moved to ':destination'",
+        'move_error' => 'Error during move',
+        'file_too_large' => 'The file must not exceed :max.',
+        'upload_failed' => 'Upload failed. The file must not exceed :max.',
+        'file_type_not_allowed' => 'File type not allowed: :name',
+        'folder_already_exists' => "Folder ':name' already exists.",
+        'name_already_exists' => "':name' already exists.",
+        'extension_changed' => 'Changing the file extension may make the file unusable.',
+        'permission_denied' => 'You do not have permission to perform this action.',
+    ],
+
+    'labels' => [
+        'folder_name' => 'Folder name',
+        'new_name' => 'New name',
+        'destination_folder' => 'Destination folder',
+        'destination_placeholder' => 'e.g. images/photos',
+        'destination_helper' => 'Leave empty to move to root.',
+        'file' => 'File',
+        'name_validation' => 'The name cannot contain / or \\.',
+        'folder' => 'Folder',
+        'files_count' => ':count file|:count files',
+        'folders_count' => ':count folder|:count folders',
+        'selected' => ':count selected',
+        'file_selected' => '1 file selected',
+        'no_file_selected' => 'No file selected',
+        'root' => 'Root',
+        'showing_of_total' => ':shown of :total files',
+        'loading_more' => 'Loading more...',
+    ],
+
+    'modals' => [
+        'confirm_deletion' => 'Confirm deletion',
+        'deletion_warning' => 'This action cannot be undone. Do you want to proceed?',
+        'bulk_deletion_warning' => 'You are about to delete :count items. This action cannot be undone.',
+        'close' => 'Close',
+    ],
+
+    'sidebar' => [
+        'folders' => 'Folders',
+        'expand' => 'Expand',
+        'collapse' => 'Collapse',
+        'empty' => '(empty)',
+        'show_folders' => 'Show folders',
+        'show_preview' => 'Show preview',
+        'hide_preview' => 'Hide preview',
+    ],
+
+    'file_types' => [
+        'image' => 'Image',
+        'document' => 'Document',
+        'audio' => 'Audio',
+        'video' => 'Video',
+        'archive' => 'Archive',
+        'code' => 'Code',
+        'other' => 'Other',
+    ],
+
+    'editors' => [
+        'file_manager' => 'File Manager',
+        'insert' => 'Insert',
+        'select_files' => 'Select files to insert',
+        'no_url_warning' => 'Some files were skipped because they have no public URL.',
+    ],
+
+    'commands' => [
+        'thumbnails_cleared' => 'Thumbnails cleared successfully on disk [:disk].',
+        'no_thumbnails' => 'No thumbnails directory found on disk [:disk].',
+        'remote_disk_not_supported' => 'The [:disk] disk uses the [:driver] driver. Remote disks are available in the Pro version.',
+    ],
+
+    'misc' => [
+        'empty_folder' => 'This folder is empty',
+        'empty_folder_hint' => 'Upload files or create a new folder to get started',
+        'select_file_preview' => 'Select a file to view its details',
+        'info' => 'Information',
+        'type' => 'Type',
+        'mime' => 'MIME',
+        'size' => 'Size',
+        'modified' => 'Modified',
+        'audio_not_supported' => 'Your browser does not support the audio element.',
+        'video_not_supported' => 'Your browser does not support the video element.',
+        'cannot_read_file' => 'Unable to read file content.',
+    ],
+
+];

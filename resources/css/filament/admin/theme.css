@@ -6,6 +6,9 @@
 @source '../../../../vendor/harvirsidhu/filament-cards/resources/views';
 @source '../../../../vendor/awcodes/overlook/resources/**/*.blade.php';
 
+@source '../../../../vendor/wezlo/filament-workspace-tabs/resources/views/**/*';
+
+
 footer{
     background:#18181b;
 }
@@ -197,4 +200,32 @@ min-width: 312px!important;
 }
 .fi-sidebar-open .fi-tenant-menu-trigger {
     padding-left:10px!important;
+}
+
+.fi-workspace-tabs{
+        background: #18181b;
+}
+.fi-workspace-tabs-strip{
+        background: #161616;
+}
+
+.fi-auth-card .fi-simple-header{
+    height: 18px;
+}
+.fi-main-ctn.fi-main-ctn-sidebar-open{
+    overflow: hidden!important;
+}
+.fi-main-ctn{
+    overflow: hidden;
+}
+
+.fi-workspace-tabs{
+        background: #18181b!important;
+}
+
+.fi-main-ctn.fi-main-ctn-sidebar-open{
+    overflow: hidden!important;
+}
+div.fi-main-ctn.fi-main-ctn-sidebar-open{
+    overflow: hidden!important;
 }

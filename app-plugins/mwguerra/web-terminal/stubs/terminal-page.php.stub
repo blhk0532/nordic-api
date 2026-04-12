@@ -17,7 +17,7 @@ class {{ class_name }} extends BaseTerminal
 
     protected static ?string $navigationLabel = '{{ navigation_label }}';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Systems DEV';
+    protected static string|UnitEnum|null $navigationGroup = 'System LOGS';
 
     protected static ?int $navigationSort = 100;
 

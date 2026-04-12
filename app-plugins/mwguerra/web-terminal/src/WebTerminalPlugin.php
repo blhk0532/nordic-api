@@ -59,7 +59,7 @@ class WebTerminalPlugin implements Plugin
     protected ?string $terminalNavigationGroup = null;
 
     // =========================================================================
-    // Terminal Logs Resource Configuration
+    // Shell Logs Resource Configuration
     // =========================================================================
 
     protected bool $terminalLogsEnabled = true;
@@ -289,15 +289,15 @@ class WebTerminalPlugin implements Plugin
      */
     public function getTerminalNavigationGroup(): ?string
     {
-        return $this->terminalNavigationGroup ?? 'Systems DEV';
+        return $this->terminalNavigationGroup ?? 'System LOGS';
     }
 
     // =========================================================================
-    // Terminal Logs Resource Configuration
+    // Shell Logs Resource Configuration
     // =========================================================================
 
     /**
-     * Configure the Terminal Logs resource.
+     * Configure the Shell Logs resource.
      */
     public function terminalLogs(bool $enabled = true): static
     {
@@ -307,7 +307,7 @@ class WebTerminalPlugin implements Plugin
     }
 
     /**
-     * Disable the Terminal Logs resource.
+     * Disable the Shell Logs resource.
      */
     public function withoutTerminalLogs(): static
     {
@@ -317,7 +317,7 @@ class WebTerminalPlugin implements Plugin
     }
 
     /**
-     * Configure navigation for the Terminal Logs resource.
+     * Configure navigation for the Shell Logs resource.
      */
     public function terminalLogsNavigation(
         ?string $icon = null,
@@ -342,7 +342,7 @@ class WebTerminalPlugin implements Plugin
     }
 
     /**
-     * Check if Terminal Logs resource is enabled.
+     * Check if Shell Logs resource is enabled.
      */
     public function isTerminalLogsEnabled(): bool
     {
@@ -350,7 +350,7 @@ class WebTerminalPlugin implements Plugin
     }
 
     /**
-     * Get the Terminal Logs navigation icon.
+     * Get the Shell Logs navigation icon.
      */
     public function getTerminalLogsNavigationIcon(): string|BackedEnum|Htmlable|null
     {
@@ -358,15 +358,15 @@ class WebTerminalPlugin implements Plugin
     }
 
     /**
-     * Get the Terminal Logs navigation label.
+     * Get the Shell Logs navigation label.
      */
     public function getTerminalLogsNavigationLabel(): string
     {
-        return $this->terminalLogsNavigationLabel ?? 'Terminal Logs';
+        return $this->terminalLogsNavigationLabel ?? 'Shell Logs';
     }
 
     /**
-     * Get the Terminal Logs navigation sort.
+     * Get the Shell Logs navigation sort.
      */
     public function getTerminalLogsNavigationSort(): ?int
     {
@@ -374,10 +374,10 @@ class WebTerminalPlugin implements Plugin
     }
 
     /**
-     * Get the Terminal Logs navigation group.
+     * Get the Shell Logs navigation group.
      */
     public function getTerminalLogsNavigationGroup(): ?string
     {
-        return $this->terminalLogsNavigationGroup ?? 'Systems DEV';
+        return $this->terminalLogsNavigationGroup ?? 'System LOGS';
     }
 }

@@ -18,26 +18,41 @@ use BackedEnum;
 use Harvirsidhu\FilamentCards\CardGroup;
 use Harvirsidhu\FilamentCards\CardItem;
 use Harvirsidhu\FilamentCards\Filament\Pages\CardsPage;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Auth;
 use UnitEnum;
-
 class ControlPanel extends CardsPage
 {
     // protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-squares-2x2';
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-squares-2x2';
 
-    protected static string|BackedEnum|null $activeNavigationIcon = 'heroicon-s-squares-2x2';
+       protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-squares-2x2';
+       protected static string|BackedEnum|null $activeNavigationIcon = 'heroicon-o-squares-2x2';
 
     //   protected static string|UnitEnum|null $navigationGroup = 'Dashboards';
 
-    protected static ?string $title = '';
+    protected static ?string $title = '#';
 
     protected static ?string $slug = 'controlpanel';
 
     protected static ?string $navigationLabel = 'DASHBOARD';
 
     protected static ?int $navigationSort = -1;
+
+        public static function getModelLabel(): string
+    {
+        return __('#');
+    }
+
+public function getHeading(): string|Htmlable|null
+{
+    return null;
+}
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Dashboards');
+    }
 
     public static function getNavigationBadgeColor(): string|array|null
     {

@@ -40,7 +40,7 @@ class SwedenPostnummer extends Page
 
     public function getTitle(): string|Htmlable
     {
-        return ' ';
+        return 'Postnummer';
     }
 
     public static function getNavigationBadge(): ?string

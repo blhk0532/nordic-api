@@ -1,0 +1,241 @@
+<div
+    x-data="{
+        previewFile: null,
+        folderSidebarOpen: localStorage.getItem('fm-folder-sidebar') !== 'false',
+        previewSidebarOpen: localStorage.getItem('fm-preview-sidebar') !== 'false',
+        async generateThumbnails() {
+            const generated = await $wire.generateMissingThumbnails();
+            if (generated > 0) {
+                this.generateThumbnails();
+            }
+        },
+        init() {
+            $wire.$watch('currentPath', () => { this.previewFile = null; });
+            this.generateThumbnails();
+            $wire.$watch('currentDisk', () => this.generateThumbnails());
+            $wire.$watch('currentPath', () => this.generateThumbnails());
+            $wire.$watch('filePage', () => this.generateThumbnails());
+        },
+        handleKeydown(e) {
+            // Escape: close sidebar preview, or clear selection
+            if (e.key === 'Escape') {
+                if ($wire.mountedActions.length > 0) {
+                    return;
+                }
+                if (this.previewFile) {
+                    this.previewFile = null;
+                    return;
+                }
+                $wire.clearSelection();
+                return;
+            }
+
+            // Ctrl+A / Cmd+A: select all
+            if ((e.ctrlKey || e.metaKey) && e.key === 'a') {
+                e.preventDefault();
+                $wire.selectAll();
+                return;
+            }
+
+            // Delete/Backspace: delete selected
+            if (e.key === 'Delete' || e.key === 'Backspace') {
+                if (@js($permissions['canDelete']) && $wire.selectedItems.length > 0 && !e.target.closest('input, textarea, [contenteditable]')) {
+                    e.preventDefault();
+                    $wire.mountAction('deleteSelected');
+                    return;
+                }
+            }
+
+            // F2: rename single selected item
+            if (e.key === 'F2') {
+                if (@js($permissions['canRename']) && $wire.selectedItems.length === 1) {
+                    e.preventDefault();
+                    $wire.mountAction('rename', { path: $wire.selectedItems[0] });
+                }
+            }
+        }
+    }"
+    @keydown.window="handleKeydown($event)"
+    class="flex flex-col"
+    data-fm-container
+>
+    {{-- Disk switcher (visible only if Pro and multiple disks) --}}
+    @if (method_exists($this, 'getAvailableDisks') && count($this->getAvailableDisks()) > 1)
+        <div class="mb-4">
+            <select
+                wire:change="switchDisk($event.target.value)"
+                class="fm-select"
+            >
+                @foreach ($this->getAvailableDisks() as $diskName => $diskConfig)
+                    <option value="{{ $diskName }}" @selected($currentDisk === $diskName)>
+                        {{ $diskConfig['label'] ?? $diskName }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+    @endif
+
+    {{-- Main layout --}}
+    <div class="flex gap-4">
+    {{-- Folder tree sidebar (left) --}}
+    <div class="fm-sticky-sidebar hidden shrink-0 lg:flex">
+        {{-- Collapsed --}}
+        <button
+            x-show="!folderSidebarOpen"
+            @click="folderSidebarOpen = true; localStorage.setItem('fm-folder-sidebar', 'true')"
+            class="flex w-10 items-center justify-center rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 text-gray-400 hover:text-gray-600 dark:bg-gray-900 dark:ring-white/10 dark:text-gray-500 dark:hover:text-gray-300"
+            title="{{ __('filament-file-manager::file-manager.sidebar.show_folders') }}"
+        >
+            <x-filament::icon icon="heroicon-o-folder" class="size-5" />
+        </button>
+        {{-- Expanded --}}
+        <div x-show="folderSidebarOpen" x-cloak>
+            @include('filament-file-manager::components.folder-tree-sidebar')
+        </div>
+    </div>
+
+    {{-- Main content --}}
+    <div class="flex min-w-0 flex-1 flex-col gap-4">
+        {{-- Toolbar --}}
+        @include('filament-file-manager::components.toolbar', ['permissions' => $permissions])
+
+        {{-- Breadcrumbs --}}
+        @include('filament-file-manager::components.breadcrumbs')
+
+        {{-- Content --}}
+        <div class="flex flex-col rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10" data-fm-content @click="previewFile = null">
+            @if ($listing && !$listing->isEmpty())
+                @if ($viewMode === 'grid')
+                    <div class="flex-1 overflow-y-auto">
+                        <div class="grid grid-cols-2 gap-4 p-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+                            @foreach ($listing->folders as $folder)
+                                @include('filament-file-manager::components.file-card', ['item' => $folder, 'isFolder' => true, 'permissions' => $permissions])
+                            @endforeach
+
+                            @foreach ($listing->files as $file)
+                                @include('filament-file-manager::components.file-card', ['item' => $file, 'isFolder' => false, 'permissions' => $permissions])
+                            @endforeach
+                        </div>
+
+                        @if ($hasMoreFiles)
+                            <div
+                                x-intersect="$wire.loadMore()"
+                                wire:key="sentinel-{{ $filePage }}"
+                                class="flex items-center justify-center p-4"
+                            >
+                                <x-filament::loading-indicator class="size-5 text-gray-400 dark:text-gray-500" />
+                                <span class="ml-2 text-xs text-gray-400 dark:text-gray-500">{{ __('filament-file-manager::file-manager.labels.loading_more') }}</span>
+                            </div>
+                        @endif
+                    </div>
+                @else
+                    <div class="flex-1 overflow-y-auto">
+                    <div class="divide-y divide-gray-200 dark:divide-white/10">
+                        {{-- List header --}}
+                        <div class="flex items-center gap-4 px-4 py-2 text-xs font-medium text-gray-500 uppercase dark:text-gray-400">
+                            <div class="w-8 shrink-0">
+                                <input
+                                    type="checkbox"
+                                    @change="$event.target.checked ? $wire.selectAll() : $wire.clearSelection()"
+                                    :checked="$wire.selectedItems.length > 0 && $wire.selectedItems.length === {{ count($listing->folders) + count($listing->files) }}"
+                                    class="size-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 dark:border-white/20 dark:bg-white/5"
+                                />
+                            </div>
+                            <button wire:click="setSortField('name')" class="flex flex-1 items-center gap-1 hover:text-gray-700 dark:hover:text-gray-200">
+                                {{ __('filament-file-manager::file-manager.toolbar.sort_name') }}
+                                @if ($sortField === 'name')
+                                    <x-filament::icon :icon="$sortDirection === 'asc' ? 'heroicon-m-chevron-up' : 'heroicon-m-chevron-down'" class="size-3" />
+                                @endif
+                            </button>
+                            <button wire:click="setSortField('size')" class="flex w-24 items-center gap-1 hover:text-gray-700 dark:hover:text-gray-200">
+                                {{ __('filament-file-manager::file-manager.toolbar.sort_size') }}
+                                @if ($sortField === 'size')
+                                    <x-filament::icon :icon="$sortDirection === 'asc' ? 'heroicon-m-chevron-up' : 'heroicon-m-chevron-down'" class="size-3" />
+                                @endif
+                            </button>
+                            <button wire:click="setSortField('type')" class="hidden w-24 items-center gap-1 hover:text-gray-700 dark:hover:text-gray-200 md:flex">
+                                {{ __('filament-file-manager::file-manager.toolbar.sort_type') }}
+                                @if ($sortField === 'type')
+                                    <x-filament::icon :icon="$sortDirection === 'asc' ? 'heroicon-m-chevron-up' : 'heroicon-m-chevron-down'" class="size-3" />
+                                @endif
+                            </button>
+                            <button wire:click="setSortField('date')" class="hidden w-36 items-center gap-1 hover:text-gray-700 dark:hover:text-gray-200 lg:flex">
+                                {{ __('filament-file-manager::file-manager.toolbar.sort_date') }}
+                                @if ($sortField === 'date')
+                                    <x-filament::icon :icon="$sortDirection === 'asc' ? 'heroicon-m-chevron-up' : 'heroicon-m-chevron-down'" class="size-3" />
+                                @endif
+                            </button>
+                            <div class="w-24"></div>
+                        </div>
+
+                        @foreach ($listing->folders as $folder)
+                            @include('filament-file-manager::components.file-row', ['item' => $folder, 'isFolder' => true, 'permissions' => $permissions])
+                        @endforeach
+
+                        @foreach ($listing->files as $file)
+                            @include('filament-file-manager::components.file-row', ['item' => $file, 'isFolder' => false, 'permissions' => $permissions])
+                        @endforeach
+
+                        @if ($hasMoreFiles)
+                            <div
+                                x-intersect="$wire.loadMore()"
+                                wire:key="sentinel-{{ $filePage }}"
+                                class="flex items-center justify-center p-4"
+                            >
+                                <x-filament::loading-indicator class="size-5 text-gray-400 dark:text-gray-500" />
+                                <span class="ml-2 text-xs text-gray-400 dark:text-gray-500">{{ __('filament-file-manager::file-manager.labels.loading_more') }}</span>
+                            </div>
+                        @endif
+                    </div>
+                    </div>
+                @endif
+
+                {{-- Status bar --}}
+                <div class="border-t border-gray-200 px-4 py-2 text-xs text-gray-400 dark:border-white/10 dark:text-gray-500">
+                    @php
+                        $folderCount = count($listing->folders);
+                        $fileCount = count($listing->files);
+                    @endphp
+                    @if (count($selectedItems) > 0)
+                        <span class="font-medium text-primary-600 dark:text-primary-400">{{ __('filament-file-manager::file-manager.labels.selected', ['count' => count($selectedItems)]) }}</span> &mdash;
+                    @endif
+                    @if ($hasMoreFiles)
+                        {{ __('filament-file-manager::file-manager.labels.showing_of_total', ['shown' => $fileCount, 'total' => $totalFiles]) }}
+                    @else
+                        {{ trans_choice('filament-file-manager::file-manager.labels.files_count', $totalFiles, ['count' => $totalFiles]) }}
+                    @endif
+                    {{ $folderCount > 0 ? ', ' . trans_choice('filament-file-manager::file-manager.labels.folders_count', $folderCount, ['count' => $folderCount]) : '' }}
+                </div>
+            @else
+                <div class="flex flex-1 flex-col items-center justify-center gap-3 p-16 text-gray-400 dark:text-gray-500">
+                    <x-filament::icon icon="heroicon-o-folder-open" class="size-12" />
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('filament-file-manager::file-manager.misc.empty_folder') }}</p>
+                    <p class="text-xs text-gray-400 dark:text-gray-500">{{ __('filament-file-manager::file-manager.misc.empty_folder_hint') }}</p>
+                </div>
+            @endif
+        </div>
+
+        {{-- Context menu --}}
+        @include('filament-file-manager::components.context-menu', ['permissions' => $permissions])
+    </div>
+
+    {{-- Preview sidebar --}}
+    <div class="fm-sticky-sidebar hidden shrink-0 lg:flex">
+        {{-- Expanded --}}
+        <div x-show="previewSidebarOpen" x-cloak class="overflow-hidden rounded-xl shadow-sm ring-1 ring-gray-950/5 dark:ring-white/10">
+            @include('filament-file-manager::components.file-preview-sidebar', ['permissions' => $permissions])
+        </div>
+        {{-- Collapsed --}}
+        <button
+            x-show="!previewSidebarOpen"
+            @click="previewSidebarOpen = true; localStorage.setItem('fm-preview-sidebar', 'true')"
+            class="flex w-10 items-center justify-center rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 text-gray-400 hover:text-gray-600 dark:bg-gray-900 dark:ring-white/10 dark:text-gray-500 dark:hover:text-gray-300"
+            title="{{ __('filament-file-manager::file-manager.sidebar.show_preview') }}"
+        >
+            <x-filament::icon icon="heroicon-o-information-circle" class="size-5" />
+        </button>
+    </div>
+    </div>
+
+    <x-filament-actions::modals />
+</div>

@@ -1,63 +1,10 @@
-<div className="ml-1 grid flex-1 text-left text-sm" style="width:222px;display: flex;;opacity:0.8;cursor:pointer;">
-<a href="{{ config('app.url') }}" className="mb-0.5 truncate leading-tight font-semibold flex" style="opacity:0.6;height:32px;width:96px;margin-top:8px;margin-left:2px;margin-right:18px;display:flex;">
-                    <svg
-                        version="1.2"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 1476 336"
-                        width="110"
-                        height="26"
-                        fill="currentColor"
-                    >
-                        <g>
-                            <path
-                                fillRule="evenodd"
-                                className="nds-svg-path n0"
-                                d="m992.5 13.5q39 0 78 0 0.25 104-0.5 208-7.73 69.72-72.5 96.5-81.52 23.59-131.5-44.5-35.41-60.78 1-121 47.62-63.63 125.5-45 0-47 0-94zm-73 200q4.85 39.91 45 39.5 31.97-6.41 35-39-5.72-41.96-48-39.5-29.03 8.55-32 39z"
-                            />
-                        </g>
-                        <g>
-                            <path
-                                fillRule="evenodd"
-                                className="nds-svg-path n1"
-                                d="m402.5 101.5q73.87-5.44 112.5 57 31.23 64.88-11 123-49.57 55.58-121.5 35.5-62.5-23.77-74.5-89.5-6.8-72.15 53.5-111.5 19.47-10.74 41-14.5zm-10 79.5q-23.59 23.82-7.5 53.5 21.72 25.85 52.5 11.5 20.62-12.99 19.5-37.5-7.55-39.17-47.5-36-9.15 2.65-17 8.5z"
-                            />
-                        </g>
-                        <g>
-                            <path
-                                fillRule="evenodd"
-                                className="nds-svg-path n2"
-                                d="m1370.5 101.5q54.96-5.93 94 32.5-24.5 24.5-49 49-1.5 1-3 0-19.77-16.75-44-7-27.69 16.05-20.5 47.5 15.6 36.43 53.5 24.5 7.07-3.08 12.5-8.5 25.25 25.25 50.5 50.5-54.66 49.83-124 23-54.24-26.7-64.5-86.5-5.66-83.98 70.5-118.5 12.06-3.76 24-6.5z"
-                            />
-                        </g>
-                        <g>
-                            <path
-                                fillRule="evenodd"
-                                className="nds-svg-path n3"
-                                d="m128.5 106.5q59 0 118 0 0 105 0 210-42 0-84 0 0-63 0-126-27 0-54 0 0 63 0 126-43 0-86 0-0.25-52 0.5-104 53.05-52.8 105.5-106z"
-                            />
-                        </g>
-                        <g>
-                            <path
-                                fillRule="evenodd"
-                                className="nds-svg-path n4"
-                                d="m691.5 106.5q50 0 100 0 0 42 0 84-60 0-120 0 0 63 0 126-43 0-86 0-0.25-52 0.5-104 53.05-52.8 105.5-106z"
-                            />
-                        </g>
-                        <g>
-                            <path
-                                fillRule="evenodd"
-                                className="nds-svg-path n5"
-                                d="m1132.5 106.5q42 0 84 0 0 105 0 210-42 0-84 0 0-105 0-210z"
-                            />
-                        </g>
-                    </svg>
-</a>
+<div className="ml-1 grid flex-1 text-left text-sm" style="width:112px;display: flex;opacity:0.8;cursor:pointer;">
 <a href="{{ config('app.url') . '/admin' }}"  class="flex" style="width:96px;">
 <svg viewBox="0 0 724 160" fill="none" width="200" height="44" xmlns="http://www.w3.org/2000/svg">
     <title>{{ config('app.name') }}</title>
-    
+
 	<style>
-		.s0 { fill: currentColor } 
+		.s0 { fill: currentColor }
 	</style>
 	<g id="layer1">
 		<g id="g2571">

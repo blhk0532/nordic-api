@@ -1,0 +1,68 @@
+{
+    "name": "joaopaulolndev/filament-world-clock",
+    "description": "Show hours around the world by timezone",
+    "keywords": [
+        "joaopaulolndev",
+        "laravel",
+        "filament-world-clock"
+    ],
+    "homepage": "https://github.com/joaopaulolndev/filament-world-clock",
+    "support": {
+        "issues": "https://github.com/joaopaulolndev/filament-world-clock/issues",
+        "source": "https://github.com/joaopaulolndev/filament-world-clock"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "João Paulo Leite Nascimento",
+            "email": "joaopauloln7@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "filament/filament": "^5.3",
+        "outhebox/blade-flags": "^1.5",
+        "spatie/laravel-package-tools": "^1.15.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.0",
+        "nunomaduro/collision": "^7.9|^8.6",
+        "orchestra/testbench": "^8.0|^9.0|^10.0",
+        "pestphp/pest": "^2.1|^3.4.7",
+        "pestphp/pest-plugin-arch": "^2.0|^3.0",
+        "pestphp/pest-plugin-laravel": "^2.0|^3.1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Joaopaulolndev\\FilamentWorldClock\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Joaopaulolndev\\FilamentWorldClock\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "format": "vendor/bin/pint"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Joaopaulolndev\\FilamentWorldClock\\FilamentWorldClockServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

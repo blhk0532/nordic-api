@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7696b27ba80228a94e565329ac18ede7",
+    "content-hash": "937bdb8255720a85b2478ef0dc43c418",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -188,6 +188,64 @@
                 "symlink": true,
                 "relative": true
             }
+        },
+        {
+            "name": "andreiio/blade-remix-icon",
+            "version": "3.9.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/andreiio/blade-remix-icon.git",
+                "reference": "622f77d25bae5d9de6aed31e70dfea92bb0cbe8f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/andreiio/blade-remix-icon/zipball/622f77d25bae5d9de6aed31e70dfea92bb0cbe8f",
+                "reference": "622f77d25bae5d9de6aed31e70dfea92bb0cbe8f",
+                "shasum": ""
+            },
+            "require": {
+                "blade-ui-kit/blade-icons": "^1.0",
+                "php": "^7.4|^8.0|^8.1"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.0|^7.0|^8.0",
+                "phpunit/phpunit": "^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "AndreiIonita\\BladeRemixIcon\\BladeRemixIconServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "AndreiIonita\\BladeRemixIcon\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andrei Ioniță",
+                    "homepage": "https://andrei.io"
+                }
+            ],
+            "description": "A package to easily make use of Remix Icon in your Laravel Blade views.",
+            "support": {
+                "issues": "https://github.com/andreiio/blade-remix-icon/issues",
+                "source": "https://github.com/andreiio/blade-remix-icon/tree/3.9.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/code4romania",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-01-29T12:19:49+00:00"
         },
         {
             "name": "andrewdwallo/filament-companies",
@@ -850,6 +908,88 @@
                 "roles",
                 "security"
             ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "binarybuilds/filament-command-runner",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "app-plugins/binarybuilds/filament-command-runner",
+                "reference": "5c2d89351ab152a789c83795cd1e053e939d6df5"
+            },
+            "require": {
+                "filament/filament": "^5.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.15.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^8.0",
+                "nunomaduro/larastan": "^3.7",
+                "orchestra/testbench": "^10.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "BinaryBuilds\\CommandRunner\\CommandRunnerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "BinaryBuilds\\CommandRunner\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "BinaryBuilds\\CommandRunner\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "post-autoload-dump": [
+                    "@php ./vendor/bin/testbench package:discover --ansi"
+                ],
+                "analyse": [
+                    "vendor/bin/phpstan analyse"
+                ],
+                "test": [
+                    "vendor/bin/pest"
+                ],
+                "test-coverage": [
+                    "vendor/bin/pest --coverage"
+                ],
+                "format": [
+                    "vendor/bin/pint"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Srinath Reddy Dudi",
+                    "email": "srinathreddydudi@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "filament-command-runner is a Filament plugin that allows users to run artisan and shell commands directly from the Filament admin panel. All commands are executed in the background so users don't have to wait for them to finish. They can return later to view the output or optionally terminate a running command midway.",
+            "homepage": "https://github.com/binarybuilds/filament-command-runner",
+            "keywords": [
+                "artisan",
+                "binarybuilds",
+                "command runner",
+                "filament",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/binarybuilds/filament-command-runner/issues",
+                "source": "https://github.com/binarybuilds/filament-command-runner"
+            },
             "transport-options": {
                 "symlink": true,
                 "relative": true
@@ -1645,6 +1785,71 @@
                 }
             ],
             "time": "2026-03-20T21:10:52+00:00"
+        },
+        {
+            "name": "clue/ami-react",
+            "version": "v1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/clue/reactphp-ami.git",
+                "reference": "41c06aee825766418fea430515859e9657a50bcd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/clue/reactphp-ami/zipball/41c06aee825766418fea430515859e9657a50bcd",
+                "reference": "41c06aee825766418fea430515859e9657a50bcd",
+                "shasum": ""
+            },
+            "require": {
+                "evenement/evenement": "^3.0 || ^2.0 || ^1.0",
+                "php": ">=5.3",
+                "react/event-loop": "^1.2",
+                "react/promise": "^3.0 || ^2.9 || ^1.1",
+                "react/socket": "^1.14"
+            },
+            "require-dev": {
+                "clue/block-react": "^1.5",
+                "phpunit/phpunit": "^9.6 || ^5.7 || ^4.8.36"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Clue\\React\\Ami\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christian Lück",
+                    "email": "christian@clue.engineering"
+                }
+            ],
+            "description": "Streaming, event-driven access to the Asterisk Manager Interface (AMI), built on top of ReactPHP.",
+            "homepage": "https://github.com/clue/reactphp-ami",
+            "keywords": [
+                "Asterisk Manager Interface",
+                "ami",
+                "async",
+                "reactphp"
+            ],
+            "support": {
+                "issues": "https://github.com/clue/reactphp-ami/issues",
+                "source": "https://github.com/clue/reactphp-ami/tree/v1.2.0"
+            },
+            "funding": [
+                {
+                    "url": "https://clue.engineering/support",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/clue",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-02-23T09:56:33+00:00"
         },
         {
             "name": "clue/stream-filter",
@@ -5873,6 +6078,193 @@
             "time": "2026-03-23T14:50:10+00:00"
         },
         {
+            "name": "intervention/gif",
+            "version": "4.2.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Intervention/gif.git",
+                "reference": "c3598a16ebe7690cd55640c44144a9df383ea73c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Intervention/gif/zipball/c3598a16ebe7690cd55640c44144a9df383ea73c",
+                "reference": "c3598a16ebe7690cd55640c44144a9df383ea73c",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^2.1",
+                "phpunit/phpunit": "^10.0 || ^11.0  || ^12.0",
+                "slevomat/coding-standard": "~8.0",
+                "squizlabs/php_codesniffer": "^3.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Intervention\\Gif\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Oliver Vogel",
+                    "email": "oliver@intervention.io",
+                    "homepage": "https://intervention.io/"
+                }
+            ],
+            "description": "Native PHP GIF Encoder/Decoder",
+            "homepage": "https://github.com/intervention/gif",
+            "keywords": [
+                "animation",
+                "gd",
+                "gif",
+                "image"
+            ],
+            "support": {
+                "issues": "https://github.com/Intervention/gif/issues",
+                "source": "https://github.com/Intervention/gif/tree/4.2.4"
+            },
+            "funding": [
+                {
+                    "url": "https://paypal.me/interventionio",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/Intervention",
+                    "type": "github"
+                },
+                {
+                    "url": "https://ko-fi.com/interventionphp",
+                    "type": "ko_fi"
+                }
+            ],
+            "time": "2026-01-04T09:27:23+00:00"
+        },
+        {
+            "name": "intervention/image",
+            "version": "3.11.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Intervention/image.git",
+                "reference": "2159bcccff18f09d2a392679b81a82c5a003f9bb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Intervention/image/zipball/2159bcccff18f09d2a392679b81a82c5a003f9bb",
+                "reference": "2159bcccff18f09d2a392679b81a82c5a003f9bb",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "intervention/gif": "^4.2",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.6",
+                "phpstan/phpstan": "^2.1",
+                "phpunit/phpunit": "^10.0 || ^11.0 || ^12.0",
+                "slevomat/coding-standard": "~8.0",
+                "squizlabs/php_codesniffer": "^3.8"
+            },
+            "suggest": {
+                "ext-exif": "Recommended to be able to read EXIF data properly."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Intervention\\Image\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Oliver Vogel",
+                    "email": "oliver@intervention.io",
+                    "homepage": "https://intervention.io"
+                }
+            ],
+            "description": "PHP Image Processing",
+            "homepage": "https://image.intervention.io",
+            "keywords": [
+                "gd",
+                "image",
+                "imagick",
+                "resize",
+                "thumbnail",
+                "watermark"
+            ],
+            "support": {
+                "issues": "https://github.com/Intervention/image/issues",
+                "source": "https://github.com/Intervention/image/tree/3.11.7"
+            },
+            "funding": [
+                {
+                    "url": "https://paypal.me/interventionio",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/Intervention",
+                    "type": "github"
+                },
+                {
+                    "url": "https://ko-fi.com/interventionphp",
+                    "type": "ko_fi"
+                }
+            ],
+            "time": "2026-02-19T13:11:17+00:00"
+        },
+        {
+            "name": "jackkum/phppdu",
+            "version": "v1.2.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jackkum/PHPPDU.git",
+                "reference": "c8cbd68c672606ede0dd01da1d8ac422d780b636"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jackkum/PHPPDU/zipball/c8cbd68c672606ede0dd01da1d8ac422d780b636",
+                "reference": "c8cbd68c672606ede0dd01da1d8ac422d780b636",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.0 || ^10.0 || ^11.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "jackkum\\PHPPDU\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Evgenii Kumanin",
+                    "email": "jackkum@bk.ru"
+                }
+            ],
+            "description": "Creating pdu string for sending sms.",
+            "support": {
+                "issues": "https://github.com/jackkum/PHPPDU/issues",
+                "source": "https://github.com/jackkum/PHPPDU/tree/v1.2.11"
+            },
+            "time": "2025-12-17T09:11:49+00:00"
+        },
+        {
             "name": "jaybizzle/crawler-detect",
             "version": "v1.3.8",
             "source": {
@@ -6083,17 +6475,11 @@
         },
         {
             "name": "joaopaulolndev/filament-general-settings",
-            "version": "v3.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/joaopaulolndev/filament-general-settings.git",
-                "reference": "394c9e60cc8f2ae1d989e113db902c53c17f0a7f"
-            },
+            "version": "dev-main",
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/joaopaulolndev/filament-general-settings/zipball/394c9e60cc8f2ae1d989e113db902c53c17f0a7f",
-                "reference": "394c9e60cc8f2ae1d989e113db902c53c17f0a7f",
-                "shasum": ""
+                "type": "path",
+                "url": "app-plugins/joaopaulolndev/filament-general-settings",
+                "reference": "442016892c2861f97d19d82c3cc950bbc6e53c62"
             },
             "require": {
                 "filament/filament": "^5.3",
@@ -6127,7 +6513,28 @@
                     "Joaopaulolndev\\FilamentGeneralSettings\\Database\\Factories\\": "database/factories/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Joaopaulolndev\\FilamentGeneralSettings\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "post-autoload-dump": [
+                    "@php ./vendor/bin/testbench package:discover --ansi"
+                ],
+                "analyse": [
+                    "vendor/bin/phpstan analyse"
+                ],
+                "test": [
+                    "vendor/bin/pest"
+                ],
+                "test-coverage": [
+                    "vendor/bin/pest --coverage"
+                ],
+                "format": [
+                    "vendor/bin/pint"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -6149,27 +6556,18 @@
                 "issues": "https://github.com/joaopaulolndev/filament-general-settings/issues",
                 "source": "https://github.com/joaopaulolndev/filament-general-settings"
             },
-            "funding": [
-                {
-                    "url": "https://github.com/joaopaulolndev",
-                    "type": "github"
-                }
-            ],
-            "time": "2026-03-29T19:32:48+00:00"
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "joaopaulolndev/filament-world-clock",
-            "version": "v3.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/joaopaulolndev/filament-world-clock.git",
-                "reference": "53b3195549e298b8ccdfc000236336e8998f1488"
-            },
+            "version": "dev-main",
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/joaopaulolndev/filament-world-clock/zipball/53b3195549e298b8ccdfc000236336e8998f1488",
-                "reference": "53b3195549e298b8ccdfc000236336e8998f1488",
-                "shasum": ""
+                "type": "path",
+                "url": "app-plugins/joaopaulolndev/filament-world-clock",
+                "reference": "007f8be2cbec3bb693842b198160717bb1f8563a"
             },
             "require": {
                 "filament/filament": "^5.3",
@@ -6198,7 +6596,25 @@
                     "Joaopaulolndev\\FilamentWorldClock\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Joaopaulolndev\\FilamentWorldClock\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "post-autoload-dump": [
+                    "@php ./vendor/bin/testbench package:discover --ansi"
+                ],
+                "test": [
+                    "vendor/bin/pest"
+                ],
+                "test-coverage": [
+                    "vendor/bin/pest --coverage"
+                ],
+                "format": [
+                    "vendor/bin/pint"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -6220,13 +6636,10 @@
                 "issues": "https://github.com/joaopaulolndev/filament-world-clock/issues",
                 "source": "https://github.com/joaopaulolndev/filament-world-clock"
             },
-            "funding": [
-                {
-                    "url": "https://github.com/joaopaulolndev",
-                    "type": "github"
-                }
-            ],
-            "time": "2026-03-04T02:40:13+00:00"
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "justinrainbow/json-schema",
@@ -8522,16 +8935,16 @@
         },
         {
             "name": "maennchen/zipstream-php",
-            "version": "3.2.1",
+            "version": "3.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/maennchen/ZipStream-PHP.git",
-                "reference": "682f1098a8fddbaf43edac2306a691c7ad508ec5"
+                "reference": "77bebeb4c6c340bb3c11c843b2cffd8bbfde4d5e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/maennchen/ZipStream-PHP/zipball/682f1098a8fddbaf43edac2306a691c7ad508ec5",
-                "reference": "682f1098a8fddbaf43edac2306a691c7ad508ec5",
+                "url": "https://api.github.com/repos/maennchen/ZipStream-PHP/zipball/77bebeb4c6c340bb3c11c843b2cffd8bbfde4d5e",
+                "reference": "77bebeb4c6c340bb3c11c843b2cffd8bbfde4d5e",
                 "shasum": ""
             },
             "require": {
@@ -8588,7 +9001,7 @@
             ],
             "support": {
                 "issues": "https://github.com/maennchen/ZipStream-PHP/issues",
-                "source": "https://github.com/maennchen/ZipStream-PHP/tree/3.2.1"
+                "source": "https://github.com/maennchen/ZipStream-PHP/tree/3.2.2"
             },
             "funding": [
                 {
@@ -8596,7 +9009,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-12-10T09:58:31+00:00"
+            "time": "2026-04-11T18:38:28+00:00"
         },
         {
             "name": "marc-mabe/php-enum",
@@ -8846,6 +9259,59 @@
                 "wiki": "https://dev.matomo.org/"
             },
             "time": "2026-01-21T07:53:39+00:00"
+        },
+        {
+            "name": "mmes-design/filament-file-manager",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "app-plugins/mmes-design/filament-file-manager",
+                "reference": "780c8ec0751b22c64560e89de621dde3710431f9"
+            },
+            "require": {
+                "filament/filament": "^5.0",
+                "intervention/image": "^3.0",
+                "php": "^8.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "MmesDesign\\FilamentFileManager\\FileManagerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "MmesDesign\\FilamentFileManager\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "MmesDesign\\FilamentFileManager\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marco Messa",
+                    "email": "marco@mmes.design"
+                }
+            ],
+            "description": "A beautiful file manager plugin for Filament. Browse, upload, rename, move and delete files with ease.",
+            "homepage": "https://github.com/marcomessa/filament-file-manager",
+            "keywords": [
+                "filament",
+                "file-manager",
+                "laravel",
+                "livewire"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "mobiledetect/mobiledetectlib",
@@ -12441,6 +12907,164 @@
             "time": "2025-08-19T18:57:03+00:00"
         },
         {
+            "name": "react/socket",
+            "version": "v1.17.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/reactphp/socket.git",
+                "reference": "ef5b17b81f6f60504c539313f94f2d826c5faa08"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/reactphp/socket/zipball/ef5b17b81f6f60504c539313f94f2d826c5faa08",
+                "reference": "ef5b17b81f6f60504c539313f94f2d826c5faa08",
+                "shasum": ""
+            },
+            "require": {
+                "evenement/evenement": "^3.0 || ^2.0 || ^1.0",
+                "php": ">=5.3.0",
+                "react/dns": "^1.13",
+                "react/event-loop": "^1.2",
+                "react/promise": "^3.2 || ^2.6 || ^1.2.1",
+                "react/stream": "^1.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.6 || ^5.7 || ^4.8.36",
+                "react/async": "^4.3 || ^3.3 || ^2",
+                "react/promise-stream": "^1.4",
+                "react/promise-timer": "^1.11"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "React\\Socket\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christian Lück",
+                    "email": "christian@clue.engineering",
+                    "homepage": "https://clue.engineering/"
+                },
+                {
+                    "name": "Cees-Jan Kiewiet",
+                    "email": "reactphp@ceesjankiewiet.nl",
+                    "homepage": "https://wyrihaximus.net/"
+                },
+                {
+                    "name": "Jan Sorgalla",
+                    "email": "jsorgalla@gmail.com",
+                    "homepage": "https://sorgalla.com/"
+                },
+                {
+                    "name": "Chris Boden",
+                    "email": "cboden@gmail.com",
+                    "homepage": "https://cboden.dev/"
+                }
+            ],
+            "description": "Async, streaming plaintext TCP/IP and secure TLS socket server and client connections for ReactPHP",
+            "keywords": [
+                "Connection",
+                "Socket",
+                "async",
+                "reactphp",
+                "stream"
+            ],
+            "support": {
+                "issues": "https://github.com/reactphp/socket/issues",
+                "source": "https://github.com/reactphp/socket/tree/v1.17.0"
+            },
+            "funding": [
+                {
+                    "url": "https://opencollective.com/reactphp",
+                    "type": "open_collective"
+                }
+            ],
+            "time": "2025-11-19T20:47:34+00:00"
+        },
+        {
+            "name": "react/stream",
+            "version": "v1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/reactphp/stream.git",
+                "reference": "1e5b0acb8fe55143b5b426817155190eb6f5b18d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/reactphp/stream/zipball/1e5b0acb8fe55143b5b426817155190eb6f5b18d",
+                "reference": "1e5b0acb8fe55143b5b426817155190eb6f5b18d",
+                "shasum": ""
+            },
+            "require": {
+                "evenement/evenement": "^3.0 || ^2.0 || ^1.0",
+                "php": ">=5.3.8",
+                "react/event-loop": "^1.2"
+            },
+            "require-dev": {
+                "clue/stream-filter": "~1.2",
+                "phpunit/phpunit": "^9.6 || ^5.7 || ^4.8.36"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "React\\Stream\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christian Lück",
+                    "email": "christian@clue.engineering",
+                    "homepage": "https://clue.engineering/"
+                },
+                {
+                    "name": "Cees-Jan Kiewiet",
+                    "email": "reactphp@ceesjankiewiet.nl",
+                    "homepage": "https://wyrihaximus.net/"
+                },
+                {
+                    "name": "Jan Sorgalla",
+                    "email": "jsorgalla@gmail.com",
+                    "homepage": "https://sorgalla.com/"
+                },
+                {
+                    "name": "Chris Boden",
+                    "email": "cboden@gmail.com",
+                    "homepage": "https://cboden.dev/"
+                }
+            ],
+            "description": "Event-driven readable and writable streams for non-blocking I/O in ReactPHP",
+            "keywords": [
+                "event-driven",
+                "io",
+                "non-blocking",
+                "pipe",
+                "reactphp",
+                "readable",
+                "stream",
+                "writable"
+            ],
+            "support": {
+                "issues": "https://github.com/reactphp/stream/issues",
+                "source": "https://github.com/reactphp/stream/tree/v1.4.0"
+            },
+            "funding": [
+                {
+                    "url": "https://opencollective.com/reactphp",
+                    "type": "open_collective"
+                }
+            ],
+            "time": "2024-06-11T12:45:25+00:00"
+        },
+        {
             "name": "roadrunner-php/roadrunner-api-dto",
             "version": "v1.14.1",
             "source": {
@@ -12835,6 +13459,113 @@
                 "source": "https://github.com/Seldaek/signal-handler/tree/2.0.2"
             },
             "time": "2023-09-03T09:24:00+00:00"
+        },
+        {
+            "name": "shahkochaki/ami-laravel-asterisk-manager-interface",
+            "version": "v2.2.6",
+            "dist": {
+                "type": "path",
+                "url": "app-plugins/shahkochaki/ami-laravel-asterisk-manager-interface",
+                "reference": "90e5ed319bb97442b3f10d65ab4d10aa1a3026fc"
+            },
+            "require": {
+                "clue/ami-react": "^0.5|^1.0",
+                "ext-mbstring": "*",
+                "illuminate/console": "^9.0|^10.0|^11.0|^12.0|^13.0",
+                "illuminate/contracts": "^9.0|^10.0|^11.0|^12.0|^13.0",
+                "illuminate/events": "^9.0|^10.0|^11.0|^12.0|^13.0",
+                "illuminate/support": "^9.0|^10.0|^11.0|^12.0|^13.0",
+                "jackkum/phppdu": "^1.2",
+                "php": ">=8.0",
+                "react/dns": "^1.0",
+                "react/socket": "^1.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.0",
+                "phpunit/phpunit": "^9.0|^10.0"
+            },
+            "bin": [
+                "bin/ami"
+            ],
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Shahkochaki\\Ami\\Providers\\AmiServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                },
+                "patches": []
+            },
+            "autoload": {
+                "psr-4": {
+                    "Shahkochaki\\Ami\\": "src"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Shahkochaki\\Ami\\Tests\\": "tests"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "@phpunit",
+                    "@phpcs"
+                ],
+                "test-coverage": [
+                    "php vendor/bin/phpunit --coverage-html coverage"
+                ],
+                "phpunit": [
+                    "php vendor/bin/phpunit"
+                ],
+                "phpcs": [
+                    "php vendor/bin/php-cs-fixer --diff --dry-run -v fix"
+                ],
+                "phpcs-fix": [
+                    "php vendor/bin/php-cs-fixer fix"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ali Shahkochaki",
+                    "email": "ali.shahkochaki7@gmail.com",
+                    "homepage": "https://shahkochaki.ir",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A modern Laravel package for connecting to VOIP servers on Asterisk/Issabel platform via AMI with advanced system management. Supports PHP 8+ and Laravel 9-13.",
+            "homepage": "https://github.com/shahkochaki/ami-laravel-asterisk-manager-interface",
+            "keywords": [
+                "ami",
+                "asterisk",
+                "chan-dongle",
+                "issabel",
+                "laravel",
+                "laravel10",
+                "laravel11",
+                "laravel12",
+                "laravel9",
+                "pbx",
+                "php8",
+                "queue-jobs",
+                "restart",
+                "server-control",
+                "shutdown",
+                "sms",
+                "system-management",
+                "telephony",
+                "ussd",
+                "voip"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "spatie/eloquent-sortable",
@@ -16281,35 +17012,39 @@
         },
         {
             "name": "symfony/mailer",
-            "version": "v8.0.8",
+            "version": "v7.4.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/mailer.git",
-                "reference": "ca5f6edaf8780ece814404b58a4482b22b509c56"
+                "reference": "f6ea532250b476bfc1b56699b388a1bdbf168f62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/mailer/zipball/ca5f6edaf8780ece814404b58a4482b22b509c56",
-                "reference": "ca5f6edaf8780ece814404b58a4482b22b509c56",
+                "url": "https://api.github.com/repos/symfony/mailer/zipball/f6ea532250b476bfc1b56699b388a1bdbf168f62",
+                "reference": "f6ea532250b476bfc1b56699b388a1bdbf168f62",
                 "shasum": ""
             },
             "require": {
                 "egulias/email-validator": "^2.1.10|^3|^4",
-                "php": ">=8.4",
+                "php": ">=8.2",
                 "psr/event-dispatcher": "^1",
                 "psr/log": "^1|^2|^3",
-                "symfony/event-dispatcher": "^7.4|^8.0",
-                "symfony/mime": "^7.4|^8.0",
+                "symfony/event-dispatcher": "^6.4|^7.0|^8.0",
+                "symfony/mime": "^7.2|^8.0",
                 "symfony/service-contracts": "^2.5|^3"
             },
             "conflict": {
-                "symfony/http-client-contracts": "<2.5"
+                "symfony/http-client-contracts": "<2.5",
+                "symfony/http-kernel": "<6.4",
+                "symfony/messenger": "<6.4",
+                "symfony/mime": "<6.4",
+                "symfony/twig-bridge": "<6.4"
             },
             "require-dev": {
-                "symfony/console": "^7.4|^8.0",
-                "symfony/http-client": "^7.4|^8.0",
-                "symfony/messenger": "^7.4|^8.0",
-                "symfony/twig-bridge": "^7.4|^8.0"
+                "symfony/console": "^6.4|^7.0|^8.0",
+                "symfony/http-client": "^6.4|^7.0|^8.0",
+                "symfony/messenger": "^6.4|^7.0|^8.0",
+                "symfony/twig-bridge": "^6.4|^7.0|^8.0"
             },
             "type": "library",
             "autoload": {
@@ -16337,7 +17072,7 @@
             "description": "Helps sending emails",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/mailer/tree/v8.0.8"
+                "source": "https://github.com/symfony/mailer/tree/v7.4.8"
             },
             "funding": [
                 {
@@ -16357,7 +17092,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-03-30T15:14:47+00:00"
+            "time": "2026-03-24T13:12:05+00:00"
         },
         {
             "name": "symfony/mime",
@@ -18523,6 +19258,82 @@
             "time": "2026-01-10T16:40:02+00:00"
         },
         {
+            "name": "usamamuneerchaudhary/filament-notifier",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "app-plugins/usamamuneerchaudhary/filament-notifier",
+                "reference": "d5ed1eeaab9decb9d739faf21796cb5853915464"
+            },
+            "require": {
+                "filament/filament": "^4.0|^5.0",
+                "guzzlehttp/guzzle": "^7.9",
+                "illuminate/contracts": "^11.0|^12.0|^13.0",
+                "illuminate/support": "^11.0|^12.0|^13.0",
+                "league/commonmark": "^2.6",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.19",
+                "symfony/mailer": "^7.2"
+            },
+            "require-dev": {
+                "nunomaduro/collision": "^8.6",
+                "orchestra/testbench": "^9.11",
+                "phpunit/phpunit": "^11.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Usamamuneerchaudhary\\Notifier\\NotifierServiceProvider"
+                    ],
+                    "aliases": {
+                        "Preference": "Usamamuneerchaudhary\\Notifier\\Facades\\Preference",
+                        "Analytics": "Usamamuneerchaudhary\\Notifier\\Facades\\Analytics",
+                        "UrlTracking": "Usamamuneerchaudhary\\Notifier\\Facades\\UrlTracking",
+                        "NotificationRepo": "Usamamuneerchaudhary\\Notifier\\Facades\\NotificationRepo"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Usamamuneerchaudhary\\Notifier\\": "src"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Usamamuneerchaudhary\\Notifier\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "vendor/bin/phpunit"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Usama Muneer",
+                    "email": "hello@usamamuneer.me",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A powerful notification system for FilamentPHP that handles multi-channel notifications with template management, scheduling, and real-time delivery. Built for developers who need enterprise-grade notifications without the complexity.",
+            "keywords": [
+                "filament",
+                "filamentphp",
+                "laravel",
+                "notifications",
+                "php",
+                "usamamuneerchaudhary"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
             "name": "vlucas/phpdotenv",
             "version": "v5.6.3",
             "source": {
@@ -18759,6 +19570,80 @@
             "time": "2026-01-19T14:17:06+00:00"
         },
         {
+            "name": "wallacemartinss/filament-whatsapp-conector",
+            "version": "v2.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wallacemartinss/filament-whatsapp-conector.git",
+                "reference": "2cff0e2bf35ab1f8868b424830588e7e9a94abde"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wallacemartinss/filament-whatsapp-conector/zipball/2cff0e2bf35ab1f8868b424830588e7e9a94abde",
+                "reference": "2cff0e2bf35ab1f8868b424830588e7e9a94abde",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^5.0",
+                "illuminate/contracts": "^11.0|^12.0|^13.0",
+                "php": "^8.2",
+                "spatie/laravel-data": "^4.0",
+                "spatie/laravel-package-tools": "^1.16"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.14",
+                "nunomaduro/collision": "^8.1",
+                "orchestra/testbench": "^9.0|^10.0|^11.0",
+                "pestphp/pest": "^3.0|^4.0",
+                "pestphp/pest-plugin-arch": "^3.0|^4.0",
+                "pestphp/pest-plugin-laravel": "^3.0|^4.0",
+                "phpstan/extension-installer": "^1.3",
+                "phpstan/phpstan-deprecation-rules": "^2.0",
+                "phpstan/phpstan-phpunit": "^2.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "WallaceMartinss\\FilamentEvolution\\FilamentEvolutionServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "WallaceMartinss\\FilamentEvolution\\": "src/",
+                    "WallaceMartinss\\FilamentEvolution\\Database\\Factories\\": "database/factories/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Wallace Martins",
+                    "email": "wallacemartinss@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Filament plugin for WhatsApp integration with Evolution API v2",
+            "homepage": "https://github.com/wallacemartinss/filament-whatsapp-conector",
+            "keywords": [
+                "baileys",
+                "evolution-api",
+                "filament",
+                "laravel",
+                "multi-tenancy",
+                "whatsapp"
+            ],
+            "support": {
+                "issues": "https://github.com/wallacemartinss/filament-whatsapp-conector/issues",
+                "source": "https://github.com/wallacemartinss/filament-whatsapp-conector/tree/v2"
+            },
+            "time": "2026-04-08T12:02:18+00:00"
+        },
+        {
             "name": "webmozart/assert",
             "version": "1.12.1",
             "source": {
@@ -18815,6 +19700,61 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.12.1"
             },
             "time": "2025-10-29T15:56:20+00:00"
+        },
+        {
+            "name": "wezlo/filament-workspace-tabs",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mustafakhaleddev/filament-workspace-tabs.git",
+                "reference": "7cd2536a93059e746078f1058ca4da7c256bc03d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mustafakhaleddev/filament-workspace-tabs/zipball/7cd2536a93059e746078f1058ca4da7c256bc03d",
+                "reference": "7cd2536a93059e746078f1058ca4da7c256bc03d",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^4.0 || ^5.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^10.0",
+                "pestphp/pest": "^4.0",
+                "pestphp/pest-plugin-livewire": "^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Wezlo\\FilamentWorkspaceTabs\\WorkspaceTabsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Wezlo\\FilamentWorkspaceTabs\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Browser-like workspace tabs for Filament panels",
+            "keywords": [
+                "browser-tabs",
+                "filament",
+                "laravel",
+                "tabs",
+                "workspace"
+            ],
+            "support": {
+                "issues": "https://github.com/mustafakhaleddev/filament-workspace-tabs/issues",
+                "source": "https://github.com/mustafakhaleddev/filament-workspace-tabs/tree/1.0.0"
+            },
+            "time": "2026-04-09T21:13:19+00:00"
         },
         {
             "name": "willdurand/geocoder",
@@ -20648,16 +21588,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "12.5.3",
+            "version": "12.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "b015312f28dd75b75d3422ca37dff2cd1a565e8d"
+                "reference": "e70f9f8870918ec31991d69133385964834f9c5a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/b015312f28dd75b75d3422ca37dff2cd1a565e8d",
-                "reference": "b015312f28dd75b75d3422ca37dff2cd1a565e8d",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/e70f9f8870918ec31991d69133385964834f9c5a",
+                "reference": "e70f9f8870918ec31991d69133385964834f9c5a",
                 "shasum": ""
             },
             "require": {
@@ -20666,7 +21606,6 @@
                 "ext-xmlwriter": "*",
                 "nikic/php-parser": "^5.7.0",
                 "php": ">=8.3",
-                "phpunit/php-file-iterator": "^6.0",
                 "phpunit/php-text-template": "^5.0",
                 "sebastian/complexity": "^5.0",
                 "sebastian/environment": "^8.0.3",
@@ -20713,7 +21652,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
                 "security": "https://github.com/sebastianbergmann/php-code-coverage/security/policy",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/12.5.3"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/12.5.4"
             },
             "funding": [
                 {
@@ -20733,7 +21672,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-02-06T06:01:44+00:00"
+            "time": "2026-04-12T05:05:15+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -22148,13 +23087,19 @@
         "adultdate/filament-booking": 20,
         "andrewdwallo/filament-companies": 20,
         "bezhansalleh/filament-shield": 20,
+        "binarybuilds/filament-command-runner": 20,
         "binarybuilds/filament-failed-jobs": 20,
         "cachethq/core": 20,
         "cheesegrits/filament-google-maps": 20,
         "eduardoribeirodev/filament-leaflet": 20,
         "eightynine/filament-excel-import": 20,
+        "joaopaulolndev/filament-general-settings": 20,
+        "joaopaulolndev/filament-world-clock": 20,
+        "mmes-design/filament-file-manager": 20,
         "muazzam/slick-scrollbar": 20,
-        "mwguerra/web-terminal": 20
+        "mwguerra/web-terminal": 20,
+        "usamamuneerchaudhary/filament-notifier": 20,
+        "wallacemartinss/filament-whatsapp-conector": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

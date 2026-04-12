@@ -26,16 +26,23 @@ class CommandRunResource extends Resource
 
     protected static ?string $model = CommandRun::class;
 
+    protected static bool $isScopedToTenant = false;
+
     protected static string|null|BackedEnum $navigationIcon = Heroicon::OutlinedCommandLine;
 
     public static function getNavigationLabel(): string
     {
-        return __('Command Runner');
+        return __('Commands');
     }
 
     public static function getBreadcrumb(): string
     {
-        return __('Command Runner');
+        return __('Commands');
+    }
+
+    public function getHeading(): string|Htmlable|null
+    {
+        return null;
     }
 
     public static function infolist(Schema $schema): Schema
@@ -65,6 +72,6 @@ class CommandRunResource extends Resource
 
     public static function getNavigationGroup(): string
     {
-        return 'Settings';
+        return 'System LOGS';
     }
 }

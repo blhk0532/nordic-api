@@ -67,7 +67,7 @@ class WebTerminal extends Livewire
 
     protected bool|Closure $autoConnect = false;
 
-    protected string|Closure $title = 'Terminal';
+    protected string|Closure $title = ' ';
 
     protected bool|Closure $showWindowControls = true;
 

@@ -6,6 +6,7 @@ namespace BinaryBuilds\CommandRunner\Resources\CommandRuns\Pages;
 
 use BinaryBuilds\CommandRunner\Resources\CommandRuns\CommandRunResource;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Contracts\Support\Htmlable;
 
 class ListCommandRuns extends ListRecords
 {
@@ -20,5 +21,10 @@ class ListCommandRuns extends ListRecords
     {
         return [
         ];
+    }
+
+        public function getHeading(): string|Htmlable|null
+    {
+        return null;
     }
 }
