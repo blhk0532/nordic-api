@@ -32,7 +32,7 @@
         window.addEventListener('load', function() {
             zadarmaWidgetFn(
                 '5fff10dd7926e1a67da5',
-                'd2d82e26d1413de6517d',
+                '86994-420',
                 'rounded', /*square|rounded*/
                 'en', /*ru, en, es, fr, de, pl, ua*/
                 true,
@@ -43,7 +43,7 @@
         window.attachEvent('onload', function(){
             zadarmaWidgetFn(
                 '5fff10dd7926e1a67da5',
-                'd2d82e26d1413de6517d',
+                '86994-420',
                 'rounded', /*square|rounded*/
                 'en', /*ru, en, es, fr, de, pl, ua*/
                 true,
