@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "937bdb8255720a85b2478ef0dc43c418",
+    "content-hash": "947d701face3cdca970c7d4f80d26ac9",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -498,17 +498,11 @@
         },
         {
             "name": "awcodes/overlook",
-            "version": "v4.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/awcodes/overlook.git",
-                "reference": "3d303a14f3b339c73ccd96e378084d92fe57eda6"
-            },
+            "version": "dev-main",
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/awcodes/overlook/zipball/3d303a14f3b339c73ccd96e378084d92fe57eda6",
-                "reference": "3d303a14f3b339c73ccd96e378084d92fe57eda6",
-                "shasum": ""
+                "type": "path",
+                "url": "app-plugins/awcodes/overlook",
+                "reference": "998eb533f464d983bfd7a1f6b072c5edefd3ff5d"
             },
             "require": {
                 "ext-intl": "*",
@@ -538,7 +532,34 @@
                     "Awcodes\\Overlook\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Awcodes\\Overlook\\Tests\\": "tests/src",
+                    "Awcodes\\Overlook\\Tests\\Database\\Factories\\": "tests/database/factories"
+                }
+            },
+            "scripts": {
+                "lint": [
+                    "pint"
+                ],
+                "refactor": [
+                    "rector"
+                ],
+                "test:lint": [
+                    "pint --test"
+                ],
+                "test:refactor": [
+                    "rector --dry-run"
+                ],
+                "test:unit": [
+                    "pest"
+                ],
+                "test": [
+                    "@test:refactor",
+                    "@test:lint",
+                    "@test:unit"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -562,13 +583,10 @@
                 "issues": "https://github.com/awcodes/overlook/issues",
                 "source": "https://github.com/awcodes/overlook"
             },
-            "funding": [
-                {
-                    "url": "https://github.com/awcodes",
-                    "type": "github"
-                }
-            ],
-            "time": "2026-01-19T16:32:44+00:00"
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -13466,7 +13484,7 @@
             "dist": {
                 "type": "path",
                 "url": "app-plugins/shahkochaki/ami-laravel-asterisk-manager-interface",
-                "reference": "90e5ed319bb97442b3f10d65ab4d10aa1a3026fc"
+                "reference": "f5e5caeb0f4d20ca9d58d7f28476b6065e741913"
             },
             "require": {
                 "clue/ami-react": "^0.5|^1.0",
@@ -19704,16 +19722,10 @@
         {
             "name": "wezlo/filament-workspace-tabs",
             "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mustafakhaleddev/filament-workspace-tabs.git",
-                "reference": "7cd2536a93059e746078f1058ca4da7c256bc03d"
-            },
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mustafakhaleddev/filament-workspace-tabs/zipball/7cd2536a93059e746078f1058ca4da7c256bc03d",
-                "reference": "7cd2536a93059e746078f1058ca4da7c256bc03d",
-                "shasum": ""
+                "type": "path",
+                "url": "app-plugins/wezlo/filament-workspace-tabs",
+                "reference": "9d22a5a7b239b12821df265f4b8c3e73e518c74c"
             },
             "require": {
                 "filament/filament": "^4.0 || ^5.0",
@@ -19738,7 +19750,11 @@
                     "Wezlo\\FilamentWorkspaceTabs\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Wezlo\\FilamentWorkspaceTabs\\Tests\\": "tests/"
+                }
+            },
             "license": [
                 "MIT"
             ],
@@ -19750,11 +19766,10 @@
                 "tabs",
                 "workspace"
             ],
-            "support": {
-                "issues": "https://github.com/mustafakhaleddev/filament-workspace-tabs/issues",
-                "source": "https://github.com/mustafakhaleddev/filament-workspace-tabs/tree/1.0.0"
-            },
-            "time": "2026-04-09T21:13:19+00:00"
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "willdurand/geocoder",
@@ -23086,6 +23101,7 @@
         "achyutn/filament-log-viewer": 20,
         "adultdate/filament-booking": 20,
         "andrewdwallo/filament-companies": 20,
+        "awcodes/overlook": 20,
         "bezhansalleh/filament-shield": 20,
         "binarybuilds/filament-command-runner": 20,
         "binarybuilds/filament-failed-jobs": 20,

@@ -18,6 +18,6 @@ Route::middleware(['auth'])->group(function () {
     Route::livewire('invitations/{invitation}/accept', 'pages::teams.accept-invitation')->name('invitations.accept');
 });
 
-Route::view('admin', 'admin')->name('admin');
+// Route::view('admin', 'admin')->name('admin');
 
 require __DIR__.'/settings.php';

@@ -267,7 +267,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 OverlookPlugin::make()
-                    ->alphabetical(true)
+                    ->alphabetical(false)
                     ->sort(2)
                     ->columns([
                         'default' => 1,

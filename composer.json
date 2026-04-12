@@ -16,7 +16,7 @@
         "andrewdwallo/filament-companies": "@dev",
         "anish/text-input-entry": "*",
         "asmit/resized-column": "^3.0",
-        "awcodes/overlook": "^4.0",
+        "awcodes/overlook": "@dev",
         "bezhansalleh/filament-exceptions": "^4.2",
         "bezhansalleh/filament-shield": "@dev",
         "binarybuilds/filament-command-runner": "@dev",
@@ -170,6 +170,13 @@
                 "symlink": true
             }
         },
+                {
+            "type": "path",
+            "url": "app-plugins/awcodes/overlook",
+            "options": {
+                "symlink": true
+            }
+        },
         {
             "type": "path",
             "url": "app-plugins/mmes-design/filament-file-manager",
@@ -292,6 +299,13 @@
                 {
             "type": "path",
             "url": "app-plugins/joaopaulolndev/filament-world-clock",
+            "options": {
+                "symlink": true
+            }
+        },
+                        {
+            "type": "path",
+            "url": "app-plugins/wezlo/filament-workspace-tabs",
             "options": {
                 "symlink": true
             }
