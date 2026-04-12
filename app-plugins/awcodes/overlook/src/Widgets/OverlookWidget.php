@@ -105,8 +105,10 @@ class OverlookWidget extends Widget
             return null;
         })
             ->filter()
-            ->when($plugin->shouldSortAlphabetical(), fn ($collection) => $collection->sortBy('count', SORT_ASC)->sortBy('name'))
-             ->when(! $plugin->shouldSortAlphabetical(), fn ($collection) => $collection->sortBy('count', SORT_ASC))
+            ->when($plugin->shouldSortAlphabetical(), fn ($collection) => $collection->sortBy('raw_count', 'DESC')->sortBy('count'))
+             ->when(! $plugin->shouldSortAlphabetical(), fn ($collection) => $collection->sortBy('raw_count', SORT_REGULAR, true))
+             ->where(fn (?array $collection) => $collection['count'] >= 1)
+             ->sortBy('count', SORT_NUMERIC, 'DESC')
             ->values()
             ->toArray();
     }
