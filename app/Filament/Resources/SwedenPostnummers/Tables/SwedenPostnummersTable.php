@@ -568,7 +568,7 @@ class SwedenPostnummersTable
                 'live_hitta_count'
             )
             ->selectSub(
-                Merinfo::selectRaw('COUNT(*)')->whereColumn('address->zip', 'sweden_postnummer.postnummer'),
+                Merinfo::selectRaw('COUNT(*)'),
                 'live_merinfo_count'
             )
             ->selectSub(
