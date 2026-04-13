@@ -34,6 +34,11 @@ function normalizePostnummer(value) {
 	return String(value || '').replace(/\D/g, '');
 }
 
+function normalizeOrder(value) {
+	const normalized = String(value || '').trim().toLowerCase();
+	return normalized === 'desc' ? 'desc' : 'asc';
+}
+
 function loadInputRowsFromFile(filePath) {
 	const text = fs.readFileSync(filePath, 'utf8');
 	const ext = filePath.split('.').pop().toLowerCase();
@@ -164,12 +169,12 @@ function parseCliFilters(argv) {
 		}
 
 		if (arg.startsWith('--order=')) {
-			order = arg.slice('--order='.length).trim() || null;
+			order = normalizeOrder(arg.slice('--order='.length));
 			continue;
 		}
 
 		if (arg === '--order' && args[i + 1]) {
-			order = String(args[i + 1]).trim() || null;
+			order = normalizeOrder(args[i + 1]);
 			i++;
 			continue;
 		}
@@ -213,6 +218,7 @@ async function fetchNextGatorRow(filters) {
 		postnummer: filters.postnummer,
 		kommun: filters.kommun,
 		lan: filters.lan,
+		order: filters.order,
 	});
 
 	const response = await fetch(`${API_BASE_URL}/sweden-gator/next${query ? `?${query}` : ''}`, {
@@ -479,7 +485,7 @@ async function main() {
 		console.log('API-only mode is active, but rows will still be read from the local sweden_gator table unless --input-file or --ratsit-link is provided.');
 	}
 
-	const orderPararm = filters.order ? `ORDER BY id ${filters.order}` : 'ORDER BY id';
+	const orderPararm = `ORDER BY id ${normalizeOrder(filters.order)}`;
 	const connection = filters.inputFile || filters.startUrl || filters.apiOnly ? null : await createDbConnection();
 
 	try {

@@ -39,6 +39,11 @@ function normalizePostnummer(value) {
 	return String(value || '').replace(/\D/g, '');
 }
 
+function normalizeOrder(value) {
+	const normalized = String(value || '').trim().toLowerCase();
+	return normalized === 'desc' ? 'desc' : 'asc';
+}
+
 function parseIntOrNull(value) {
 	if (value === null || value === undefined) {
 		return null;
@@ -80,6 +85,7 @@ async function fetchNextPersonRow(filters) {
 		postnummer: filters.postnummer,
 		kommun: filters.kommun,
 		lan: filters.lan,
+		order: filters.order,
 	});
 
 	const response = await fetch(`${API_BASE_URL}/sweden-personer/next${query ? `?${query}` : ''}`, {
@@ -200,12 +206,12 @@ function parseCliFilters(argv) {
 		}
 
 		if (arg.startsWith('--order=')) {
-		   order = arg.slice('--order='.length).trim().toLowerCase() || null;
+		   order = normalizeOrder(arg.slice('--order='.length));
 		   continue;
 	   }
 
 	   if (arg === '--order' && args[i + 1]) {
-		   order = String(args[i + 1]).trim().toLowerCase() || null;
+		   order = normalizeOrder(args[i + 1]);
 		   i++;
 	   }
 	}
@@ -991,7 +997,7 @@ async function main() {
 			`is_queue = true`,
 		];
 		const queryParams = [];
-		const orderParams = ` ORDER BY id ${filters.order === 'asc' ? 'ASC' : 'DESC'}`;
+		const orderParams = ` ORDER BY id ${normalizeOrder(filters.order).toUpperCase()}`;
 
 		if (filters.postort) {
 			queryParams.push(filters.postort);

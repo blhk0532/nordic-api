@@ -8,6 +8,11 @@
 
 @source '../../../../vendor/wezlo/filament-workspace-tabs/resources/views/**/*';
 
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+@source '../../../../vendor/wezlo/filament-grid-list/resources/views/**/*';
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 footer{
     background:#18181b;

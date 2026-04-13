@@ -69,24 +69,7 @@ class MapPickerWidget extends MapTableWidget
 
     protected function getTableQuery(): Builder
     {
-        return SwedenPostnummer::query()
-            ->addSelect('sweden_postnummer.*')
-            ->selectSub(
-                RatsitData::selectRaw('COUNT(*)')->whereColumn('postnummer', 'sweden_postnummer.postnummer'),
-                'live_ratsit_count'
-            )
-            ->selectSub(
-                HittaData::selectRaw('COUNT(*)')->whereColumn('postnummer', 'sweden_postnummer.postnummer'),
-                'live_hitta_count'
-            )
-            ->selectSub(
-                MerinfoData::selectRaw('COUNT(*)')->whereColumn('postnummer', 'sweden_postnummer.postnummer'),
-                'live_merinfo_count'
-            )
-            ->selectSub(
-                SwedenPersoner::selectRaw('COUNT(*)')->whereColumn('postnummer', 'sweden_postnummer.postnummer'),
-                'live_personer_count'
-            );
+        return SwedenPostnummer::query()->withLiveCounts();
     }
 
     protected function paginateTableQuery(Builder $query): Paginator

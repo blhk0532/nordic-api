@@ -19,6 +19,11 @@ function normalizePostnummer(value) {
 	return String(value || '').replace(/\D/g, '');
 }
 
+function normalizeOrder(value) {
+	const normalized = String(value || '').trim().toLowerCase();
+	return normalized === 'desc' ? 'desc' : 'asc';
+}
+
 const API_BASE_URL =
 	process.env.SWEDEN_POSTNUMMER_API_URL ||
 	process.env.SWEDEN_API_URL ||
@@ -39,6 +44,7 @@ function parseCliFilters(argv) {
 	let postnummer = null;
 	let kommun = null;
 	let lan = null;
+	let order = null;
 	let apiOnly = false;
 
 	for (let i = 0; i < args.length; i++) {
@@ -88,13 +94,24 @@ function parseCliFilters(argv) {
 			continue;
 		}
 
+		if (arg.startsWith('--order=')) {
+			order = normalizeOrder(arg.slice('--order='.length));
+			continue;
+		}
+
+		if (arg === '--order' && args[i + 1]) {
+			order = normalizeOrder(args[i + 1]);
+			i++;
+			continue;
+		}
+
 		if (arg === '--api-only' || arg === '--only-api') {
 			apiOnly = true;
 			continue;
 		}
 	}
 
-	return { postort, postnummer, kommun, lan, apiOnly };
+	return { postort, postnummer, kommun, lan, order, apiOnly };
 }
 
 function buildQueryString(params) {
@@ -113,6 +130,7 @@ async function fetchNextPostnummerRow(filters) {
 		postnummer: filters.postnummer,
 		kommun: filters.kommun,
 		lan: filters.lan,
+		order: filters.order,
 	});
 
 	const response = await fetch(`${API_BASE_URL}/sweden-postnummer/next${query ? `?${query}` : ''}`, {
@@ -413,10 +431,10 @@ async function main() {
 		if (isApiOnlyQueue) {
 			console.log('API-only mode is active. Fetching queued sweden_postnummer rows from the API.');
 		} else {
-const query = `SELECT id, postnummer AS postnummer, postort AS postort, kommun, lan, ratsit_link
+			const query = `SELECT id, postnummer AS postnummer, postort AS postort, kommun, lan, ratsit_link
 			 FROM sweden_postnummer
 			 WHERE ${whereClauses.join(' AND ')}
-			 ORDER BY id`;
+			 ORDER BY id ${normalizeOrder(filters.order)}`;
 
 			const { rows } = await connection.query(query, queryParams);
 			postnummerRows = rows;

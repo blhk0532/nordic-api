@@ -13,10 +13,12 @@ class SwedenPersonerQueueController extends Controller
 {
     public function next(Request $request): JsonResponse
     {
+        $orderDirection = strtolower((string) $request->input('order', 'asc')) === 'desc' ? 'desc' : 'asc';
+
         $query = SwedenPersoner::query()
             ->where('is_done', false)
             ->where('is_queue', true)
-            ->orderBy('id');
+            ->orderBy('id', $orderDirection);
 
         if ($request->filled('postort')) {
             $query->where('postort', $request->input('postort'));

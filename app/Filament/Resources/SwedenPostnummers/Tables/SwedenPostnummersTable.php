@@ -144,6 +144,7 @@ class SwedenPostnummersTable
             ->defaultSort('updated_at', 'desc')
             ->paginated([10, 25, 50, 100, 200, 500])
             ->defaultPaginationPageOption(10)
+            ->modifyQueryUsing(fn (Builder $query): Builder => $query->withLiveCounts())
             ->filters([
                 Filter::make('has_personer')
                     ->label('Has Personer')
@@ -555,25 +556,4 @@ class SwedenPostnummersTable
             ]);
     }
 
-    protected function getTableQuery(): Builder
-    {
-        return SwedenPostnummer::query()
-            ->addSelect('sweden_postnummer.*')
-            ->selectSub(
-                RatsitData::selectRaw('COUNT(*)')->whereColumn('postnummer', 'sweden_postnummer.postnummer'),
-                'live_ratsit_count'
-            )
-            ->selectSub(
-                HittaData::selectRaw('COUNT(*)')->whereColumn('postnummer', 'sweden_postnummer.postnummer'),
-                'live_hitta_count'
-            )
-            ->selectSub(
-                Merinfo::selectRaw('COUNT(*)'),
-                'live_merinfo_count'
-            )
-            ->selectSub(
-                SwedenPersoner::selectRaw('COUNT(*)')->whereColumn('postnummer', 'sweden_postnummer.postnummer'),
-                'live_personer_count'
-            );
-    }
 }

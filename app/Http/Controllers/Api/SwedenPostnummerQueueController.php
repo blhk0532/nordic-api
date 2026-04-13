@@ -13,12 +13,14 @@ class SwedenPostnummerQueueController extends Controller
 {
     public function next(Request $request): JsonResponse
     {
+        $orderDirection = strtolower((string) $request->input('order', 'asc')) === 'desc' ? 'desc' : 'asc';
+
         $query = SwedenPostnummer::query()
             ->whereNotNull('ratsit_link')
             ->where('ratsit_link', '!=', '')
             ->where('is_done', false)
             ->where('is_queue', true)
-            ->orderBy('id');
+            ->orderBy('id', $orderDirection);
 
         if ($request->filled('postort')) {
             $query->where('postort', $request->input('postort'));

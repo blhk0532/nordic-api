@@ -35,6 +35,11 @@ function normalizePostnummer(value) {
 	return String(value || '').replace(/\D/g, '');
 }
 
+function normalizeOrder(value) {
+	const normalized = String(value || '').trim().toLowerCase();
+	return normalized === 'desc' ? 'desc' : 'asc';
+}
+
 function loadInputRowsFromFile(filePath) {
 	const text = fs.readFileSync(filePath, 'utf8');
 	const ext = filePath.split('.').pop().toLowerCase();
@@ -73,6 +78,7 @@ function parseCliFilters(argv) {
 	let postnummer = null;
 	let kommun = null;
 	let lan = null;
+	let order = null;
 	let apiOnly = false;
 	let inputFile = null;
 	let startUrl = null;
@@ -125,6 +131,17 @@ function parseCliFilters(argv) {
 			continue;
 		}
 
+		if (arg.startsWith('--order=')) {
+			order = normalizeOrder(arg.slice('--order='.length));
+			continue;
+		}
+
+		if (arg === '--order' && args[i + 1]) {
+			order = normalizeOrder(args[i + 1]);
+			i++;
+			continue;
+		}
+
 		if (arg === '--api-only' || arg === '--only-api') {
 			apiOnly = true;
 			continue;
@@ -164,7 +181,7 @@ function parseCliFilters(argv) {
 		}
 	}
 
-	return { postort, postnummer, kommun, lan, apiOnly, inputFile, startUrl, adress };
+	return { postort, postnummer, kommun, lan, order, apiOnly, inputFile, startUrl, adress };
 }
 
 async function postScrapedPersons(records) {
@@ -202,6 +219,7 @@ async function fetchNextAdresserRow(filters) {
 		postnummer: filters.postnummer,
 		kommun: filters.kommun,
 		lan: filters.lan,
+		order: filters.order,
 	});
 
 	const response = await fetch(`${API_BASE_URL}/sweden-adresser/next${query ? `?${query}` : ''}`, {
@@ -543,7 +561,7 @@ async function main() {
 			const query = `SELECT id, adress, postnummer, postort, kommun, lan, ratsit_link
 				 FROM sweden_adresser
 				 WHERE ${whereClauses.join(' AND ')}
-				 ORDER BY id`;
+				 ORDER BY id ${normalizeOrder(filters.order)}`;
 
 			try {
 				const queryResult = await connection.query(query, queryParams);
