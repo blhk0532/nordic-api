@@ -54,9 +54,11 @@ use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
 use MmesDesign\FilamentFileManager\FileManagerPlugin;
 use Muazzam\SlickScrollbar\SlickScrollbarPlugin;
 use MWGuerra\WebTerminal\WebTerminalPlugin;
-use Wezlo\FilamentWorkspaceTabs\WorkspaceTabsPlugin;
-use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 use Usamamuneerchaudhary\Notifier\FilamentNotifierPlugin;
+use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
+use Wezlo\FilamentGridList\FilamentGridListPlugin;
+use Wezlo\FilamentWorkspaceTabs\WorkspaceTabsPlugin;
+
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -138,7 +140,7 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make('System LOGS')
                     ->collapsed(true)
                     ->icon('heroicon-o-megaphone'),
-                            NavigationGroup::make('Notifications')
+                NavigationGroup::make('Notifications')
                     ->collapsed(true)
                     ->icon('heroicon-o-bell'),
 
@@ -219,7 +221,7 @@ class AdminPanelProvider extends PanelProvider
             ->plugins([
                 WorkspaceTabsPlugin::make(),
                 FilamentIconPickerPlugin::make(),
-                 FilamentNotifierPlugin::make()
+                FilamentNotifierPlugin::make(),
             ])
             ->plugins([
                 FilamentBookingPlugin::make(),
@@ -227,9 +229,7 @@ class AdminPanelProvider extends PanelProvider
             ->plugin(
                 FilamentSocialitePlugin::make()
                     // (required) Add providers corresponding with providers in `config/services.php`.
-                    ->providers([
-
-                    ])
+                    ->providers([])
                     // (optional) Override the panel slug to be used in the oauth routes. Defaults to the panel's configured path.
                     ->slug('admin')
                     // (optional) Enable/disable registration of new (socialite-) users.
@@ -242,6 +242,15 @@ class AdminPanelProvider extends PanelProvider
                     // (optional) Change the associated socialite class (see below).
                     ->socialiteUserModelClass(User::class)
             )
+            ->plugins(array_filter([
+                class_exists(FilamentGridListPlugin::class)
+                    ? FilamentGridListPlugin::make()
+                        ->gridColumns(['default' => 1, 'sm' => 2, 'lg' => 3])
+                        ->gap(4)
+                        ->recordsPerPage(12)
+                        ->recordsPerPageOptions([12, 24, 48, 96])
+                    : null,
+            ]))
             ->plugins([
                 FilamentShieldPlugin::make()
                     ->scopeToTenant(false),

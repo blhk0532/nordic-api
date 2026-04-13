@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\HittaData;
+use App\Models\Merinfo;
 use App\Models\MerinfoData;
 use App\Models\RatsitData;
 use App\Models\SwedenPersoner;
@@ -10,8 +11,8 @@ use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
-#[Signature('import:sweden-personer {--source=all : Which source to import (hitta,ratsit,merinfo,all)} {--limit=0 : Limit number of rows per source} {--chunk=1000 : Chunk size for processing}')]
-#[Description('Import data from hitta_data, ratsit_data, merinfo_data tables into sweden_personer table.')]
+#[Signature('import:sweden-personer {--source=all : Which source to import (hitta,ratsit,mer,merinfo,all)} {--limit=0 : Limit number of rows per source} {--chunk=1000 : Chunk size for processing}')]
+#[Description('Import data from hitta_data, ratsit_data, merinfo_data, and merinfos tables into sweden_personer table.')]
 class ImportSwedenPersonerCommand extends Command
 {
     protected int $created = 0;
@@ -36,7 +37,8 @@ class ImportSwedenPersonerCommand extends Command
             'hitta' => ['hitta'],
             'ratsit' => ['ratsit'],
             'merinfo' => ['merinfo'],
-            default => ['hitta', 'ratsit', 'merinfo'],
+            'mer' => ['mer'],
+            default => ['hitta', 'ratsit', 'merinfo', 'mer'],
         };
 
         foreach ($sources as $src) {
@@ -337,6 +339,100 @@ class ImportSwedenPersonerCommand extends Command
             'is_hus' => $record->is_hus,
             'is_active' => $record->is_active,
             'merinfo_link' => $record->link,
+            'merinfo_data' => $record->toArray(),
+        ];
+    }
+
+    private function importMer(int $limit, int $chunkSize): void
+    {
+        $query = Merinfo::query();
+
+        if ($limit > 0) {
+            $query->limit($limit);
+        }
+
+        $success = 0;
+        $failures = 0;
+
+        $query->chunkById($chunkSize, function ($records) use (&$success, &$failures) {
+            foreach ($records as $record) {
+                $this->processed++;
+                try {
+                    $this->importMerRecord($record);
+                    $success++;
+                } catch (\Exception $e) {
+                    $failures++;
+                    $this->failed++;
+                    $this->warn("Failed to import Mer record ID {$record->id}: {$e->getMessage()}");
+                }
+            }
+        }, 'id');
+
+        $this->info("Mer data import finished. Success: {$success}, Failures: {$failures}");
+    }
+
+    private function importMerRecord(Merinfo $record): void
+    {
+        $attributes = $this->mapMerAttributes($record);
+        $this->upsertSwedenPersoner($attributes, $record->url, 'merinfo');
+    }
+
+    private function mapMerAttributes(Merinfo $record): array
+    {
+        $personnamn = $record->name;
+        [$fallbackFornamn, $efternamn] = $this->splitPersonnamn($personnamn);
+        $fornamn = $record->givenNameOrFirstName ?: $fallbackFornamn;
+
+        $addressData = is_array($record->address) ? $record->address : [];
+        $addressItem = array_is_list($addressData) ? ($addressData[0] ?? []) : $addressData;
+
+        $adress = is_array($addressItem) ? ($addressItem['street'] ?? null) : null;
+        $postnummer = is_array($addressItem) ? ($addressItem['zip_code'] ?? null) : null;
+        $postort = is_array($addressItem) ? ($addressItem['city'] ?? null) : null;
+
+        $phoneData = is_array($record->phone_number) ? $record->phone_number : [];
+        $phoneItems = array_is_list($phoneData) ? $phoneData : [$phoneData];
+        $telefonnummer = [];
+
+        foreach ($phoneItems as $phoneItem) {
+            if (is_array($phoneItem)) {
+                foreach (['raw', 'number'] as $key) {
+                    $value = $phoneItem[$key] ?? null;
+                    if (is_string($value) && $value !== '') {
+                        $telefonnummer[] = $value;
+                    }
+                }
+            } elseif (is_string($phoneItem) && $phoneItem !== '') {
+                $telefonnummer[] = $phoneItem;
+            }
+        }
+
+        $telefonnummer = array_values(array_unique($telefonnummer));
+
+        return [
+            'fornamn' => $fornamn,
+            'efternamn' => $efternamn,
+            'personnamn' => $personnamn,
+            'personnummer' => $record->personalNumber,
+            'kon' => $this->normalizeGender($record->gender),
+            'telefon' => $telefonnummer[0] ?? null,
+            'telefonnummer' => $telefonnummer,
+            'adress' => $adress,
+            'postnummer' => $postnummer,
+            'postort' => $postort,
+            'kommun' => null,
+            'lan' => null,
+            'civilstand' => null,
+            'adressandring' => null,
+            'bostadstyp' => null,
+            'agandeform' => null,
+            'boarea' => null,
+            'byggar' => null,
+            'personer' => null,
+            'alder' => null,
+            'is_hus' => $record->is_house,
+            'is_active' => true,
+            'merinfo_link' => $record->url,
             'merinfo_data' => $record->toArray(),
         ];
     }

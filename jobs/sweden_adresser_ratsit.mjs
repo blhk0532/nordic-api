@@ -8,7 +8,7 @@ const API_BASE_URL =
 	process.env.SWEDEN_ADRESSER_API_URL ||
 	process.env.SWEDEN_PERSONER_API_URL ||
 	process.env.SWEDEN_API_URL ||
-	'http://127.0.0.1:8000/api';
+	'https://ekoll.se/api';
 
 async function parseJsonResponse(response) {
 	const responseText = await response.text();

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "910f50f2ab0fd4cd15bb6b18c2333fe6",
+    "content-hash": "a41304f0afdb5fad4ce79762613b9e98",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -5824,6 +5824,81 @@
                 "source": "https://github.com/hammadzafar05/mobile-bottom-nav"
             },
             "time": "2026-04-01T17:23:21+00:00"
+        },
+        {
+            "name": "harvirsidhu/filament-action-overflow",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/harvirsidhu/filament-action-overflow.git",
+                "reference": "125160d703dd48fbbfcf0e9f8d019659e08d9a45"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/harvirsidhu/filament-action-overflow/zipball/125160d703dd48fbbfcf0e9f8d019659e08d9a45",
+                "reference": "125160d703dd48fbbfcf0e9f8d019659e08d9a45",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^4.0 || ^5.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.15.0"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^8.0",
+                "orchestra/testbench": "^9.0|^10.0",
+                "pestphp/pest": "^3.7|^4.0",
+                "pestphp/pest-plugin-arch": "^3.0|^4.0",
+                "pestphp/pest-plugin-laravel": "^3.0|^4.0",
+                "pestphp/pest-plugin-livewire": "^3.0|^4.0",
+                "rector/rector": "^2.0",
+                "spatie/laravel-ray": "^1.26"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "ActionOverflow": "Harvirsidhu\\FilamentActionOverflow\\Facades\\ActionOverflow"
+                    },
+                    "providers": [
+                        "Harvirsidhu\\FilamentActionOverflow\\FilamentActionOverflowServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Harvirsidhu\\FilamentActionOverflow\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "harvirsidhu",
+                    "email": "harvirsidhu@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Compose any Filament action list into primary actions plus an overflow dropdown, with divider support.",
+            "homepage": "https://github.com/harvirsidhu/filament-action-overflow",
+            "keywords": [
+                "action-overflow",
+                "filament",
+                "filament-action-overflow",
+                "filament-plugin",
+                "filamentphp",
+                "harvirsidhu",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/harvirsidhu/filament-action-overflow/issues",
+                "source": "https://github.com/harvirsidhu/filament-action-overflow"
+            },
+            "time": "2026-04-12T04:45:47+00:00"
         },
         {
             "name": "harvirsidhu/filament-cards",
@@ -19718,6 +19793,56 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.12.1"
             },
             "time": "2025-10-29T15:56:20+00:00"
+        },
+        {
+            "name": "wezlo/filament-grid-list",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mustafakhaleddev/filament-grid-list.git",
+                "reference": "bc85b3e23cbcb77f0975bdbc507bddae05a70fb1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mustafakhaleddev/filament-grid-list/zipball/bc85b3e23cbcb77f0975bdbc507bddae05a70fb1",
+                "reference": "bc85b3e23cbcb77f0975bdbc507bddae05a70fb1",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^4.0 || ^5.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Wezlo\\FilamentGridList\\FilamentGridListServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Wezlo\\FilamentGridList\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Configurable grid/card layout that replaces the default Filament list table",
+            "keywords": [
+                "cards",
+                "filament",
+                "grid",
+                "laravel",
+                "list"
+            ],
+            "support": {
+                "issues": "https://github.com/mustafakhaleddev/filament-grid-list/issues",
+                "source": "https://github.com/mustafakhaleddev/filament-grid-list/tree/1.0.0"
+            },
+            "time": "2026-04-12T21:04:32+00:00"
         },
         {
             "name": "wezlo/filament-workspace-tabs",

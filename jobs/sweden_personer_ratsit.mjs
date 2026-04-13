@@ -209,9 +209,8 @@ function parseCliFilters(argv) {
 		   i++;
 	   }
 	}
-
 	return { postort, postnummer, kommun, lan, order, apiOnly };
-}aaa
+}
 
 function loadRatsitCookies() {
 	const cookieCandidates = [

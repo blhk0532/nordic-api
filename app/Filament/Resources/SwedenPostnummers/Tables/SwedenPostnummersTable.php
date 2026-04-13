@@ -13,6 +13,7 @@ use App\Jobs\RunRatsitDataScriptJob;
 use App\Jobs\RunScriptForPostnummerJob;
 use App\Models\HittaData;
 use App\Models\MerinfoData;
+use App\Models\Merinfo;
 use App\Models\RatsitData;
 use App\Models\SwedenPersoner;
 use App\Models\SwedenPostnummer;
@@ -247,136 +248,6 @@ class SwedenPostnummersTable
                                 ->send();
                         })
                         ->deselectRecordsAfterCompletion(),
-                ]),
-                BulkAction::make('refreshTable')
-                    ->label('Refresh')
-                    ->icon('heroicon-o-arrow-path')
-                    ->color('gray')
-                    ->requiresConfirmation()
-                    ->modalHeading('Refresh Database Counts')
-                    ->modalDescription('This will check and update database counts for the selected records. This may take a few moments.')
-                    ->modalSubmitActionLabel('Refresh Counts')
-                    ->deselectRecordsAfterCompletion()
-                    ->accessSelectedRecords()
-                    ->action(function (Collection $records): void {
-                        $updated = 0;
-
-                        foreach ($records as $record) {
-                            $postNummer = (string) $record->postnummer;
-                            $normalizedPostNummer = $record->csv_id;
-
-                            $hittaCount = HittaData::query()
-                                ->where('postnummer', $postNummer)
-                                ->count();
-
-                            $merinfoCount = MerinfoData::query()
-                                ->where('postnummer', $postNummer)
-                                ->count();
-
-                            $ratsitCount = RatsitData::query()
-                                ->where('postnummer', $postNummer)
-                                ->count();
-
-                            SwedenPostnummer::query()
-                                ->whereKey($record->getKey())
-                                ->update([
-                                    'personer_hitta_saved' => $hittaCount,
-                                    'personer_merinfo_saved' => $merinfoCount,
-                                    'personer_ratsit_saved' => $ratsitCount,
-                                ]);
-
-                            $updated++;
-                        }
-
-                        Notification::make()
-                            ->success()
-                            ->title('DB Counts Updated')
-                            ->body("Updated saved counts for {$updated} record(s).")
-                            ->send();
-                    }),
-                Action::make('importFromFile')
-                    ->label('Import')
-                    ->icon('heroicon-o-document-arrow-down')
-                    ->color('success')
-                    ->schema([
-                        FileUpload::make('import_file')
-                            ->label('CSV or XLSX file')
-                            ->required()
-                            ->acceptedFileTypes(['text/csv', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'])
-                            ->maxSize(50 * 1024), // 50MB
-                    ])
-                    ->action(function (array $data): void {
-                        try {
-                            $filePath = $data['import_file'];
-
-                            if (! is_string($filePath)) {
-                                throw new \Exception('Invalid file upload');
-                            }
-
-                            $count = app(PeopleImportService::class)->importFromFile(
-                                storage_path("app/{$filePath}")
-                            );
-
-                            Notification::make()
-                                ->success()
-                                ->title('Import completed')
-                                ->body("Imported/updated {$count} people into personer.")
-                                ->send();
-                        } catch (\Throwable $exception) {
-                            report($exception);
-
-                            Notification::make()
-                                ->danger()
-                                ->title('Import failed')
-                                ->body($exception->getMessage())
-                                ->send();
-                        }
-                    }),
-                Action::make('importFromGoogleSheets')
-                    ->label('Import')
-                    ->icon('heroicon-o-arrow-down-tray')
-                    ->color('warning')
-                    ->requiresConfirmation()
-                    ->modalHeading('Import people from Google Sheets')
-                    ->modalDescription('Reads rows from the sheet and upserts into personer using personnummer or name+address+postnummer.')
-                    ->schema([
-                        TextInput::make('spreadsheet_id')
-                            ->label('Spreadsheet ID')
-                            ->default(config('services.google_sheets.default_spreadsheet_id'))
-                            ->required(),
-                        TextInput::make('sheet_name')
-                            ->label('Sheet tab name')
-                            ->default(config('services.google_sheets.default_sheet_name', 'People'))
-                            ->required(),
-                    ])
-                    ->action(function (array $data): void {
-                        try {
-                            $count = app(PeopleSheetsSyncService::class)->importIntoDatabase(
-                                spreadsheetId: (string) ($data['spreadsheet_id'] ?? ''),
-                                sheetName: (string) ($data['sheet_name'] ?? 'People'),
-                            );
-
-                            Notification::make()
-                                ->success()
-                                ->title('Google Sheets import completed')
-                                ->body("Imported {$count} people into personer.")
-                                ->send();
-                        } catch (\Throwable $exception) {
-                            report($exception);
-
-                            Notification::make()
-                                ->danger()
-                                ->title('Google Sheets import failed')
-                                ->body($exception->getMessage())
-                                ->send();
-                        }
-                    }),
-                ExportAction::make()
-                    ->label('Export')
-                    ->visible(fn () => Auth::user()->role === 'super')
-                    ->exporter(PeopleExporter::class)
-                    ->icon('heroicon-o-arrow-up-tray')
-                    ->color('danger'),
                 BulkAction::make('runScript')
                     ->label('Run Queue Script')
                     ->icon('heroicon-o-command-line')
@@ -551,6 +422,136 @@ class SwedenPostnummersTable
                             ->send();
                     })
                     ->deselectRecordsAfterCompletion(),
+                ]),
+                BulkAction::make('refreshTable')
+                    ->label('Refresh')
+                    ->icon('heroicon-o-arrow-path')
+                    ->color('gray')
+                    ->requiresConfirmation()
+                    ->modalHeading('Refresh Database Counts')
+                    ->modalDescription('This will check and update database counts for the selected records. This may take a few moments.')
+                    ->modalSubmitActionLabel('Refresh Counts')
+                    ->deselectRecordsAfterCompletion()
+                    ->accessSelectedRecords()
+                    ->action(function (Collection $records): void {
+                        $updated = 0;
+
+                        foreach ($records as $record) {
+                            $postNummer = (string) $record->postnummer;
+                            $normalizedPostNummer = $record->csv_id;
+
+                            $hittaCount = HittaData::query()
+                                ->where('postnummer', $postNummer)
+                                ->count();
+
+                            $merinfoCount = Merinfo::query()
+                                ->where('address->zip', $postNummer)
+                                ->count();
+
+                            $ratsitCount = RatsitData::query()
+                                ->where('postnummer', $postNummer)
+                                ->count();
+
+                            SwedenPostnummer::query()
+                                ->whereKey($record->getKey())
+                                ->update([
+                                    'personer_hitta_saved' => $hittaCount,
+                                    'personer_merinfo_saved' => $merinfoCount,
+                                    'personer_ratsit_saved' => $ratsitCount,
+                                ]);
+
+                            $updated++;
+                        }
+
+                        Notification::make()
+                            ->success()
+                            ->title('DB Counts Updated')
+                            ->body("Updated saved counts for {$updated} record(s).")
+                            ->send();
+                    }),
+                Action::make('importFromFile')
+                    ->label('Import')
+                    ->icon('heroicon-o-document-arrow-down')
+                    ->color('success')
+                    ->schema([
+                        FileUpload::make('import_file')
+                            ->label('CSV or XLSX file')
+                            ->required()
+                            ->acceptedFileTypes(['text/csv', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'])
+                            ->maxSize(50 * 1024), // 50MB
+                    ])
+                    ->action(function (array $data): void {
+                        try {
+                            $filePath = $data['import_file'];
+
+                            if (! is_string($filePath)) {
+                                throw new \Exception('Invalid file upload');
+                            }
+
+                            $count = app(PeopleImportService::class)->importFromFile(
+                                storage_path("app/{$filePath}")
+                            );
+
+                            Notification::make()
+                                ->success()
+                                ->title('Import completed')
+                                ->body("Imported/updated {$count} people into personer.")
+                                ->send();
+                        } catch (\Throwable $exception) {
+                            report($exception);
+
+                            Notification::make()
+                                ->danger()
+                                ->title('Import failed')
+                                ->body($exception->getMessage())
+                                ->send();
+                        }
+                    }),
+                Action::make('importFromGoogleSheets')
+                    ->label('Import')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->color('warning')
+                    ->requiresConfirmation()
+                    ->modalHeading('Import people from Google Sheets')
+                    ->modalDescription('Reads rows from the sheet and upserts into personer using personnummer or name+address+postnummer.')
+                    ->schema([
+                        TextInput::make('spreadsheet_id')
+                            ->label('Spreadsheet ID')
+                            ->default(config('services.google_sheets.default_spreadsheet_id'))
+                            ->required(),
+                        TextInput::make('sheet_name')
+                            ->label('Sheet tab name')
+                            ->default(config('services.google_sheets.default_sheet_name', 'People'))
+                            ->required(),
+                    ])
+                    ->action(function (array $data): void {
+                        try {
+                            $count = app(PeopleSheetsSyncService::class)->importIntoDatabase(
+                                spreadsheetId: (string) ($data['spreadsheet_id'] ?? ''),
+                                sheetName: (string) ($data['sheet_name'] ?? 'People'),
+                            );
+
+                            Notification::make()
+                                ->success()
+                                ->title('Google Sheets import completed')
+                                ->body("Imported {$count} people into personer.")
+                                ->send();
+                        } catch (\Throwable $exception) {
+                            report($exception);
+
+                            Notification::make()
+                                ->danger()
+                                ->title('Google Sheets import failed')
+                                ->body($exception->getMessage())
+                                ->send();
+                        }
+                    }),
+                ExportAction::make()
+                    ->label('Export')
+                    ->visible(fn () => Auth::user()->role === 'super')
+                    ->exporter(PeopleExporter::class)
+                    ->icon('heroicon-o-arrow-up-tray')
+                    ->color('danger'),
             ]);
     }
 
@@ -567,7 +568,7 @@ class SwedenPostnummersTable
                 'live_hitta_count'
             )
             ->selectSub(
-                MerinfoData::selectRaw('COUNT(*)')->whereColumn('postnummer', 'sweden_postnummer.postnummer'),
+                Merinfo::selectRaw('COUNT(*)')->whereColumn('address->zip', 'sweden_postnummer.postnummer'),
                 'live_merinfo_count'
             )
             ->selectSub(
