@@ -41,6 +41,11 @@ class NotificationEventResource extends Resource
         ];
     }
 
+        public static function getPluralModelLabel(): string
+    {
+        return __('⩍ Notify Events @APP');
+    }
+
     public static function getPages(): array
     {
         return [

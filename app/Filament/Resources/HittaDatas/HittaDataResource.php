@@ -35,19 +35,19 @@ class HittaDataResource extends Resource
 
     protected static UnitEnum|string|null $navigationGroup = 'Database NR';
 
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = -89;
 
     // place resource under Databaser cluster
     protected static ?string $slug = 'databaser/hitta-data';
 
     public static function getModelLabel(): string
     {
-        return __('DB Hitta');
+        return __('⛁ Hitta @DB');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('DB Hitta');
+        return __('⛁ Hitta @DB');
     }
 
     public static function getNavigationBadge(): ?string

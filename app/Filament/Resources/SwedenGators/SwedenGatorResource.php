@@ -29,16 +29,16 @@ class SwedenGatorResource extends Resource
 
     protected static ?string $navigationLabel = 'Gator';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = -98;
 
     public static function getModelLabel(): string
     {
-        return __('DB Gator');
+        return __('# Gator @GEO');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('DB Gator');
+        return __('# Gator @GEO');
     }
 
     public static function getNavigationBadgeColor(): string|array|null

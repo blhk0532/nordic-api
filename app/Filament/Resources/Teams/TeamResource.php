@@ -24,7 +24,7 @@ class TeamResource extends Resource
 {
     protected static ?string $model = Team::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::UserGroup;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
 
     protected static bool $isGloballySearchable = true;
 
@@ -32,7 +32,7 @@ class TeamResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = -80;
 
     public static function getGloballySearchableAttributes(): array
     {
@@ -51,12 +51,12 @@ class TeamResource extends Resource
 
     public static function getPluralModelLabel(): string
     {
-        return __('Teams');
+        return __('★ Teams @APP');
     }
 
     public static function getNavigationLabel(): string
     {
-        return __('Teams');
+        return __('★ Teams @APP');
     }
 
     public static function getNavigationGroup(): ?string

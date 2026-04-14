@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "529ef5ae5d2d5d551933f29d20225ab6",
+    "content-hash": "c48b8cbc32a058117174aa3e77b132d7",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -5207,16 +5207,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.436.0",
+            "version": "v0.437.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-api-php-client-services.git",
-                "reference": "42493f9565963a0456b1edace1eb5f1cc53f2f73"
+                "reference": "1a7dd2368adb7ee4d5d07f828ae2dd7ecc43247c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/42493f9565963a0456b1edace1eb5f1cc53f2f73",
-                "reference": "42493f9565963a0456b1edace1eb5f1cc53f2f73",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/1a7dd2368adb7ee4d5d07f828ae2dd7ecc43247c",
+                "reference": "1a7dd2368adb7ee4d5d07f828ae2dd7ecc43247c",
                 "shasum": ""
             },
             "require": {
@@ -5245,9 +5245,9 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/google-api-php-client-services/issues",
-                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.436.0"
+                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.437.0"
             },
-            "time": "2026-04-06T01:28:26+00:00"
+            "time": "2026-04-13T01:26:28+00:00"
         },
         {
             "name": "google/auth",
@@ -9181,6 +9181,66 @@
             "time": "2026-04-11T18:38:28+00:00"
         },
         {
+            "name": "mallardduck/blade-lucide-icons",
+            "version": "1.26.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mallardduck/blade-lucide-icons.git",
+                "reference": "bd6f832ce594acbb2328cecebad236839c8cc17d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mallardduck/blade-lucide-icons/zipball/bd6f832ce594acbb2328cecebad236839c8cc17d",
+                "reference": "bd6f832ce594acbb2328cecebad236839c8cc17d",
+                "shasum": ""
+            },
+            "require": {
+                "blade-ui-kit/blade-icons": "^1.8",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "ext-dom": "*",
+                "ext-fileinfo": "*",
+                "orchestra/testbench": "^6.0|^7.0|^8.0|^9.0|^10.0",
+                "phpunit/phpunit": "^9.0|^10.0|^11.0",
+                "spatie/phpunit-snapshot-assertions": "^4.2.14|^5.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "MallardDuck\\LucideIcons\\BladeLucideIconsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "MallardDuck\\LucideIcons\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dan Pock"
+                }
+            ],
+            "description": "A package to easily make use of Lucide icons in your Laravel Blade views.",
+            "homepage": "https://github.com/mallardduck/blade-lucide-icons",
+            "keywords": [
+                "LucideIcons",
+                "blade",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/mallardduck/blade-lucide-icons/issues",
+                "source": "https://github.com/mallardduck/blade-lucide-icons/tree/1.26.12"
+            },
+            "time": "2026-04-10T00:26:49+00:00"
+        },
+        {
             "name": "malzariey/filament-daterangepicker-filter",
             "version": "5.0.1",
             "source": {
@@ -10762,6 +10822,56 @@
             "time": "2025-09-03T16:03:54+00:00"
         },
         {
+            "name": "osamaatef/filament-drilldown-sidebar",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "app-plugins/osamaatef1/filament-drilldown-sidebar",
+                "reference": "9aa80a296544e634c45e524701ea25d616d94aa7"
+            },
+            "require": {
+                "filament/filament": "^3.0||^4.0||^5.0",
+                "illuminate/contracts": "^10.0||^11.0||^12.0||^13.0",
+                "php": "^8.1"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "OsamaAtef\\DrilldownSidebar\\DrilldownSidebarServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "OsamaAtef\\DrilldownSidebar\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Osama Atef",
+                    "email": "osamaatef1@users.noreply.github.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A Filament plugin that adds optional drill-down navigation to sidebar groups.",
+            "homepage": "https://github.com/osamaatef1/filament-drilldown-sidebar",
+            "keywords": [
+                "drilldown",
+                "filament",
+                "laravel",
+                "navigation",
+                "sidebar"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
             "name": "outhebox/blade-flags",
             "version": "1.7.0",
             "source": {
@@ -11341,16 +11451,16 @@
         },
         {
             "name": "phpdocumentor/reflection",
-            "version": "6.5.0",
+            "version": "6.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/Reflection.git",
-                "reference": "70ad4ae38901a1c71623d29192983274671e9113"
+                "reference": "c8d36446027506a005103d57265ba5ea56beabfc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/Reflection/zipball/70ad4ae38901a1c71623d29192983274671e9113",
-                "reference": "70ad4ae38901a1c71623d29192983274671e9113",
+                "url": "https://api.github.com/repos/phpDocumentor/Reflection/zipball/c8d36446027506a005103d57265ba5ea56beabfc",
+                "reference": "c8d36446027506a005103d57265ba5ea56beabfc",
                 "shasum": ""
             },
             "require": {
@@ -11407,9 +11517,9 @@
             ],
             "support": {
                 "issues": "https://github.com/phpDocumentor/Reflection/issues",
-                "source": "https://github.com/phpDocumentor/Reflection/tree/6.5.0"
+                "source": "https://github.com/phpDocumentor/Reflection/tree/6.6.0"
             },
-            "time": "2026-04-10T12:00:48+00:00"
+            "time": "2026-04-12T18:07:10+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -13604,6 +13714,64 @@
                 }
             ],
             "time": "2022-12-17T21:53:22+00:00"
+        },
+        {
+            "name": "secondnetwork/blade-tabler-icons",
+            "version": "v3.41.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/secondnetwork/blade-tabler-icons.git",
+                "reference": "cd1f24b5680b74ca6a10451377f6b331b5e953bd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/secondnetwork/blade-tabler-icons/zipball/cd1f24b5680b74ca6a10451377f6b331b5e953bd",
+                "reference": "cd1f24b5680b74ca6a10451377f6b331b5e953bd",
+                "shasum": ""
+            },
+            "require": {
+                "blade-ui-kit/blade-icons": "^1.8",
+                "illuminate/support": "^9.0|^10.0|^11.0|^12.0|^13.0",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.0|^7.0|^9.0|^10.0",
+                "phpunit/phpunit": "^9.0|^10.0|^11.0|^12.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "secondnetwork\\TablerIcons\\BladeTablerIconsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "secondnetwork\\TablerIcons\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andreas Farah"
+                }
+            ],
+            "description": "A package to easily make use of tabler-icons in your Laravel Blade views.",
+            "homepage": "https://github.com/secondnetwork/blade-tabler-icons",
+            "keywords": [
+                "blade",
+                "laravel",
+                "tabler-icons"
+            ],
+            "support": {
+                "issues": "https://github.com/secondnetwork/blade-tabler-icons/issues",
+                "source": "https://github.com/secondnetwork/blade-tabler-icons/tree/v3.41.0"
+            },
+            "time": "2026-03-30T10:09:04+00:00"
         },
         {
             "name": "seld/jsonlint",
@@ -16169,16 +16337,16 @@
         },
         {
             "name": "stechstudio/filament-impersonate",
-            "version": "v5.2.0",
+            "version": "v5.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stechstudio/filament-impersonate.git",
-                "reference": "71a51f33d51ced34df882201956f5dd445bbc092"
+                "reference": "00197ab5a7cbb18a2b8726a70eddefc943317794"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stechstudio/filament-impersonate/zipball/71a51f33d51ced34df882201956f5dd445bbc092",
-                "reference": "71a51f33d51ced34df882201956f5dd445bbc092",
+                "url": "https://api.github.com/repos/stechstudio/filament-impersonate/zipball/00197ab5a7cbb18a2b8726a70eddefc943317794",
+                "reference": "00197ab5a7cbb18a2b8726a70eddefc943317794",
                 "shasum": ""
             },
             "require": {
@@ -16209,9 +16377,9 @@
             "description": "A Filament package to impersonate your users.",
             "support": {
                 "issues": "https://github.com/stechstudio/filament-impersonate/issues",
-                "source": "https://github.com/stechstudio/filament-impersonate/tree/v5.2.0"
+                "source": "https://github.com/stechstudio/filament-impersonate/tree/v5.3.0"
             },
-            "time": "2026-04-08T19:58:33+00:00"
+            "time": "2026-04-14T01:55:02+00:00"
         },
         {
             "name": "symfony/clock",
@@ -19811,17 +19979,11 @@
         },
         {
             "name": "wallacemartinss/filament-icon-picker",
-            "version": "v2.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/wallacemartinss/filament-icon-picker.git",
-                "reference": "b5f667b3eec7789a19e4bf0ffb7e83c83b3dd8b9"
-            },
+            "version": "dev-main",
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/wallacemartinss/filament-icon-picker/zipball/b5f667b3eec7789a19e4bf0ffb7e83c83b3dd8b9",
-                "reference": "b5f667b3eec7789a19e4bf0ffb7e83c83b3dd8b9",
-                "shasum": ""
+                "type": "path",
+                "url": "app-plugins/wallacemartinss/filament-icon-picker",
+                "reference": "9d64a02b879b03a15ee402a540d6dde428fb9f06"
             },
             "require": {
                 "blade-ui-kit/blade-icons": "^1.0",
@@ -19857,7 +20019,11 @@
                     "Wallacemartinss\\FilamentIconPicker\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Wallacemartinss\\FilamentIconPicker\\Tests\\": "tests/"
+                }
+            },
             "license": [
                 "MIT"
             ],
@@ -19871,21 +20037,20 @@
             "description": "A beautiful icon picker component for Filament v5 using blade-ui-kit/blade-icons",
             "homepage": "https://github.com/wallacemartinss/filament-icon-picker",
             "keywords": [
-                "FontAwesome",
-                "Heroicons",
-                "Phosphor",
                 "blade-icons",
                 "filament",
                 "filament-plugin",
+                "fontawesome",
+                "heroicons",
                 "icon-picker",
                 "laravel",
-                "material-icons"
+                "material-icons",
+                "phosphor"
             ],
-            "support": {
-                "issues": "https://github.com/wallacemartinss/filament-icon-picker/issues",
-                "source": "https://github.com/wallacemartinss/filament-icon-picker/tree/v2.0.0"
-            },
-            "time": "2026-01-19T14:17:06+00:00"
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "wallacemartinss/filament-whatsapp-conector",
@@ -20245,6 +20410,67 @@
                 }
             ],
             "time": "2024-11-24T11:45:37+00:00"
+        },
+        {
+            "name": "yousefaman/filament-modal-repeater",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yousef-aman/filament-modal-repeater.git",
+                "reference": "9ce545dd296690d88fe9f10f4770d101763a1318"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yousef-aman/filament-modal-repeater/zipball/9ce545dd296690d88fe9f10f4770d101763a1318",
+                "reference": "9ce545dd296690d88fe9f10f4770d101763a1318",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^5.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.9"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^10.0",
+                "pestphp/pest": "^4.0",
+                "pestphp/pest-plugin-livewire": "^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "YousefAman\\ModalRepeater\\ModalRepeaterServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "YousefAman\\ModalRepeater\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Yousef Aman"
+                }
+            ],
+            "description": "A Filament v5 form component that displays repeater items in a table with modal-based editing.",
+            "keywords": [
+                "Repeater",
+                "filament",
+                "form",
+                "laravel",
+                "modal",
+                "table"
+            ],
+            "support": {
+                "issues": "https://github.com/yousef-aman/filament-modal-repeater/issues",
+                "source": "https://github.com/yousef-aman/filament-modal-repeater/tree/v1.0.0"
+            },
+            "time": "2026-04-13T09:20:30+00:00"
         },
         {
             "name": "zvizvi/user-fields",
@@ -21953,16 +22179,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "12.5.4",
+            "version": "12.5.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "e70f9f8870918ec31991d69133385964834f9c5a"
+                "reference": "a25bde1f8f83849f441ef5713c6466e470872a71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/e70f9f8870918ec31991d69133385964834f9c5a",
-                "reference": "e70f9f8870918ec31991d69133385964834f9c5a",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/a25bde1f8f83849f441ef5713c6466e470872a71",
+                "reference": "a25bde1f8f83849f441ef5713c6466e470872a71",
                 "shasum": ""
             },
             "require": {
@@ -22017,7 +22243,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
                 "security": "https://github.com/sebastianbergmann/php-code-coverage/security/policy",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/12.5.4"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/12.5.5"
             },
             "funding": [
                 {
@@ -22037,7 +22263,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-04-12T05:05:15+00:00"
+            "time": "2026-04-13T04:53:32+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -23464,7 +23690,9 @@
         "mmes-design/filament-file-manager": 20,
         "muazzam/slick-scrollbar": 20,
         "mwguerra/web-terminal": 20,
+        "osamaatef/filament-drilldown-sidebar": 20,
         "usamamuneerchaudhary/filament-notifier": 20,
+        "wallacemartinss/filament-icon-picker": 20,
         "wallacemartinss/filament-whatsapp-conector": 20,
         "wezlo/filament-workspace-tabs": 20
     },

@@ -20,7 +20,7 @@ use UnitEnum;
 
 class SwedenPostnummerResource extends Resource
 {
-    protected static ?int $navigationSort = 3;
+     protected static ?int $navigationSort = -97;
 
     protected static ?string $navigationLabel = 'Postnummer';
 
@@ -79,11 +79,11 @@ class SwedenPostnummerResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return __('DB Postnummer');
+        return __('# Postnummer @GEO');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('DB Postnummer');
+        return __('# Postnummer @GEO');
     }
 }

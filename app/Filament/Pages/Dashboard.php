@@ -17,12 +17,14 @@ use UnitEnum;
 use Wallacemartinss\FilamentIconPicker\Enums\BootstrapIcons;
 use Wallacemartinss\FilamentIconPicker\Enums\Remix;
 use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
+use Illuminate\Contracts\Support\Htmlable;
+
 
 class Dashboard extends BaseDashboard
 {
     // protected static ?string $navigationLabel = 'Dashboard';
 
-    protected static ?string $title = ' ';
+     protected static ?string $title = '# Dashboard';
 
     protected static ?string $slug = 'dashboard';
 
@@ -36,6 +38,11 @@ class Dashboard extends BaseDashboard
 
     protected static bool $shouldRegisterNavigation = false;
 
+
+     protected string $view = 'filament.app.dashboard';
+
+     protected static string|UnitEnum|null $navigationGroup = 'Dashboard';
+
     // protected static UnitEnum|string|null $navigationGroup = 'Dashboard';
 
     //   protected static UnitEnum|string|null $navigationGroup = 'Kartor MAPS';
@@ -43,9 +50,17 @@ class Dashboard extends BaseDashboard
     //   protected static string|BackedEnum|null $navigationIcon = Remix::RiCalendarScheduleLine;
     //   protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiCalendarScheduleFill;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Dashboard';
-
     protected static ?int $navigationSort = -20;
+
+    public function getHeading(): string|Htmlable|null
+    {
+        return null;
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Dashboard');
+    }
 
     public static function getNavigationLabel(): string
     {
@@ -84,7 +99,7 @@ class Dashboard extends BaseDashboard
         return [
             // AccountInfoStackWidget::class,
             // WorldClockWidget::class,
-
+            OverlookWidget::class
             //    AccountWidget::class,
             //    FilamentInfosWidget::class,
             //    StatsOverviewWidget::class,
@@ -111,7 +126,7 @@ class Dashboard extends BaseDashboard
     {
         return [
             //    MapPinsTableWidget::class,
-            OverlookWidget::class,
+
         ];
     }
 

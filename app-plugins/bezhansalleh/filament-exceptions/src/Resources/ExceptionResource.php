@@ -20,6 +20,8 @@ class ExceptionResource extends Resource
 {
     protected static bool $isScopedToTenant = false;
 
+      protected static ?int $navigationSort = -70;
+
     public static function getCluster(): ?string
     {
         return FilamentExceptions::getCluster();
@@ -42,7 +44,7 @@ class ExceptionResource extends Resource
 
     public static function getPluralModelLabel(): string
     {
-        return static::getPlugin()->getPluralModelLabel();
+        return '⊞ Exceptions @SYS';
     }
 
     public static function getActiveNavigationIcon(): ?string

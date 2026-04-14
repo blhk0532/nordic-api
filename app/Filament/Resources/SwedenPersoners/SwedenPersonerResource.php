@@ -23,7 +23,7 @@ class SwedenPersonerResource extends Resource
 {
     protected static ?string $model = SwedenPersoner::class;
 
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = -100;
 
     protected static ?string $navigationLabel = 'Personer';
 
@@ -37,12 +37,12 @@ class SwedenPersonerResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return __('DB Persons');
+        return __('# Personer @GEO');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('DB Persons');
+        return __('# Personer @GEO');
     }
 
     public static function getNavigationBadgeColor(): string|array|null

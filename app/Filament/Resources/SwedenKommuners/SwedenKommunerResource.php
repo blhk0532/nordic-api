@@ -25,7 +25,7 @@ class SwedenKommunerResource extends Resource
 
     protected static bool $isScopedToTenant = false;
 
-    protected static ?int $navigationSort = 1;
+     protected static ?int $navigationSort = -95;
 
     protected static ?string $navigationLabel = 'Kommuner';
 
@@ -97,11 +97,11 @@ class SwedenKommunerResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return __('DB Kommuner');
+        return __('# Kommuner @GEO');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('DB Kommuner');
+        return __('# Kommuner @GEO');
     }
 }

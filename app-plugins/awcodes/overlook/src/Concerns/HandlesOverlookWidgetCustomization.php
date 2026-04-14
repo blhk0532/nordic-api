@@ -19,4 +19,8 @@ trait HandlesOverlookWidgetCustomization
     {
         return $title ?? ucfirst(self::getPluralModelLabel());
     }
+    public static function getOverlookWidgetSort(): string
+    {
+        return $sort ?? self::getNavigationSort();
+    }
 }

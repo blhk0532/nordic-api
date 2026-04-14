@@ -27,13 +27,13 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::User;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
 
     protected static bool $isGloballySearchable = true;
 
     protected static ?string $navigationLabel = 'Users TEAM';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = -80;
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -51,12 +51,12 @@ class UserResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return __('Users');
+        return __('★ Users @APP');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('Users');
+        return __('★ Users @APP');
     }
 
     public static function getNavigationLabel(): string
@@ -73,6 +73,11 @@ class UserResource extends Resource
     {
         return (string) Cache::rememberForever('users_count', fn () => User::query()->count());
     }
+
+public static function getNavigationSort(): ?int
+{
+    return 0;
+}
 
     public static function form(Schema $schema): Schema
     {

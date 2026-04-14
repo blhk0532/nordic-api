@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Awcodes\Overlook\Widgets;
 
+use Closure;
 use Awcodes\Overlook\Contracts\CustomizeOverlookWidget;
 use Awcodes\Overlook\OverlookPlugin;
 use Exception;
 use Filament\Widgets\Widget;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Number;
+
 
 class OverlookWidget extends Widget
 {
@@ -93,22 +95,28 @@ class OverlookWidget extends Widget
             }
 
             if ($res->canViewAny()) {
+                try {
+                    $url = $res->getUrl('index');
+                } catch (\Exception) {
+                    $url = null;
+                }
+
                 return [
                     'name' => $title,
+                    'sort' => $res->getNavigationSort() ?? 0,
                     'raw_count' => $this->formatRawcount($rawCount),
                     'count' => $this->convertCount($rawCount),
+                    'sort_count' => (int) $rawCount,
                     'icon' => $customIcon ?: $res->getNavigationIcon(),
-                    'url' => $res->getUrl('index'),
+                    'url' => $url,
                 ];
             }
 
             return null;
         })
             ->filter()
-            ->when($plugin->shouldSortAlphabetical(), fn ($collection) => $collection->sortBy('raw_count', 'DESC')->sortBy('count'))
-             ->when(! $plugin->shouldSortAlphabetical(), fn ($collection) => $collection->sortBy('raw_count', SORT_REGULAR, true))
-             ->where(fn (?array $collection) => $collection['count'] >= 1)
-             ->sortBy('count', SORT_NUMERIC, 'DESC')
+            ->filter(fn (array $item): bool => $item['sort_count'] >= 1)
+            ->sortBy([['sort', 'asc'], ['sort', 'desc']])
             ->values()
             ->toArray();
     }
@@ -118,5 +126,18 @@ class OverlookWidget extends Widget
         $plugin = OverlookPlugin::get();
 
         return mb_strlen($number) >= 4 && $plugin->shouldAbbreviateCount() && $plugin->shouldShowTooltips();
+    }
+
+        public function getIncludes(): array
+    {
+        return $this->evaluate($this->includes) ?? [];
+    }
+
+
+    public function includes(array|Closure $resources): static
+    {
+        $this->includes = $resources;
+
+        return $this;
     }
 }

@@ -22,7 +22,11 @@ class TerminalLogResource extends Resource
 
     protected static bool $isScopedToTenant = false;
 
+    protected static ?int $navigationSort = -60;
+
     protected static ?string $slug = 'terminal-logs';
+
+    protected static bool $isDiscovered = false;
 
     public static function getModelLabel(): string
     {
@@ -31,7 +35,7 @@ class TerminalLogResource extends Resource
 
     public static function getPluralModelLabel(): string
     {
-        return __('web-terminal::terminal.resource.plural_label');
+        return __('⊞ Shell Logs @SYS');
     }
 
     public static function getNavigationIcon(): string|BackedEnum|null
@@ -54,8 +58,7 @@ class TerminalLogResource extends Resource
 
     public static function getNavigationSort(): ?int
     {
-        return WebTerminalPlugin::current()?->getTerminalLogsNavigationSort()
-            ?? 101;
+        return -60;
     }
 
     public static function infolist(Schema $schema): Schema

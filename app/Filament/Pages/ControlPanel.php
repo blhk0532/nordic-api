@@ -6,6 +6,8 @@ namespace App\Filament\Pages;
 
 use App\Filament\Resources\Merinfos\MerinfoResource;
 use App\Filament\Resources\People\PersonResource;
+use App\Filament\Resources\HittaDatas\HittaDataResource;
+use App\Filament\Resources\RatsitDatas\RatsitDataResource;
 use App\Filament\Resources\SwedenAdressers\SwedenAdresserResource;
 use App\Filament\Resources\SwedenGators\SwedenGatorResource;
 use App\Filament\Resources\SwedenKommuners\SwedenKommunerResource;
@@ -31,11 +33,11 @@ class ControlPanel extends CardsPage
 
     //   protected static string|UnitEnum|null $navigationGroup = 'Dashboards';
 
-    protected static ?string $title = '#';
+    protected static ?string $title = 'Dashboard';
 
     protected static ?string $slug = 'controlpanel';
 
-    protected static ?string $navigationLabel = 'DASHBOARD';
+    protected static ?string $navigationLabel = 'ⵌ Dashboard';
 
     protected static ?int $navigationSort = -1;
 
@@ -72,8 +74,8 @@ public function getHeading(): string|Htmlable|null
                 ->collapsible()
                 ->schema([
                     CardItem::make(SwedenKommunerResource::class)
-                        ->description('Sverige Kommuner DB')
-                        ->icon('heroicon-o-map')
+                        ->description('@GEO Sverige')
+                        ->icon('heroicon-o-map-pin')
                         ->label('Kommuner')
                         ->color('primary')
                         ->badge(fn () => (string) SwedenKommunerResource::getModel()::count())
@@ -83,8 +85,8 @@ public function getHeading(): string|Htmlable|null
                         ->badgeColor('success')
                         ->columnSpan('1/3'),
                     CardItem::make(SwedenPostorterResource::class)
-                        ->description('Sverige Postorter DB')
-                        ->icon('heroicon-o-envelope')
+                        ->description('@GEO Sverige')
+                        ->icon('heroicon-o-map-pin')
                         ->label('Postorter')
                         ->color('primary')
                         ->badge(fn () => (string) SwedenPostorterResource::getModel()::count())
@@ -94,7 +96,7 @@ public function getHeading(): string|Htmlable|null
                         ->badgeColor('success')
                         ->columnSpan('1/3'),
                     CardItem::make(SwedenPostnummerResource::class)
-                        ->description('Sverige Postnummer DB')
+                        ->description('@GEO Sverige')
                         ->icon('heroicon-o-map-pin')
                         ->label('Postnummer')
                         ->color('primary')
@@ -105,8 +107,8 @@ public function getHeading(): string|Htmlable|null
                         ->badgeColor('success')
                         ->columnSpan('1/3'),
                     CardItem::make(SwedenGatorResource::class)
-                        ->description('Sverige Gator DB')
-                        ->icon('heroicon-o-home-modern')
+                        ->description('@GEO Sverige')
+                        ->icon('heroicon-o-map-pin')
                         ->label('Gator')
                         ->color('primary')
                         ->badge(fn () => (string) SwedenGatorResource::getModel()::count())
@@ -116,8 +118,8 @@ public function getHeading(): string|Htmlable|null
                         ->badgeColor('success')
                         ->columnSpan('1/3'),
                     CardItem::make(SwedenAdresserResource::class)
-                        ->description('Sverige Adresser DB')
-                        ->icon('heroicon-o-home')
+                        ->description('@GEO Sverige')
+                        ->icon('heroicon-o-map-pin')
                         ->label('Adresser')
                         ->color('primary')
                         ->badge(fn () => (string) SwedenAdresserResource::getModel()::count())
@@ -127,8 +129,8 @@ public function getHeading(): string|Htmlable|null
                         ->badgeColor('success')
                         ->columnSpan('1/3'),
                     CardItem::make(SwedenPersonerResource::class)
-                        ->description('Sverige Personer DB')
-                        ->icon('heroicon-o-users')
+                        ->description('@GEO Sverige')
+                        ->icon('heroicon-o-map-pin')
                         ->label('Personer')
                         ->color('primary')
                         ->badge(fn () => (string) SwedenPersonerResource::getModel()::count())
@@ -142,20 +144,42 @@ public function getHeading(): string|Htmlable|null
                 ->icon('heroicon-o-map-pin')
                 ->collapsible()
                 ->schema([
+                    CardItem::make(HittaDataResource::class)
+                        ->description('@DB Hitta Data')
+                        ->icon('heroicon-o-user-plus')
+                        ->label('Hitta.se')
+                        ->color('success')
+                        ->badge(fn () => (string) HittaDataResource::getModel()::count())
+                        ->extraAttributes([
+                            'style' => 'background:#18181b;padding-top:2rem;padding-bottom:2rem;',
+                        ])
+                        ->badgeColor('primary')
+                        ->columnSpan('1/4'),
+                    CardItem::make(RatsitDataResource::class)
+                        ->description('@DB Ratsit Data')
+                        ->icon('heroicon-o-user-plus')
+                        ->label('Ratsit.se')
+                        ->color('success')
+                        ->badge(fn () => (string) RatsitDataResource::getModel()::count())
+                        ->extraAttributes([
+                            'style' => 'background:#18181b;padding-top:2rem;padding-bottom:2rem;',
+                        ])
+                        ->badgeColor('primary')
+                        ->columnSpan('1/4'),
                     CardItem::make(MerinfoResource::class)
-                        ->description('Sverige Merinfo DB')
-                        ->icon('heroicon-o-users')
-                        ->label('Merinfo')
+                        ->description('@DB Merinfo Data')
+                        ->icon('heroicon-o-user-plus')
+                        ->label('Merinfo.se')
                         ->color('success')
                         ->badge(fn () => (string) MerinfoResource::getModel()::count())
                         ->extraAttributes([
                             'style' => 'background:#18181b;padding-top:2rem;padding-bottom:2rem;',
                         ])
                         ->badgeColor('primary')
-                        ->columnSpan('1/2'),
+                        ->columnSpan('1/4'),
                     CardItem::make(PersonResource::class)
-                        ->description('Sverige Personer DB')
-                        ->icon('heroicon-o-users')
+                        ->description('@DB Person Data')
+                        ->icon('heroicon-o-user-plus')
                         ->label('Personer')
                         ->color('success')
                         ->badge(fn () => (string) PersonResource::getModel()::count())
@@ -163,9 +187,9 @@ public function getHeading(): string|Htmlable|null
                             'style' => 'background:#18181b;padding-top:2rem;padding-bottom:2rem;',
                         ])
                         ->badgeColor('primary')
-                        ->columnSpan('1/2'),
+                        ->columnSpan('1/4'),
                 ])
-                ->columns(2),
+                ->columns(4),
         ];
     }
 

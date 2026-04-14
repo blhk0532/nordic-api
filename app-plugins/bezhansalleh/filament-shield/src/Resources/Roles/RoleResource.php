@@ -41,6 +41,8 @@ class RoleResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
+    protected static ?int $navigationSort = -78;
+
     #[Override]
     public static function form(Schema $schema): Schema
     {
@@ -166,5 +168,10 @@ class RoleResource extends Resource
     public static function getEssentialsPlugin(): ?FilamentShieldPlugin
     {
         return FilamentShieldPlugin::get();
+    }
+
+        public static function getPluralModelLabel(): string
+    {
+        return __('★ Roles @APP');
     }
 }

@@ -35,19 +35,21 @@ class MerinfoDataResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Merinfo data';
 
-    protected static ?int $navigationSort = 5;
+    protected static bool $isDiscovered = false;
+
+     protected static ?int $navigationSort = -98;
 
     // place resource under Databaser cluster
     protected static ?string $slug = 'databaser/merinfo-data';
 
     public static function getModelLabel(): string
     {
-        return __('DB Merinfo');
+        return __('⛁ Merinfos @DB');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('DB Merinfo');
+        return __('⛁ Merinfos @DB');
     }
 
     public static function getNavigationBadge(): ?string

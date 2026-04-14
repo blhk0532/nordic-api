@@ -34,6 +34,11 @@ class NotificationTemplateResource extends Resource
         return NotificationTemplateTable::configure($table);
     }
 
+        public static function getPluralModelLabel(): string
+    {
+        return __('⩍ Notify Templates @APP');
+    }
+
     public static function getPages(): array
     {
         return [

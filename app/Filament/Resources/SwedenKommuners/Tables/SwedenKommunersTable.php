@@ -195,11 +195,11 @@ class SwedenKommunersTable
                         })
                         ->deselectRecordsAfterCompletion(),
                     BulkAction::make('updatePersonerCount')
-                        ->label('Update DB Persons Count')
+                        ->label('Update Persons DB  Count')
                         ->icon('heroicon-o-calculator')
                         ->color('gray')
                         ->requiresConfirmation()
-                        ->modalHeading('Update DB Persons Count')
+                        ->modalHeading('Update Persons DB  Count')
                         ->modalDescription('This counts actual records in sweden_personer for each selected kommun and saves the total to persons_count.')
                         ->action(function (Collection $records): void {
                             $updated = 0;
@@ -216,7 +216,7 @@ class SwedenKommunersTable
 
                             Notification::make()
                                 ->success()
-                                ->title('DB Persons Count Updated')
+                                ->title('Persons DB Count Updated')
                                 ->body("Updated {$updated} kommun(s).")
                                 ->send();
                         })

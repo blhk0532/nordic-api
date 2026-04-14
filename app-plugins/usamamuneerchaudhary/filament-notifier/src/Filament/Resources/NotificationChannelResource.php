@@ -42,4 +42,9 @@ class NotificationChannelResource extends Resource
             'edit' => EditNotificationChannel::route('/{record}/edit'),
         ];
     }
+
+        public static function getPluralModelLabel(): string
+    {
+        return __('⩍ Notifications @APP');
+    }
 }

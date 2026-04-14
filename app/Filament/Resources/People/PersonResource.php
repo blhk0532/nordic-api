@@ -29,16 +29,20 @@ class PersonResource extends Resource
 
     protected static UnitEnum|string|null $navigationGroup = 'Database NR';
 
+      protected static ?int $navigationSort = -55;
+
     protected static ?string $navigationLabel = 'Persons NEW';
+
+    protected static ?string $title = '⛁ Personer @DB';
 
     public static function getModelLabel(): string
     {
-        return __('DB Personer');
+        return __('⛁ Personer @DB');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('DB Personer');
+        return __('⛁ Personer @DB');
     }
 
     public static function form(Schema $schema): Schema

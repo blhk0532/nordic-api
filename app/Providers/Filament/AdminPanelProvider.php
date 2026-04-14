@@ -58,6 +58,20 @@ use Usamamuneerchaudhary\Notifier\FilamentNotifierPlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 use Wezlo\FilamentGridList\FilamentGridListPlugin;
 use Wezlo\FilamentWorkspaceTabs\WorkspaceTabsPlugin;
+use App\Filament\Resources\Merinfos\MerinfoResource;
+use App\Models\SwedenPostnummer;
+use OsamaAtef\DrilldownSidebar\DrilldownSidebarPlugin;
+use App\Filament\Resources\People\PersonResource;
+use App\Filament\Resources\RatsitDatas\RatsitDataResource;
+use App\Filament\Resources\HittaDatas\HittaDataResource;
+use App\Filament\Resources\SwedenPostnummers\SwedenPostnummerResource;
+use App\Filament\Resources\SwedenPostorters\SwedenPostorterResource;
+use App\Filament\Resources\SwedenAdressers\SwedenAdresserResource;
+use App\Filament\Resources\SwedenGators\SwedenGatorResource;
+use App\Filament\Resources\SwedenPersoners\SwedenPersonerResource;
+use App\Filament\Resources\SwedenKommuners\SwedenKommunerResource;
+use YousefAman\ModalRepeater\ModalRepeaterPlugin;
+use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -79,8 +93,8 @@ class AdminPanelProvider extends PanelProvider
             ->maxContentWidth(Width::Full)
             ->spaUrlExceptions(['tel:*', 'mailto:*'])
             ->sidebarCollapsibleOnDesktop(true)
-            ->favicon(fn () => asset('favicon.svg'))
-            ->brandLogo(fn () => view('filament.app.logo'))
+            ->favicon(fn() => asset('favicon.svg'))
+            ->brandLogo(fn() => view('filament.app.logo'))
             ->brandLogoHeight('48px')
             ->sidebarWidth('21rem')
             ->viteTheme('resources/css/filament/admin/theme.css')
@@ -99,10 +113,10 @@ class AdminPanelProvider extends PanelProvider
                 CurrentTenant::class,
             ], isPersistent: true)
             ->tenantMenuItems([
-                'register' => fn (Action $action) => $action->label('Register team')
+                'register' => fn(Action $action) => $action->label('Register team')
                     ->icon('heroicon-m-user-plus')
-                    ->visible(fn () => ! filament()->getTenant()),
-                'profile' => fn (Action $action) => $action->label('Team Settings')
+                    ->visible(fn() => ! filament()->getTenant()),
+                'profile' => fn(Action $action) => $action->label('Team Settings')
                     ->sort(-1),
             ])
             ->navigationGroups([
@@ -115,7 +129,7 @@ class AdminPanelProvider extends PanelProvider
                     ->icon('heroicon-c-squares-plus'),
                 NavigationGroup::make('Dialers TELE')
                     ->collapsed(true)
-                    ->icon('heroicon-o-phone-arrow-up-right'),
+                    ->icon(Tabler::PhoneRinging),
                 NavigationGroup::make('Sverige GEO')
                     ->collapsed(true)
                     ->icon('heroicon-o-map-pin'),
@@ -147,8 +161,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->userMenuItems([
                 'profile' => Action::make('profile')
-                    ->label(fn () => Str::ucfirst(Auth::user()->name))
-                    ->url(fn () => EditProfilePage::getUrl())
+                    ->label(fn() => Str::ucfirst(Auth::user()->name))
+                    ->url(fn() => EditProfilePage::getUrl())
                     ->icon('heroicon-o-user-circle'),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
@@ -178,13 +192,13 @@ class AdminPanelProvider extends PanelProvider
             ->plugin(
                 AuthDesignerPlugin::make()
                     ->defaults(
-                        fn ($config) => $config
+                        fn($config) => $config
                             ->media(asset('assets/pattaya.webp'))
                             ->mediaPosition(MediaPosition::Cover)
                             ->blur(1)
                     )
                     ->login(
-                        fn ($config) => $config
+                        fn($config) => $config
                             ->media(asset('video/beach-at-sunset.1920x1080.mp4'))
                             ->usingPage(AuthLogin::class)
                     )
@@ -192,6 +206,13 @@ class AdminPanelProvider extends PanelProvider
                     ->emailVerification()
                     ->themeToggle()
             )
+            ->plugins([
+                DrilldownSidebarPlugin::make()
+                    ->drilledGroups([
+                        'Database NR',
+                        'Sverige GEO',
+                    ]),
+            ])
             ->plugins([
                 MobileBottomNav::make()
                     ->items([
@@ -206,7 +227,7 @@ class AdminPanelProvider extends PanelProvider
                             ->badge(5, 'danger'),
                         MobileBottomNavItem::make('Profile')
                             ->icon('heroicon-o-user')
-                            ->url(fn () => EditProfilePage::getUrl()),
+                            ->url(fn() => EditProfilePage::getUrl()),
                     ]),
 
             ])
@@ -236,7 +257,7 @@ class AdminPanelProvider extends PanelProvider
                     ->registration(true)
                     // (optional) Enable/disable registration of new (socialite-) users using a callback.
                     // In this example, a login flow can only continue if there exists a user (Authenticatable) already.
-                    ->registration(fn (string $provider, SocialiteUserContract $oauthUser, ?Authenticatable $user) => (bool) $user)
+                    ->registration(fn(string $provider, SocialiteUserContract $oauthUser, ?Authenticatable $user) => (bool) $user)
                     // (optional) Change the associated model class.
                     ->userModelClass(User::class)
                     // (optional) Change the associated socialite class (see below).
@@ -245,10 +266,10 @@ class AdminPanelProvider extends PanelProvider
             ->plugins(array_filter([
                 class_exists(FilamentGridListPlugin::class)
                     ? FilamentGridListPlugin::make()
-                        ->gridColumns(['default' => 1, 'sm' => 2, 'lg' => 3])
-                        ->gap(4)
-                        ->recordsPerPage(12)
-                        ->recordsPerPageOptions([12, 24, 48, 96])
+                    ->gridColumns(['default' => 1, 'sm' => 2, 'lg' => 3])
+                    ->gap(4)
+                    ->recordsPerPage(12)
+                    ->recordsPerPageOptions([12, 24, 48, 96])
                     : null,
             ]))
             ->plugins([
@@ -276,7 +297,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 OverlookPlugin::make()
-                    ->alphabetical(false)
+                    ->alphabetical()
                     ->sort(2)
                     ->columns([
                         'default' => 1,
@@ -285,6 +306,18 @@ class AdminPanelProvider extends PanelProvider
                         'lg' => 4,
                         'xl' => 5,
                         '2xl' => 6,
+                    ])
+                    ->includes([
+                        MerinfoResource::class,
+                        RatsitDataResource::class,
+                        HittaDataResource::class,
+                        PersonResource::class,
+                        SwedenPostnummerResource::class,
+                        SwedenPostorterResource::class,
+                        SwedenAdresserResource::class,
+                        SwedenGatorResource::class,
+                        SwedenPersonerResource::class,
+                        SwedenKommunerResource::class,
                     ])
                     ->excludes([
                         DynamicCollectionResource::class,

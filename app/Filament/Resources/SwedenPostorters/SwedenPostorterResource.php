@@ -27,7 +27,7 @@ class SwedenPostorterResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMapPin;
 
-    protected static ?int $navigationSort = 2;
+     protected static ?int $navigationSort = -96;
 
     protected static string|UnitEnum|null $navigationGroup = 'Sverige GEO';
 
@@ -62,12 +62,12 @@ class SwedenPostorterResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return __('DB Postorter');
+        return __('# Postorter @GEO');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('DB Postorter');
+        return __('# Postorter @GEO');
     }
 
     public static function getPages(): array

@@ -33,7 +33,7 @@ class RatsitDataResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Database NR';
 
-    protected static ?int $navigationSort = 9;
+    protected static ?int $navigationSort = -90;
 
     // place resource under Databaser cluster
     protected static ?string $slug = 'databaser/ratsit-data';
@@ -43,12 +43,12 @@ class RatsitDataResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return __('DB Ratsit');
+        return __('⛁ Ratsit @DB');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('DB Ratsit');
+        return __('⛁ Ratsit @DB');
     }
 
     public static function getNavigationBadge(): ?string
