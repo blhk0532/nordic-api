@@ -62,7 +62,7 @@ class WebTerminalPlugin implements Plugin
     // Shell Logs Resource Configuration
     // =========================================================================
 
-    protected bool $terminalLogsEnabled = true;
+    protected bool $terminalLogsEnabled = false;
 
     protected ?string $terminalLogsNavigationIcon = null;
 

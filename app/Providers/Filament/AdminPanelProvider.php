@@ -72,6 +72,9 @@ use App\Filament\Resources\SwedenPersoners\SwedenPersonerResource;
 use App\Filament\Resources\SwedenKommuners\SwedenKommunerResource;
 use YousefAman\ModalRepeater\ModalRepeaterPlugin;
 use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
+use Kirschbaum\FilamentDiffs\Infolists\Components\FileEntry;
+use Kirschbaum\FilamentDiffs\FilamentDiffsPlugin;
+use MWGuerra\WebTerminal\Filament\Resources\TerminalLogResource;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -126,22 +129,22 @@ class AdminPanelProvider extends PanelProvider
                     ->icon('heroicon-o-star'),
                 NavigationGroup::make('Dashboard')
                     ->collapsed(true)
-                    ->icon('heroicon-c-squares-plus'),
+                    ->icon('ri-dashboard-2-fill'),
                 NavigationGroup::make('Dialers TELE')
                     ->collapsed(true)
                     ->icon(Tabler::PhoneRinging),
                 NavigationGroup::make('Sverige GEO')
                     ->collapsed(true)
-                    ->icon('heroicon-o-map-pin'),
+                    ->icon('ri-map-pin-user-fill'),
                 NavigationGroup::make('Kartor MAPS')
                     ->collapsed(true)
                     ->icon('heroicon-o-map'),
                 NavigationGroup::make('Database PS')
                     ->collapsed(true)
-                    ->icon('heroicon-o-shield-check'),
+                    ->icon('ri-charging-pile-fill'),
                 NavigationGroup::make('Queue JOBS')
                     ->collapsed(true)
-                    ->icon('heroicon-o-clock'),
+                    ->icon('ri-charging-pile-line'),
                 NavigationGroup::make('Users TEAM')
                     ->collapsed(true)
                     ->icon('heroicon-o-user'),
@@ -189,6 +192,9 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
+                    ->plugins([
+            FilamentDiffsPlugin::make(),
+        ])
             ->plugin(
                 AuthDesignerPlugin::make()
                     ->defaults(
@@ -231,6 +237,7 @@ class AdminPanelProvider extends PanelProvider
                     ]),
 
             ])
+            ->plugin(ModalRepeaterPlugin::make())
             ->plugin(CommandRunnerPlugin::make())
             ->plugins([
                 FileManagerPlugin::make()
@@ -321,6 +328,7 @@ class AdminPanelProvider extends PanelProvider
                     ])
                     ->excludes([
                         DynamicCollectionResource::class,
+                        TerminalLogResource::class,
                     ]),
             ])
             ->plugins([
@@ -338,7 +346,7 @@ class AdminPanelProvider extends PanelProvider
                         label: 'Terminal',
                         sort: 100,
                         group: 'System LOGS',
-                    ),
+                    )
             ])
             ->plugins([
                 FilamentGeneralSettingsPlugin::make()
