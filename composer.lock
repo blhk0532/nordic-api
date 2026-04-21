@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "73da1bd48da488961bfa6cbc6ad36290",
+    "content-hash": "243bf4807093ed0b5e4b666857c6a0f8",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -91,6 +91,89 @@
                 "symlink": true,
                 "relative": true
             }
+        },
+        {
+            "name": "achyutn/filament-storage-monitor",
+            "version": "v1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/achyutkneupane/filament-storage-monitor.git",
+                "reference": "464804855dd3208e25b51f81b7b97b56b23b15bc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/achyutkneupane/filament-storage-monitor/zipball/464804855dd3208e25b51f81b7b97b56b23b15bc",
+                "reference": "464804855dd3208e25b51f81b7b97b56b23b15bc",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^4.0|^5.0",
+                "php": "^8.2|^8.3"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.9",
+                "laravel/pint": "^1.29",
+                "mockery/mockery": "^1.6",
+                "orchestra/testbench": "^10.0|^11.1",
+                "pestphp/pest": "^3.0|^4.5",
+                "phpstan/phpstan": "^2.1",
+                "rector/rector": "^2.4"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "AchyutN\\FilamentStorageMonitor\\Providers\\FilamentStorageMonitorProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "AchyutN\\FilamentStorageMonitor\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Achyut Neupane",
+                    "email": "achyutkneupane@gmail.com",
+                    "homepage": "https://achyut.com.np",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "A server storage monitoring widget for Filament.",
+            "keywords": [
+                "filament",
+                "laravel",
+                "storage",
+                "utility"
+            ],
+            "support": {
+                "issues": "https://github.com/achyutkneupane/filament-storage-monitor/issues",
+                "source": "https://github.com/achyutkneupane/filament-storage-monitor/tree/v1.2.0"
+            },
+            "funding": [
+                {
+                    "url": "https://www.buymeacoffee.com/achyutn",
+                    "type": "buy_me_a_coffee"
+                },
+                {
+                    "url": "https://buymemomo.com/achyut",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/achyutkneupane",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/Achyut",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2026-04-16T18:40:57+00:00"
         },
         {
             "name": "adultdate/filament-booking",

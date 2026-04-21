@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use AchyutN\FilamentLogViewer\FilamentLogViewer;
+use AchyutN\FilamentStorageMonitor\FilamentStorageMonitor;
 use Adultdate\FilamentBooking\FilamentBookingPlugin;
 use App\Filament\Pages\AuthLogin;
 use App\Filament\Pages\Tenancy\EditTeamProfile;
@@ -94,6 +95,7 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Orange,
             ])
             ->spa()
+            ->databaseNotificationsPolling('30s')
             ->maxContentWidth(Width::Full)
             ->spaUrlExceptions(['tel:*', 'mailto:*'])
             ->sidebarCollapsibleOnDesktop(true)
@@ -109,7 +111,6 @@ class AdminPanelProvider extends PanelProvider
             ->unsavedChangesAlerts()
             ->passwordReset()
             ->databaseNotifications()
-            ->databaseNotificationsPolling('30s')
             ->emailChangeVerification()
             ->spaUrlExceptions(['tel:*', 'mailto:*'])
             ->tenantMiddleware([
@@ -376,6 +377,13 @@ class AdminPanelProvider extends PanelProvider
                 ResizedColumnPlugin::make(),
                 FilamentLogViewer::make(),
                 UniverSheetPlugin::make(),
-            ]);
+            ])
+            ->plugin(
+                FilamentStorageMonitor::make()
+                    ->addDisk('/', label: 'Root Storage')
+                    ->addDisk('/var/www/html', label: 'App Storage')
+                    ->columnSpan('full')
+                    ->sort(-5),
+            );
     }
 }

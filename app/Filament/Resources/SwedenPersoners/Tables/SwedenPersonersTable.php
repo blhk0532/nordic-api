@@ -20,10 +20,12 @@ use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Support\Enums\Width;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\Summarizers\Count;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
+use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -36,52 +38,22 @@ class SwedenPersonersTable
     private static function toggleGroupAction(): Action
     {
         return Action::make('toggle-table-group')
-            ->label('Toggle Details')
+            ->label(' ')
             ->icon('heroicon-o-arrows-pointing-out')
             ->color('gray')
-            ->alpineClickHandler("
-                (() => {
-                    // Get all group header rows
-                    const headerRows = document.querySelectorAll('tr.fi-ta-group-header-row');
-                    if (headerRows.length === 0) return;
-
-                    // Track if any group is currently expanded (has visible content rows)
-                    let anyExpanded = false;
-                    const groupStates = [];
-
-                    headerRows.forEach(headerRow => {
-                        let hasVisibleContent = false;
-                        let current = headerRow.nextElementSibling;
-
-                        while (current && !current.classList.contains('fi-ta-group-header-row')) {
-                            if (current.classList.contains('fi-clickable')) {
-                                const style = window.getComputedStyle(current);
-                                if (style.display !== 'none') {
-                                    hasVisibleContent = true;
-                                    anyExpanded = true;
-                                }
-                            }
-                            current = current.nextElementSibling;
-                        }
-                        groupStates.push({ headerRow, hasVisibleContent });
-                    });
-
-                    // Toggle all groups
-                    groupStates.forEach(({ headerRow, hasVisibleContent }) => {
-                        let current = headerRow.nextElementSibling;
-                        while (current && !current.classList.contains('fi-ta-group-header-row')) {
-                            if (current.classList.contains('fi-clickable')) {
-                                if (anyExpanded) {
-                                    current.style.display = 'none';
-                                } else {
-                                    current.style.display = '';
-                                }
-                            }
-                            current = current.nextElementSibling;
-                        }
-                    });
-                })()
-            ");
+            ->action(function () {
+                // Toggling is handled client-side via JavaScript
+            })
+            ->alpineClickHandler(<<<'JS'
+                const btns = Array.from(document.querySelectorAll('button[aria-expanded]')).filter(b => b.closest('tr'));
+                if (!btns.length) return;
+                const allExp = btns.filter(b => b.getAttribute('aria-expanded') === 'true').length > btns.length / 2;
+                btns.forEach(b => {
+                    const isExp = b.getAttribute('aria-expanded') === 'true';
+                    if ((allExp && isExp) || (!allExp && !isExp)) b.click();
+                });
+            JS
+            );
     }
 
     private static function transferToRingaDataBulkAction(): Action
@@ -149,9 +121,15 @@ class SwedenPersonersTable
     {
         return $table
             ->groups([
-                'adress',
+                Group::make('adress')
+                    ->label('Address')
+                    ->collapsible(),
             ])
-            ->defaultGroup('adress')
+        //    ->defaultGroup('id')
+            ->summaries(
+                pageCondition: false,
+                allTableCondition: false
+            )
             ->headerActions([
             ])
             ->columns([
@@ -159,7 +137,8 @@ class SwedenPersonersTable
                     ->label('ID')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(),
+                    ->sortable()
+                    ->summarize(Count::make()->label('Persons')),
                 TextColumn::make('adress')
                     ->label('Adress')
                     ->searchable()

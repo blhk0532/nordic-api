@@ -11,6 +11,7 @@
     "require": {
         "php": "^8.4",
         "achyutn/filament-log-viewer": "@dev",
+        "achyutn/filament-storage-monitor": "^1.2",
         "adultdate/filament-booking": "@dev",
         "andreiio/blade-remix-icon": "^3.9",
         "andrewdwallo/filament-companies": "@dev",
@@ -193,7 +194,14 @@
                 "symlink": true
             }
         },
-            {
+        {
+            "type": "path",
+            "url": "app-plugins/rawand201/filament-connection-badge",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
             "type": "path",
             "url": "app-plugins/qalainau/filament-univer-sheet",
             "options": {

@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages;
 
-use App\Filament\Widgets\DatabaseBackupWidget;
+use AchyutN\FilamentStorageMonitor\Widgets\StorageMonitorWidget;
 use App\Filament\Widgets\ExternalAppWidget;
-use App\Filament\Widgets\GeoMapWidget;
-use App\Filament\Widgets\LocationMapPickerWidgetFull;
 use App\Filament\Widgets\MapPinsTableWidget;
 use App\Filament\Widgets\SwedenPersonersWidget;
 use Awcodes\Overlook\Widgets\OverlookWidget;
@@ -116,18 +114,16 @@ class Dashboard extends BaseDashboard
     public function getWidgets(): array
     {
         return [
-            SwedenPersonersWidget::class,
-            //  DatabaseBackupWidget::class,
-            //    LocationMapPickerWidgetFull::class,
-            // GeoMapWidget::class,
+            StorageMonitorWidget::class,
         ];
     }
 
     protected function getFooterWidgets(): array
     {
         return [
+            SwedenPersonersWidget::class,
             //    MapPinsTableWidget::class,
-            ExternalAppWidget::class,
+            // ExternalAppWidget::class,
         ];
     }
 
