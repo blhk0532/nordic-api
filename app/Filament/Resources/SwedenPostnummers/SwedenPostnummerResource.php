@@ -20,7 +20,7 @@ use UnitEnum;
 
 class SwedenPostnummerResource extends Resource
 {
-     protected static ?int $navigationSort = -97;
+    protected static ?int $navigationSort = -97;
 
     protected static ?string $navigationLabel = 'Postnummer';
 

@@ -14,11 +14,11 @@ class ListPeople extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-        //    CreateAction::make(),
+            //    CreateAction::make(),
         ];
     }
 
-        public function getHeading(): string|Htmlable|null
+    public function getHeading(): string|Htmlable|null
     {
         return null;
     }

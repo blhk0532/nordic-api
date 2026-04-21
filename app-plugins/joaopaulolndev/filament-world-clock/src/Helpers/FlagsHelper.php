@@ -19,7 +19,7 @@ class FlagsHelper
             if ($location && ! empty($location['country_code']) && $location['country_code'] !== '??') {
                 $code = strtolower($location['country_code']);
 
-                return asset('vendor/blade-flags/country-' . $code . '.svg');
+                return asset('vendor/blade-flags/country-'.$code.'.svg');
             }
         } catch (\Exception $e) {
             // Invalid timezone, fall through to placeholder

@@ -3,10 +3,10 @@
 namespace Shahkochaki\Ami\Commands;
 
 use Clue\React\Ami\Client;
-use jackkum\PHPPDU\Submit;
-use Illuminate\Support\Arr;
 use Clue\React\Ami\Protocol\Response;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Event;
+use jackkum\PHPPDU\Submit;
 
 class AmiSms extends AmiAbstract
 {
@@ -51,7 +51,7 @@ class AmiSms extends AmiAbstract
 
     public function sendPdu()
     {
-        $pdu = new Submit();
+        $pdu = new Submit;
         $pdu->setAddress($this->argument('number'));
         $pdu->setData($this->argument('message'));
         $promises = [];

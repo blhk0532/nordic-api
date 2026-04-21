@@ -115,4 +115,9 @@ class User extends Authenticatable implements FilamentUser, HasTenants
     {
         return $this->belongsToTeam($tenant);
     }
+
+    public function viewConnectionBadge(): bool
+    {
+        return true;
+    }
 }

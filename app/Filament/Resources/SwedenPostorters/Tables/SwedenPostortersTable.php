@@ -4,7 +4,7 @@ namespace App\Filament\Resources\SwedenPostorters\Tables;
 
 use App\Exports\SwedenPostorterExporter;
 use App\Models\SwedenPostorter;
-use EightyNine\ExcelImport\ExcelImportAction;
+use Waad\FilamentImportWizard\Actions\ImportWizardAction as ExcelImportAction;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;

@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
+use MmesDesign\FilamentFileManager\Livewire\FileManager;
 use MmesDesign\FilamentFileManager\Tests\Feature\Concerns\ResetsPermissions;
 use Tests\TestCase;
 
@@ -30,7 +31,7 @@ class RenameExtensionProtectionTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->mountAction('rename', arguments: ['path' => 'photo.jpg'])
             ->assertSchemaStateSet([
                 'newName' => 'photo.jpg',
@@ -44,7 +45,7 @@ class RenameExtensionProtectionTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->mountAction('rename', arguments: ['path' => 'docs/report.pdf'])
             ->assertSchemaStateSet([
                 'newName' => 'report.pdf',
@@ -58,7 +59,7 @@ class RenameExtensionProtectionTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->mountAction('rename', arguments: ['path' => 'my-folder'])
             ->assertSchemaStateSet([
                 'newName' => 'my-folder',

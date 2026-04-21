@@ -2,19 +2,16 @@
 
 namespace Shahkochaki\Ami;
 
-use React\Stream\Stream;
-use Clue\React\Ami\Client;
-use Illuminate\Support\Arr;
 use Clue\React\Ami\ActionSender;
-use React\EventLoop\LoopInterface;
-use React\Socket\Connector;
-use React\Promise\Promise;
+use Clue\React\Ami\Client;
 use Exception;
-use function React\Promise\resolve;
+use Illuminate\Support\Arr;
+use React\Promise\Promise;
+use React\Stream\Stream;
 
 /**
  * Enhanced AMI Connection Factory
- * 
+ *
  * Provides advanced connection management features including:
  * - Connection pooling
  * - Automatic reconnection
@@ -56,8 +53,7 @@ class EnhancedFactory extends Factory
     /**
      * Create client with enhanced features
      *
-     * @param array $options
-     * @return \React\Promise\Promise
+     * @return Promise
      */
     public function create(array $options = [])
     {
@@ -71,6 +67,7 @@ class EnhancedFactory extends Factory
                 $promise = new Promise(function ($resolve) use ($connection) {
                     $resolve($connection);
                 });
+
                 return $promise;
             } else {
                 unset($this->connections[$connectionKey]);
@@ -83,9 +80,8 @@ class EnhancedFactory extends Factory
     /**
      * Create a new connection
      *
-     * @param array $options
-     * @param string $connectionKey
-     * @return \React\Promise\Promise
+     * @param  string  $connectionKey
+     * @return Promise
      */
     protected function createNewConnection(array $options, $connectionKey)
     {
@@ -97,8 +93,8 @@ class EnhancedFactory extends Factory
 
         $promise = $this->connector
             ->create($options['host'], $options['port'])
-            ->then(function (Stream $stream) use ($options) {
-                $client = new Client($stream, new Parser());
+            ->then(function (Stream $stream) {
+                $client = new Client($stream, new Parser);
 
                 // Set up connection monitoring
                 $this->setupConnectionMonitoring($client);
@@ -106,7 +102,7 @@ class EnhancedFactory extends Factory
                 return $client;
             });
 
-        if (!is_null($options['username'])) {
+        if (! is_null($options['username'])) {
             $promise = $promise->then(function (Client $client) use ($options, $connectionKey) {
                 $sender = new ActionSender($client);
 
@@ -137,7 +133,6 @@ class EnhancedFactory extends Factory
     /**
      * Generate connection key for pooling
      *
-     * @param array $options
      * @return string
      */
     protected function getConnectionKey(array $options)
@@ -152,7 +147,6 @@ class EnhancedFactory extends Factory
     /**
      * Check if connection is healthy
      *
-     * @param Client $client
      * @return bool
      */
     protected function isConnectionHealthy(Client $client)
@@ -167,7 +161,6 @@ class EnhancedFactory extends Factory
     /**
      * Setup connection monitoring
      *
-     * @param Client $client
      * @return void
      */
     protected function setupConnectionMonitoring(Client $client)
@@ -184,16 +177,16 @@ class EnhancedFactory extends Factory
     /**
      * Setup heartbeat for connection
      *
-     * @param Client $client
-     * @param string $connectionKey
+     * @param  string  $connectionKey
      * @return void
      */
     protected function setupHeartbeat(Client $client, $connectionKey)
     {
         $this->loop->addPeriodicTimer($this->heartbeatInterval, function () use ($client, $connectionKey) {
-            if (!$this->isConnectionHealthy($client)) {
+            if (! $this->isConnectionHealthy($client)) {
                 unset($this->connections[$connectionKey]);
                 unset($this->configs[$connectionKey]);
+
                 return;
             }
 
@@ -209,7 +202,6 @@ class EnhancedFactory extends Factory
     /**
      * Remove connection from pool
      *
-     * @param Client $client
      * @return void
      */
     protected function removeFromPool(Client $client)
@@ -261,14 +253,14 @@ class EnhancedFactory extends Factory
     /**
      * Enable/disable connection pooling
      *
-     * @param bool $enable
+     * @param  bool  $enable
      * @return self
      */
     public function setPooling($enable)
     {
         $this->enablePooling = $enable;
 
-        if (!$enable) {
+        if (! $enable) {
             $this->closeAll();
         }
 
@@ -278,36 +270,39 @@ class EnhancedFactory extends Factory
     /**
      * Set maximum connections
      *
-     * @param int $max
+     * @param  int  $max
      * @return self
      */
     public function setMaxConnections($max)
     {
         $this->maxConnections = $max;
+
         return $this;
     }
 
     /**
      * Set connection timeout
      *
-     * @param int $timeout
+     * @param  int  $timeout
      * @return self
      */
     public function setConnectionTimeout($timeout)
     {
         $this->connectionTimeout = $timeout;
+
         return $this;
     }
 
     /**
      * Set heartbeat interval
      *
-     * @param int $interval
+     * @param  int  $interval
      * @return self
      */
     public function setHeartbeatInterval($interval)
     {
         $this->heartbeatInterval = $interval;
+
         return $this;
     }
 }

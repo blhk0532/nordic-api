@@ -74,10 +74,10 @@ class UserResource extends Resource
         return (string) Cache::rememberForever('users_count', fn () => User::query()->count());
     }
 
-public static function getNavigationSort(): ?int
-{
-    return 0;
-}
+    public static function getNavigationSort(): ?int
+    {
+        return 0;
+    }
 
     public static function form(Schema $schema): Schema
     {

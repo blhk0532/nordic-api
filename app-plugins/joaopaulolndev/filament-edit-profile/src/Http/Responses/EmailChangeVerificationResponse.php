@@ -10,7 +10,7 @@ use Livewire\Features\SupportRedirects\Redirector;
 
 class EmailChangeVerificationResponse implements Responsable
 {
-    public function toResponse($request): RedirectResponse | Redirector
+    public function toResponse($request): RedirectResponse|Redirector
     {
         return redirect()->intended(EditProfilePage::getUrl() ?? Filament::getUrl());
     }

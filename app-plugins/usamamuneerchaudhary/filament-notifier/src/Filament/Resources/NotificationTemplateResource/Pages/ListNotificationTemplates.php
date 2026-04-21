@@ -4,9 +4,8 @@ namespace Usamamuneerchaudhary\Notifier\Filament\Resources\NotificationTemplateR
 
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
-use Usamamuneerchaudhary\Notifier\Filament\Resources\NotificationTemplateResource;
 use Illuminate\Contracts\Support\Htmlable;
-
+use Usamamuneerchaudhary\Notifier\Filament\Resources\NotificationTemplateResource;
 
 class ListNotificationTemplates extends ListRecords
 {
@@ -15,12 +14,12 @@ class ListNotificationTemplates extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-         //   Actions\CreateAction::make(),
+            //   Actions\CreateAction::make(),
         ];
     }
 
     public function getHeading(): string|Htmlable|null
-{
-    return null;
-}
+    {
+        return null;
+    }
 }

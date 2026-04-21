@@ -7,6 +7,7 @@ namespace BezhanSalleh\FilamentShield\Resources\Roles\Pages;
 use BezhanSalleh\FilamentShield\Resources\Roles\RoleResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Contracts\Support\Htmlable;
 
 class ListRoles extends ListRecords
 {
@@ -15,11 +16,11 @@ class ListRoles extends ListRecords
     protected function getActions(): array
     {
         return [
-         //   CreateAction::make(),
+            //   CreateAction::make(),
         ];
     }
 
-            public function getHeading(): \Illuminate\Contracts\Support\Htmlable|string|null
+    public function getHeading(): Htmlable|string|null
     {
         return null;
     }

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace MWGuerra\WebTerminal\Filament\Resources\TerminalLogResource\Pages;
 
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Contracts\Support\Htmlable;
 use MWGuerra\WebTerminal\Filament\Resources\TerminalLogResource;
 use MWGuerra\WebTerminal\Filament\Resources\TerminalLogResource\Widgets\TerminalLogsStatsOverview;
-use Illuminate\Contracts\Support\Htmlable;
 
 class ListTerminalLogs extends ListRecords
 {
@@ -25,10 +25,8 @@ class ListTerminalLogs extends ListRecords
         ];
     }
 
-
-        public function getHeading(): string|Htmlable|null
+    public function getHeading(): string|Htmlable|null
     {
         return null;
     }
-
 }

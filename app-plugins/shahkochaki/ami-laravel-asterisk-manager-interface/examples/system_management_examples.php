@@ -2,14 +2,14 @@
 
 /**
  * مثال‌های استفاده از SystemManager برای مدیریت سرور Asterisk/Issabel
- * 
+ *
  * این فایل نحوه استفاده از توابع مختلف SystemManager را نشان می‌دهد
  */
 
 require_once 'vendor/autoload.php';
 
-use Shahkochaki\Ami\Services\SystemManager;
 use Shahkochaki\Ami\Facades\SystemManager as SystemManagerFacade;
+use Shahkochaki\Ami\Services\SystemManager;
 
 // ==============================================
 // مثال 1: استفاده مستقیم از Service
@@ -22,7 +22,7 @@ $systemManager = new SystemManager([
     'host' => 'localhost',
     'port' => 5038,
     'username' => 'admin',
-    'secret' => 'amp111'
+    'secret' => 'amp111',
 ]);
 
 // دریافت وضعیت سرور
@@ -44,12 +44,12 @@ echo "\n=== بارگیری مجدد تنظیمات ===\n";
 // بارگیری مجدد تنظیمات SIP
 echo "بارگیری مجدد تنظیمات SIP...\n";
 $result = $systemManager->reloadConfiguration('sip');
-echo "نتیجه: " . ($result ? "موفق" : "ناموفق") . "\n";
+echo 'نتیجه: '.($result ? 'موفق' : 'ناموفق')."\n";
 
 // بارگیری مجدد کل تنظیمات
 echo "بارگیری مجدد کل تنظیمات...\n";
 $result = $systemManager->reloadConfiguration();
-echo "نتیجه: " . ($result ? "موفق" : "ناموفق") . "\n";
+echo 'نتیجه: '.($result ? 'موفق' : 'ناموفق')."\n";
 
 // ==============================================
 // مثال 3: عملیات شرطی بر اساس وضعیت سیستم
@@ -128,12 +128,12 @@ try {
         'host' => 'wrong-host',
         'port' => 9999,
         'username' => 'wrong-user',
-        'secret' => 'wrong-pass'
+        'secret' => 'wrong-pass',
     ]);
 
     $status = $wrongSystemManager->getServerStatus();
 } catch (Exception $e) {
-    echo "خطا در اتصال: " . $e->getMessage() . "\n";
+    echo 'خطا در اتصال: '.$e->getMessage()."\n";
     echo "لطفاً تنظیمات اتصال را بررسی کنید.\n";
 }
 
@@ -152,6 +152,7 @@ function checkSystemHealth($systemManager)
 
     if (isset($status['error'])) {
         echo "❌ خطا در دریافت وضعیت سیستم\n";
+
         return false;
     }
 
@@ -162,20 +163,21 @@ function checkSystemHealth($systemManager)
 
     // بررسی منابع
     $resources = $systemManager->getSystemResources();
-    if (!isset($resources['error'])) {
+    if (! isset($resources['error'])) {
         echo "💾 وضعیت منابع: سالم\n";
     } else {
         echo "⚠️ مشکل در دریافت اطلاعات منابع\n";
     }
 
     echo "✅ سیستم در وضعیت مطلوب است\n";
+
     return true;
 }
 
 // اجرای چک سلامت
 $isHealthy = checkSystemHealth($systemManager);
 
-if (!$isHealthy) {
+if (! $isHealthy) {
     echo "سیستم نیاز به توجه دارد.\n";
 }
 

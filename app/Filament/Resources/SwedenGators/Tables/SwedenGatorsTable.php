@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\SwedenGators\Tables;
 
 use App\Exports\SwedenGatorExporter;
-use EightyNine\ExcelImport\ExcelImportAction;
+use Waad\FilamentImportWizard\Actions\ImportWizardAction as ExcelImportAction;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;

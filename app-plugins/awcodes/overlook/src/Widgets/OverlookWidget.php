@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Awcodes\Overlook\Widgets;
 
-use Closure;
 use Awcodes\Overlook\Contracts\CustomizeOverlookWidget;
 use Awcodes\Overlook\OverlookPlugin;
+use Closure;
 use Exception;
 use Filament\Widgets\Widget;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Number;
-
 
 class OverlookWidget extends Widget
 {
@@ -97,7 +96,7 @@ class OverlookWidget extends Widget
             if ($res->canViewAny()) {
                 try {
                     $url = $res->getUrl('index');
-                } catch (\Exception) {
+                } catch (Exception) {
                     $url = null;
                 }
 
@@ -128,11 +127,10 @@ class OverlookWidget extends Widget
         return mb_strlen($number) >= 4 && $plugin->shouldAbbreviateCount() && $plugin->shouldShowTooltips();
     }
 
-        public function getIncludes(): array
+    public function getIncludes(): array
     {
         return $this->evaluate($this->includes) ?? [];
     }
-
 
     public function includes(array|Closure $resources): static
     {

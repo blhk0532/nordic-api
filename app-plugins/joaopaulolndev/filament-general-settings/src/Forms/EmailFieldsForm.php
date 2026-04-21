@@ -28,11 +28,11 @@ class EmailFieldsForm
                             ->options(function () {
                                 $options = [];
                                 foreach (EmailProviderEnum::options() as $key => $value) {
-                                    if (file_exists(public_path('vendor/filament-general-settings/images/email-providers/' . strtolower($value) . '.svg'))) {
-                                        $options[strtolower($value)] = '<div style="display: flex; gap: 0.5rem;">' .
-                                            ' <img src="' . asset('vendor/filament-general-settings/images/email-providers/' . strtolower($value) . '.svg') . '"  style="height: 1.25rem;">'
-                                            . $value
-                                            . '</div>';
+                                    if (file_exists(public_path('vendor/filament-general-settings/images/email-providers/'.strtolower($value).'.svg'))) {
+                                        $options[strtolower($value)] = '<div style="display: flex; gap: 0.5rem;">'.
+                                            ' <img src="'.asset('vendor/filament-general-settings/images/email-providers/'.strtolower($value).'.svg').'"  style="height: 1.25rem;">'
+                                            .$value
+                                            .'</div>';
                                     } else {
                                         $options[strtolower($value)] = $value;
                                     }

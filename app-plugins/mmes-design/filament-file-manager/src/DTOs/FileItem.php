@@ -8,6 +8,7 @@ use MmesDesign\FilamentFileManager\Enums\FileCategory;
 readonly class FileItem
 {
     use HasFormattedDate;
+
     public const THUMBNAILABLE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'avif', 'bmp'];
 
     public function __construct(

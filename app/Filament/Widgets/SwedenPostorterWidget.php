@@ -8,7 +8,7 @@ use App\Enums\AuthRole;
 use App\Exports\SwedenPostorterExporter;
 use App\Filament\Resources\SwedenPostorters\SwedenPostorterResource;
 use App\Models\SwedenPostorter;
-use EightyNine\ExcelImport\ExcelImportAction;
+use Waad\FilamentImportWizard\Actions\ImportWizardAction as ExcelImportAction;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;

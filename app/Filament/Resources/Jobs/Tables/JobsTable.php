@@ -6,8 +6,11 @@ namespace App\Filament\Resources\Jobs\Tables;
 
 use App\Filament\Resources\Jobs\JobResource;
 use App\Models\Job;
+use Exception;
+use Filament\Actions\Action;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
@@ -17,12 +20,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Exception;
-use Filament\Actions\Action;
-use Filament\Actions\CreateAction;
-use Filament\Resources\Pages\ListRecords;
 use Illuminate\Support\Facades\DB;
-
 
 class JobsTable
 {
@@ -158,142 +156,142 @@ class JobsTable
                                 ->send();
                         }),
                 ]),
-                 Action::make('startWorker')
-                ->label('Start')
-                ->icon('heroicon-o-play')
-                ->color('success')
-                ->requiresConfirmation()
-                ->modalHeading('Start Queue Worker')
-                ->modalDescription('This will start a background queue worker to process jobs from the postnummer-updates queue.')
-                ->modalSubmitActionLabel('Start Worker')
-                ->action(function () {
-                    try {
-                        // Check if exec function is available
-                        if (! function_exists('exec')) {
-                            throw new Exception('exec() function is disabled on this server');
-                        }
+                Action::make('startWorker')
+                    ->label('Start')
+                    ->icon('heroicon-o-play')
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->modalHeading('Start Queue Worker')
+                    ->modalDescription('This will start a background queue worker to process jobs from the postnummer-updates queue.')
+                    ->modalSubmitActionLabel('Start Worker')
+                    ->action(function () {
+                        try {
+                            // Check if exec function is available
+                            if (! function_exists('exec')) {
+                                throw new Exception('exec() function is disabled on this server');
+                            }
 
-                        // Check if worker is already running
-                        $output = [];
-                        @exec('ps aux | grep "queue:work" | grep -v grep', $output);
+                            // Check if worker is already running
+                            $output = [];
+                            @exec('ps aux | grep "queue:work" | grep -v grep', $output);
 
-                        if (count($output) > 0) {
+                            if (count($output) > 0) {
+                                Notification::make()
+                                    ->warning()
+                                    ->title('Queue Worker Already Running')
+                                    ->body('A queue worker is already active.')
+                                    ->send();
+
+                                return;
+                            }
+
+                            // Start queue worker in background
+                            if (! function_exists('shell_exec')) {
+                                throw new Exception('shell_exec() function is disabled on this server');
+                            }
+
+                            $command = 'cd '.base_path().' && nohup php artisan queue:work --queue=postnummer-updates --tries=3 --timeout=300 > /dev/null 2>&1 & echo $!';
+                            $pid = @shell_exec($command);
+
+                            if ($pid) {
+                                Notification::make()
+                                    ->success()
+                                    ->title('Queue Worker Started')
+                                    ->body("Queue worker started with PID: {$pid}")
+                                    ->send();
+                            } else {
+                                throw new Exception('Failed to start queue worker');
+                            }
+                        } catch (Exception $e) {
                             Notification::make()
-                                ->warning()
-                                ->title('Queue Worker Already Running')
-                                ->body('A queue worker is already active.')
+                                ->danger()
+                                ->title('Failed to Start Worker')
+                                ->body($e->getMessage())
                                 ->send();
-
-                            return;
                         }
+                    }),
 
-                        // Start queue worker in background
-                        if (! function_exists('shell_exec')) {
-                            throw new Exception('shell_exec() function is disabled on this server');
-                        }
+                Action::make('stopWorker')
+                    ->label('Stop')
+                    ->icon('heroicon-o-stop')
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->modalHeading('Stop Queue Worker')
+                    ->modalDescription('This will stop all running queue workers. Jobs in progress will be interrupted.')
+                    ->modalSubmitActionLabel('Stop Worker')
+                    ->action(function () {
+                        try {
+                            // Check if exec function is available
+                            if (! function_exists('exec')) {
+                                throw new Exception('exec() function is disabled on this server');
+                            }
 
-                        $command = 'cd '.base_path().' && nohup php artisan queue:work --queue=postnummer-updates --tries=3 --timeout=300 > /dev/null 2>&1 & echo $!';
-                        $pid = @shell_exec($command);
+                            // Find and kill queue worker processes
+                            $output = [];
+                            @exec('ps aux | grep "queue:work" | grep -v grep | awk \'\'{print $2}\'\' ', $output);
 
-                        if ($pid) {
+                            if (empty($output)) {
+                                Notification::make()
+                                    ->warning()
+                                    ->title('No Queue Workers Running')
+                                    ->body('There are no active queue workers to stop.')
+                                    ->send();
+
+                                return;
+                            }
+
+                            foreach ($output as $pid) {
+                                @exec("kill {$pid}");
+                            }
+
                             Notification::make()
                                 ->success()
-                                ->title('Queue Worker Started')
-                                ->body("Queue worker started with PID: {$pid}")
+                                ->title('Queue Worker Stopped')
+                                ->body('All queue workers have been stopped.')
                                 ->send();
-                        } else {
-                            throw new Exception('Failed to start queue worker');
-                        }
-                    } catch (Exception $e) {
-                        Notification::make()
-                            ->danger()
-                            ->title('Failed to Start Worker')
-                            ->body($e->getMessage())
-                            ->send();
-                    }
-                }),
-
-            Action::make('stopWorker')
-                ->label('Stop')
-                ->icon('heroicon-o-stop')
-                ->color('danger')
-                ->requiresConfirmation()
-                ->modalHeading('Stop Queue Worker')
-                ->modalDescription('This will stop all running queue workers. Jobs in progress will be interrupted.')
-                ->modalSubmitActionLabel('Stop Worker')
-                ->action(function () {
-                    try {
-                        // Check if exec function is available
-                        if (! function_exists('exec')) {
-                            throw new Exception('exec() function is disabled on this server');
-                        }
-
-                        // Find and kill queue worker processes
-                        $output = [];
-                        @exec('ps aux | grep "queue:work" | grep -v grep | awk \'\'{print $2}\'\' ', $output);
-
-                        if (empty($output)) {
+                        } catch (Exception $e) {
                             Notification::make()
-                                ->warning()
-                                ->title('No Queue Workers Running')
-                                ->body('There are no active queue workers to stop.')
+                                ->danger()
+                                ->title('Failed to Stop Worker')
+                                ->body($e->getMessage())
                                 ->send();
-
-                            return;
                         }
+                    }),
 
-                        foreach ($output as $pid) {
-                            @exec("kill {$pid}");
+                Action::make('clearFailedJobs')
+                    ->label('Clear')
+                    ->icon('heroicon-o-trash')
+                    ->color('warning')
+                    ->requiresConfirmation()
+                    ->modalHeading('Clear Failed Jobs')
+                    ->modalDescription('This will delete all failed jobs from the database. This action cannot be undone.')
+                    ->modalSubmitActionLabel('Clear Failed Jobs')
+                    ->action(function () {
+                        try {
+                            $count = DB::table('failed_jobs')->count();
+                            DB::table('failed_jobs')->truncate();
+
+                            Notification::make()
+                                ->success()
+                                ->title('Failed Jobs Cleared')
+                                ->body("Cleared {$count} failed job(s).")
+                                ->send();
+                        } catch (Exception $e) {
+                            Notification::make()
+                                ->danger()
+                                ->title('Failed to Clear Jobs')
+                                ->body($e->getMessage())
+                                ->send();
                         }
+                    }),
 
-                        Notification::make()
-                            ->success()
-                            ->title('Queue Worker Stopped')
-                            ->body('All queue workers have been stopped.')
-                            ->send();
-                    } catch (Exception $e) {
-                        Notification::make()
-                            ->danger()
-                            ->title('Failed to Stop Worker')
-                            ->body($e->getMessage())
-                            ->send();
-                    }
-                }),
+                CreateAction::make(),
 
-            Action::make('clearFailedJobs')
-                ->label('Clear')
-                ->icon('heroicon-o-trash')
-                ->color('warning')
-                ->requiresConfirmation()
-                ->modalHeading('Clear Failed Jobs')
-                ->modalDescription('This will delete all failed jobs from the database. This action cannot be undone.')
-                ->modalSubmitActionLabel('Clear Failed Jobs')
-                ->action(function () {
-                    try {
-                        $count = DB::table('failed_jobs')->count();
-                        DB::table('failed_jobs')->truncate();
-
-                        Notification::make()
-                            ->success()
-                            ->title('Failed Jobs Cleared')
-                            ->body("Cleared {$count} failed job(s).")
-                            ->send();
-                    } catch (Exception $e) {
-                        Notification::make()
-                            ->danger()
-                            ->title('Failed to Clear Jobs')
-                            ->body($e->getMessage())
-                            ->send();
-                    }
-                }),
-
-            CreateAction::make(),
-
-            Action::make('Job Batches')
-                ->label('Job Batches')
-                ->icon('heroicon-o-bolt-slash')
-                ->color('lightning')
-                ->action(function () {}),
+                Action::make('Job Batches')
+                    ->label('Job Batches')
+                    ->icon('heroicon-o-bolt-slash')
+                    ->color('lightning')
+                    ->action(function () {}),
 
             ]);
     }

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Facade;
 
 /**
  * SystemManager Facade
- * 
+ *
  * @method static mixed shutdownServer(bool $graceful = true, string $reason = 'System maintenance')
  * @method static mixed restartServer(bool $graceful = true, string $reason = 'System maintenance')
  * @method static mixed reloadConfiguration(string|null $module = null)
@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static array getSystemResources()
  * @method static self setConnectionOptions(array $options)
  * @method static array getConnectionOptions()
- * 
+ *
  * @see \Shahkochaki\Ami\Services\SystemManager
  */
 class SystemManager extends Facade

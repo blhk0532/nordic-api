@@ -61,7 +61,7 @@ class CustomFieldsForm extends BaseProfileForm
             ->statePath('data');
     }
 
-    private static function createField(string $fieldKey, array | Closure $field): ?Component
+    private static function createField(string $fieldKey, array|Closure $field): ?Component
     {
         switch ($field['type']) {
             case 'text':

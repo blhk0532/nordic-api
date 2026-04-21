@@ -32,7 +32,7 @@ class InsertFileAction
             ->modalContent(fn (RichEditor $component): View => view(
                 'filament-file-manager::rich-editor.file-picker-modal',
                 [
-                    'fieldId' => 'rich-editor-fm-' . $component->getKey(),
+                    'fieldId' => 'rich-editor-fm-'.$component->getKey(),
                     'multiple' => $multiple,
                     'disk' => $disk,
                     'acceptedCategories' => $acceptedCategories,

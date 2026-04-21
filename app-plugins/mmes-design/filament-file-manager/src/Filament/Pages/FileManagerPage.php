@@ -52,48 +52,47 @@ class FileManagerPage extends Page
     protected function getHeaderActions(): array
     {
         return [
-        //Action::make('checkForUpdates')
-        //    ->label(__('filament-file-manager::file-manager.actions.check_updates'))
-        //    ->icon('heroicon-o-arrow-path')
-        //    ->color('gray')
-        //    ->action(function (): void {
-        //        $currentVersion = $this->getInstalledVersion();
+            // Action::make('checkForUpdates')
+            //    ->label(__('filament-file-manager::file-manager.actions.check_updates'))
+            //    ->icon('heroicon-o-arrow-path')
+            //    ->color('gray')
+            //    ->action(function (): void {
+            //        $currentVersion = $this->getInstalledVersion();
 
-        //        try {
-        //            $response = Http::timeout(10)
-        //                ->get('https://repo.packagist.org/p2/mmes-design/filament-file-manager.json');
+            //        try {
+            //            $response = Http::timeout(10)
+            //                ->get('https://repo.packagist.org/p2/mmes-design/filament-file-manager.json');
 
-        //            $latestVersion = $response->json('packages.mmes-design/filament-file-manager.0.version');
+            //            $latestVersion = $response->json('packages.mmes-design/filament-file-manager.0.version');
 
-        //            $current = ltrim($currentVersion, 'v');
-        //            $latest = ltrim($latestVersion, 'v');
+            //            $current = ltrim($currentVersion, 'v');
+            //            $latest = ltrim($latestVersion, 'v');
 
-        //            if (version_compare($current, $latest, '>=')) {
-        //                Notification::make()
-        //                    ->success()
-        //                    ->title(__('filament-file-manager::file-manager.actions.up_to_date_title'))
-        //                    ->body(__('filament-file-manager::file-manager.actions.up_to_date_body', ['current' => $currentVersion]))
-        //                    ->send();
-        //            } else {
-        //                Notification::make()
-        //                    ->warning()
-        //                    ->title(__('filament-file-manager::file-manager.actions.update_available_title'))
-        //                    ->body(__('filament-file-manager::file-manager.actions.update_available_body', ['latest' => $latestVersion, 'current' => $currentVersion]))
-        //                    ->send();
-        //            }
-        //        } catch (\Throwable) {
-        //            Notification::make()
-        //                ->danger()
-        //                ->title(__('filament-file-manager::file-manager.actions.update_check_failed_title'))
-        //                ->body(__('filament-file-manager::file-manager.actions.update_check_failed_body'))
-        //                ->send();
-        //        }
-        //    }),
+            //            if (version_compare($current, $latest, '>=')) {
+            //                Notification::make()
+            //                    ->success()
+            //                    ->title(__('filament-file-manager::file-manager.actions.up_to_date_title'))
+            //                    ->body(__('filament-file-manager::file-manager.actions.up_to_date_body', ['current' => $currentVersion]))
+            //                    ->send();
+            //            } else {
+            //                Notification::make()
+            //                    ->warning()
+            //                    ->title(__('filament-file-manager::file-manager.actions.update_available_title'))
+            //                    ->body(__('filament-file-manager::file-manager.actions.update_available_body', ['latest' => $latestVersion, 'current' => $currentVersion]))
+            //                    ->send();
+            //            }
+            //        } catch (\Throwable) {
+            //            Notification::make()
+            //                ->danger()
+            //                ->title(__('filament-file-manager::file-manager.actions.update_check_failed_title'))
+            //                ->body(__('filament-file-manager::file-manager.actions.update_check_failed_body'))
+            //                ->send();
+            //        }
+            //    }),
         ];
     }
 
-
-        public function getHeading(): string|Htmlable|null
+    public function getHeading(): string|Htmlable|null
     {
         return null;
     }

@@ -4,13 +4,9 @@ declare(strict_types=1);
 
 namespace BinaryBuilds\FilamentFailedJobs\Resources\FailedJobs\Pages;
 
-use BinaryBuilds\FilamentFailedJobs\Models\FailedJob;
 use BinaryBuilds\FilamentFailedJobs\Resources\FailedJobs\FailedJobResource;
-use Filament\Actions\Action;
-use Filament\Forms\Components\Radio;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\Pages\ListRecords;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Contracts\Support\Htmlable;
 
 class ListFailedJobs extends ListRecords
 {
@@ -23,7 +19,7 @@ class ListFailedJobs extends ListRecords
         ];
     }
 
-        public function getHeading(): \Illuminate\Contracts\Support\Htmlable|string|null
+    public function getHeading(): Htmlable|string|null
     {
         return null;
     }

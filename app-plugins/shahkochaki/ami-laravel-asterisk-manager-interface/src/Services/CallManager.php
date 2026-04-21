@@ -3,11 +3,10 @@
 namespace Shahkochaki\Ami\Services;
 
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Collection;
 
 /**
  * Call Management Service
- * 
+ *
  * Provides high-level call management functionality
  */
 class CallManager
@@ -19,8 +18,6 @@ class CallManager
 
     /**
      * Constructor
-     *
-     * @param array $connectionOptions
      */
     public function __construct(array $connectionOptions = [])
     {
@@ -30,11 +27,10 @@ class CallManager
     /**
      * Initiate a call
      *
-     * @param string $from
-     * @param string $to
-     * @param string $context
-     * @param int $priority
-     * @param array $variables
+     * @param  string  $from
+     * @param  string  $to
+     * @param  string  $context
+     * @param  int  $priority
      * @return mixed
      */
     public function makeCall($from, $to, $context = 'default', $priority = 1, array $variables = [])
@@ -43,14 +39,14 @@ class CallManager
             'Channel' => $this->formatChannel($from),
             'Context' => $context,
             'Exten' => $to,
-            'Priority' => (string)$priority,
+            'Priority' => (string) $priority,
             'CallerID' => $from,
             'Timeout' => '30000', // 30 seconds
         ];
 
         // Add custom variables
         foreach ($variables as $key => $value) {
-            $arguments["Variable"] = "{$key}={$value}";
+            $arguments['Variable'] = "{$key}={$value}";
         }
 
         return $this->executeAction('Originate', $arguments);
@@ -59,24 +55,24 @@ class CallManager
     /**
      * Hangup a call
      *
-     * @param string $channel
-     * @param string $cause
+     * @param  string  $channel
+     * @param  string  $cause
      * @return mixed
      */
     public function hangupCall($channel, $cause = 'Normal Clearing')
     {
         return $this->executeAction('Hangup', [
             'Channel' => $channel,
-            'Cause' => $cause
+            'Cause' => $cause,
         ]);
     }
 
     /**
      * Transfer a call
      *
-     * @param string $channel
-     * @param string $extension
-     * @param string $context
+     * @param  string  $channel
+     * @param  string  $extension
+     * @param  string  $context
      * @return mixed
      */
     public function transferCall($channel, $extension, $context = 'default')
@@ -85,31 +81,31 @@ class CallManager
             'Channel' => $channel,
             'Context' => $context,
             'Exten' => $extension,
-            'Priority' => '1'
+            'Priority' => '1',
         ]);
     }
 
     /**
      * Park a call
      *
-     * @param string $channel
-     * @param string $parkingLot
+     * @param  string  $channel
+     * @param  string  $parkingLot
      * @return mixed
      */
     public function parkCall($channel, $parkingLot = 'default')
     {
         return $this->executeAction('Park', [
             'Channel' => $channel,
-            'ParkingLot' => $parkingLot
+            'ParkingLot' => $parkingLot,
         ]);
     }
 
     /**
      * Bridge two channels
      *
-     * @param string $channel1
-     * @param string $channel2
-     * @param bool $tone
+     * @param  string  $channel1
+     * @param  string  $channel2
+     * @param  bool  $tone
      * @return mixed
      */
     public function bridgeChannels($channel1, $channel2, $tone = true)
@@ -117,14 +113,14 @@ class CallManager
         return $this->executeAction('Bridge', [
             'Channel1' => $channel1,
             'Channel2' => $channel2,
-            'Tone' => $tone ? 'yes' : 'no'
+            'Tone' => $tone ? 'yes' : 'no',
         ]);
     }
 
     /**
      * Get channel status
      *
-     * @param string|null $channel
+     * @param  string|null  $channel
      * @return mixed
      */
     public function getChannelStatus($channel = null)
@@ -150,9 +146,9 @@ class CallManager
     /**
      * Send DTMF to channel
      *
-     * @param string $channel
-     * @param string $digit
-     * @param int $duration
+     * @param  string  $channel
+     * @param  string  $digit
+     * @param  int  $duration
      * @return mixed
      */
     public function sendDtmf($channel, $digit, $duration = 250)
@@ -160,17 +156,17 @@ class CallManager
         return $this->executeAction('PlayDTMF', [
             'Channel' => $channel,
             'Digit' => $digit,
-            'Duration' => (string)$duration
+            'Duration' => (string) $duration,
         ]);
     }
 
     /**
      * Monitor a channel
      *
-     * @param string $channel
-     * @param string $file
-     * @param string $format
-     * @param bool $mix
+     * @param  string  $channel
+     * @param  string  $file
+     * @param  string  $format
+     * @param  bool  $mix
      * @return mixed
      */
     public function monitorChannel($channel, $file, $format = 'wav', $mix = true)
@@ -179,27 +175,27 @@ class CallManager
             'Channel' => $channel,
             'File' => $file,
             'Format' => $format,
-            'Mix' => $mix ? 'true' : 'false'
+            'Mix' => $mix ? 'true' : 'false',
         ]);
     }
 
     /**
      * Stop monitoring a channel
      *
-     * @param string $channel
+     * @param  string  $channel
      * @return mixed
      */
     public function stopMonitor($channel)
     {
         return $this->executeAction('StopMonitor', [
-            'Channel' => $channel
+            'Channel' => $channel,
         ]);
     }
 
     /**
      * Format channel string
      *
-     * @param string $channel
+     * @param  string  $channel
      * @return string
      */
     protected function formatChannel($channel)
@@ -216,8 +212,7 @@ class CallManager
     /**
      * Execute AMI action
      *
-     * @param string $action
-     * @param array $arguments
+     * @param  string  $action
      * @return mixed
      */
     protected function executeAction($action, array $arguments = [])
@@ -226,7 +221,7 @@ class CallManager
             'action' => $action,
         ], $this->connectionOptions);
 
-        if (!empty($arguments)) {
+        if (! empty($arguments)) {
             $command['--arguments'] = $arguments;
         }
 
@@ -236,12 +231,12 @@ class CallManager
     /**
      * Set connection options
      *
-     * @param array $options
      * @return self
      */
     public function setConnectionOptions(array $options)
     {
         $this->connectionOptions = $options;
+
         return $this;
     }
 

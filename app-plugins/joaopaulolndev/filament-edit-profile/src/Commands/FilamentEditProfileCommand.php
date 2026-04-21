@@ -57,7 +57,7 @@ class FilamentEditProfileCommand extends Command
 
         $this->copyStubToApp('EditForm', $path, [
             'class' => $componentClass,
-            'namespace' => 'App\\Livewire' . ($componentNamespace !== '' ? "\\{$componentNamespace}" : ''),
+            'namespace' => 'App\\Livewire'.($componentNamespace !== '' ? "\\{$componentNamespace}" : ''),
             'view' => $view,
         ]);
 

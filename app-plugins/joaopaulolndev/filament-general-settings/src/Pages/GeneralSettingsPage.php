@@ -240,7 +240,7 @@ class GeneralSettingsPage extends Page
             return;
         }
 
-        $this->successNotification(__('filament-general-settings::default.test_email_success') . $email);
+        $this->successNotification(__('filament-general-settings::default.test_email_success').$email);
     }
 
     private function successNotification(string $title): void
@@ -253,7 +253,7 @@ class GeneralSettingsPage extends Page
 
     private function errorNotification(string $title, string $body): void
     {
-        Log::error('[EMAIL] ' . $body);
+        Log::error('[EMAIL] '.$body);
 
         Notification::make()
             ->title($title)

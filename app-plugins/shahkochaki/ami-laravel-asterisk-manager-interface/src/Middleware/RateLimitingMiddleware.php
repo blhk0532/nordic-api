@@ -25,8 +25,8 @@ class RateLimitingMiddleware
     /**
      * Constructor
      *
-     * @param int $maxRequestsPerMinute
-     * @param bool $enabled
+     * @param  int  $maxRequestsPerMinute
+     * @param  bool  $enabled
      */
     public function __construct($maxRequestsPerMinute = 60, $enabled = true)
     {
@@ -37,19 +37,19 @@ class RateLimitingMiddleware
     /**
      * Check if request is allowed
      *
-     * @param string $identifier
+     * @param  string  $identifier
      * @return bool
      */
     public function isAllowed($identifier = 'default')
     {
-        if (!$this->enabled) {
+        if (! $this->enabled) {
             return true;
         }
 
         $currentMinute = floor(time() / 60);
-        $key = $identifier . '_' . $currentMinute;
+        $key = $identifier.'_'.$currentMinute;
 
-        if (!isset(static::$counters[$key])) {
+        if (! isset(static::$counters[$key])) {
             static::$counters[$key] = 0;
         }
 
@@ -64,13 +64,13 @@ class RateLimitingMiddleware
     /**
      * Get current request count
      *
-     * @param string $identifier
+     * @param  string  $identifier
      * @return int
      */
     public function getCurrentCount($identifier = 'default')
     {
         $currentMinute = floor(time() / 60);
-        $key = $identifier . '_' . $currentMinute;
+        $key = $identifier.'_'.$currentMinute;
 
         return static::$counters[$key] ?? 0;
     }
@@ -78,7 +78,7 @@ class RateLimitingMiddleware
     /**
      * Get remaining requests
      *
-     * @param string $identifier
+     * @param  string  $identifier
      * @return int
      */
     public function getRemainingRequests($identifier = 'default')
@@ -89,13 +89,13 @@ class RateLimitingMiddleware
     /**
      * Reset counter for identifier
      *
-     * @param string $identifier
+     * @param  string  $identifier
      * @return void
      */
     public function reset($identifier = 'default')
     {
         $currentMinute = floor(time() / 60);
-        $key = $identifier . '_' . $currentMinute;
+        $key = $identifier.'_'.$currentMinute;
 
         unset(static::$counters[$key]);
     }
@@ -123,24 +123,26 @@ class RateLimitingMiddleware
     /**
      * Set maximum requests per minute
      *
-     * @param int $max
+     * @param  int  $max
      * @return self
      */
     public function setMaxRequestsPerMinute($max)
     {
         $this->maxRequestsPerMinute = $max;
+
         return $this;
     }
 
     /**
      * Enable/disable rate limiting
      *
-     * @param bool $enabled
+     * @param  bool  $enabled
      * @return self
      */
     public function setEnabled($enabled)
     {
         $this->enabled = $enabled;
+
         return $this;
     }
 

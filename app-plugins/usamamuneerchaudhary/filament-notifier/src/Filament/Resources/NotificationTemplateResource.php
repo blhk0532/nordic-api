@@ -20,7 +20,7 @@ class NotificationTemplateResource extends Resource
 
     protected static string|null|\UnitEnum $navigationGroup = 'Notifications';
 
-     protected static bool $isScopedToTenant = false;
+    protected static bool $isScopedToTenant = false;
 
     protected static ?int $navigationSort = 4;
 
@@ -34,9 +34,9 @@ class NotificationTemplateResource extends Resource
         return NotificationTemplateTable::configure($table);
     }
 
-        public static function getPluralModelLabel(): string
+    public static function getPluralModelLabel(): string
     {
-        return __('⩍ Notify Templates @APP');
+        return __('Notify Templates');
     }
 
     public static function getPages(): array

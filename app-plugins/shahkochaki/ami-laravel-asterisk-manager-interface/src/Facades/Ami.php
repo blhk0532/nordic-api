@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Facade;
 
 /**
  * AMI Facade
- * 
+ *
  * @method static mixed action(string $action, array $arguments = [])
  * @method static mixed makeCall(string $from, string $to, string $context = 'default')
  * @method static mixed hangupCall(string $channel)

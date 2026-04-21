@@ -2,20 +2,16 @@
 
 namespace Shahkochaki\Ami\Tests;
 
-use Shahkochaki\Ami\Parser;
-use React\Stream\Stream;
 use Clue\React\Ami\Client;
 use React\EventLoop\LoopInterface;
 use React\Promise\FulfilledPromise;
+use React\Promise\Promise;
 use React\SocketClient\ConnectorInterface;
+use React\Stream\Stream;
+use Shahkochaki\Ami\Parser;
 
 class Factory extends \Shahkochaki\Ami\Factory
 {
-    /**
-     * @param \React\EventLoop\LoopInterface         $loop
-     * @param \React\SocketClient\ConnectorInterface $connector
-     * @param \React\Stream\Stream                   $stream
-     */
     public function __construct(LoopInterface $loop, ConnectorInterface $connector, Stream $stream)
     {
         parent::__construct($loop, $connector);
@@ -25,12 +21,11 @@ class Factory extends \Shahkochaki\Ami\Factory
     /**
      * Create client.
      *
-     * @param array $options
      *
-     * @return \React\Promise\Promise
+     * @return Promise
      */
     public function create(array $options = [])
     {
-        return new FulfilledPromise(new Client($this->stream, new Parser()));
+        return new FulfilledPromise(new Client($this->stream, new Parser));
     }
 }

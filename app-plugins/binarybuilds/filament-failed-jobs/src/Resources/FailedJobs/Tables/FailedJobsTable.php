@@ -10,22 +10,20 @@ use BinaryBuilds\FilamentFailedJobs\Actions\RetryJobAction;
 use BinaryBuilds\FilamentFailedJobs\Actions\RetryJobsBulkAction;
 use BinaryBuilds\FilamentFailedJobs\FilamentFailedJobsPlugin;
 use BinaryBuilds\FilamentFailedJobs\Models\FailedJob;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Str;
-use BinaryBuilds\FilamentFailedJobs\Resources\FailedJobs\FailedJobResource;
-use Filament\Actions\Action;
-use Filament\Forms\Components\Radio;
-use Filament\Forms\Components\TextInput;
-use Filament\Resources\Pages\ListRecords;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Str;
 
 class FailedJobsTable
 {
@@ -61,52 +59,52 @@ class FailedJobsTable
                     RetryJobsBulkAction::make(),
                     DeleteJobsBulkAction::make(),
                 ]),
-                  Action::make(__('Retry Jobs'))
-                ->requiresConfirmation()
-                ->schema(function () {
+                Action::make(__('Retry Jobs'))
+                    ->requiresConfirmation()
+                    ->schema(function () {
 
-                    $queues = FailedJob::query()
-                        ->select('queue')
-                        ->distinct()
-                        ->pluck('queue')
-                        ->toArray();
+                        $queues = FailedJob::query()
+                            ->select('queue')
+                            ->distinct()
+                            ->pluck('queue')
+                            ->toArray();
 
-                    $options = [
-                        'all' => 'All Queues',
-                    ];
+                        $options = [
+                            'all' => 'All Queues',
+                        ];
 
-                    $descriptions = [
-                        'all' => 'Retry all Jobs',
-                    ];
+                        $descriptions = [
+                            'all' => 'Retry all Jobs',
+                        ];
 
-                    foreach ($queues as $queue) {
-                        $options[$queue] = $queue;
-                        $descriptions[$queue] = 'Retry jobs from '.$queue.' queue';
-                    }
+                        foreach ($queues as $queue) {
+                            $options[$queue] = $queue;
+                            $descriptions[$queue] = 'Retry jobs from '.$queue.' queue';
+                        }
 
-                    return [
-                        Radio::make('queue')
-                            ->options($options)
-                            ->descriptions($descriptions)
-                            ->default('all')
-                            ->required(),
-                    ];
-                })
-                ->successNotificationTitle(__('Jobs pushed to queue successfully!'))
-                ->action(fn (array $data) => Artisan::call('queue:retry '.$data['queue'])),
+                        return [
+                            Radio::make('queue')
+                                ->options($options)
+                                ->descriptions($descriptions)
+                                ->default('all')
+                                ->required(),
+                        ];
+                    })
+                    ->successNotificationTitle(__('Jobs pushed to queue successfully!'))
+                    ->action(fn (array $data) => Artisan::call('queue:retry '.$data['queue'])),
 
-            Action::make(__('Prune Jobs'))
-                ->requiresConfirmation()
-                ->schema([
-                    TextInput::make('hours')
-                        ->numeric()
-                        ->required()
-                        ->default(1)
-                        ->helperText(__("Prune's all failed jobs older than given hours.")),
-                ])
-                ->color('danger')
-                ->successNotificationTitle(__('Jobs pruned successfully!'))
-                ->action(fn (array $data) => Artisan::call('queue:prune-failed --hours='.$data['hours'])),
+                Action::make(__('Prune Jobs'))
+                    ->requiresConfirmation()
+                    ->schema([
+                        TextInput::make('hours')
+                            ->numeric()
+                            ->required()
+                            ->default(1)
+                            ->helperText(__("Prune's all failed jobs older than given hours.")),
+                    ])
+                    ->color('danger')
+                    ->successNotificationTitle(__('Jobs pruned successfully!'))
+                    ->action(fn (array $data) => Artisan::call('queue:prune-failed --hours='.$data['hours'])),
             ]);
     }
 

@@ -22,7 +22,7 @@ class Terminal extends Page implements HasSchemas
 
     protected string $view = 'web-terminal::filament.pages.terminal';
 
-      protected static ?int $navigationSort = -69;
+    protected static ?int $navigationSort = -69;
 
     protected static string $routePath = 'terminal';
 
@@ -38,10 +38,10 @@ class Terminal extends Page implements HasSchemas
         return __('⊞ Terminal @SYS');
     }
 
-public function getHeading(): string|Htmlable|null
-{
-    return null;
-}
+    public function getHeading(): string|Htmlable|null
+    {
+        return null;
+    }
 
     public static function getNavigationLabel(): string
     {

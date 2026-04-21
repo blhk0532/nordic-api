@@ -8,7 +8,7 @@ use App\Actions\TransferSwedenPersonerToRingaDataAction;
 use App\Actions\UpdateSwedenPersonerAction;
 use App\Exports\SwedenPersonerExporter;
 use App\Models\SwedenPersoner;
-use EightyNine\ExcelImport\ExcelImportAction;
+use Waad\FilamentImportWizard\Actions\ImportWizardAction as ExcelImportAction;
 use Filament\Actions\Action;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;

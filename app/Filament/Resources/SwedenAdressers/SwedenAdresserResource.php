@@ -29,7 +29,7 @@ class SwedenAdresserResource extends Resource
 
     protected static ?string $navigationLabel = 'Adresser';
 
-     protected static ?int $navigationSort = -99;
+    protected static ?int $navigationSort = -99;
 
     public static function getModelLabel(): string
     {

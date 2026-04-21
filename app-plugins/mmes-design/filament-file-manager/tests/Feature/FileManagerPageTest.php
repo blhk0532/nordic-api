@@ -6,6 +6,9 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
+use MmesDesign\FilamentFileManager\DTOs\FileItem;
+use MmesDesign\FilamentFileManager\Enums\FileCategory;
+use MmesDesign\FilamentFileManager\Livewire\FileManager;
 use MmesDesign\FilamentFileManager\Tests\Feature\Concerns\ResetsPermissions;
 use Tests\TestCase;
 
@@ -35,7 +38,7 @@ class FileManagerPageTest extends TestCase
 
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->assertSee(__('filament-file-manager::file-manager.misc.empty_folder'));
     }
 
@@ -46,7 +49,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->assertSee('test-file.txt');
     }
 
@@ -57,7 +60,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->assertSee('my-folder');
     }
 
@@ -68,7 +71,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->call('navigateTo', 'images')
             ->assertSee('photo.jpg')
             ->assertSet('currentPath', 'images');
@@ -82,7 +85,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->call('navigateTo', 'images')
             ->assertSet('currentPath', 'images')
             ->call('navigateUp')
@@ -95,7 +98,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->assertSet('viewMode', 'grid')
             ->call('setViewMode', 'list')
             ->assertSet('viewMode', 'list');
@@ -106,7 +109,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->assertSet('sortField', 'name')
             ->call('setSortField', 'size')
             ->assertSet('sortField', 'size')
@@ -118,7 +121,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->assertSet('sortDirection', 'asc')
             ->call('setSortField', 'name')
             ->assertSet('sortDirection', 'desc');
@@ -129,7 +132,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $component = Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class);
+        $component = Livewire::test(FileManager::class);
         $breadcrumbs = $component->instance()->getBreadcrumbs();
 
         $this->assertCount(1, $breadcrumbs);
@@ -143,7 +146,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $component = Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        $component = Livewire::test(FileManager::class)
             ->call('navigateTo', 'images/vacation');
 
         $breadcrumbs = $component->instance()->getBreadcrumbs();
@@ -161,7 +164,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->callAction('preview', arguments: ['path' => 'document.pdf'])
             ->assertOk();
     }
@@ -173,7 +176,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->mountAction('preview', arguments: ['path' => 'report.pdf'])
             ->assertSee('report.pdf');
     }
@@ -186,7 +189,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->call('generateMissingThumbnails');
 
         Storage::disk('public')->assertExists('.thumbnails/photo.jpg');
@@ -199,7 +202,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class);
+        Livewire::test(FileManager::class);
 
         Storage::disk('public')->assertMissing('.thumbnails/document.pdf');
     }
@@ -213,7 +216,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->assertSee(trans_choice('filament-file-manager::file-manager.labels.files_count', 2, ['count' => 2]))
             ->assertSee(trans_choice('filament-file-manager::file-manager.labels.folders_count', 1, ['count' => 1]));
     }
@@ -223,7 +226,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->assertActionExists('deleteSelected')
             ->assertActionExists('moveSelected');
     }
@@ -235,7 +238,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->set('selectedItems', ['file.txt'])
             ->assertSee(trans_choice('filament-file-manager::file-manager.toolbar.selected_count', 1, ['count' => 1]))
             ->assertSee(__('filament-file-manager::file-manager.toolbar.deselect'));
@@ -248,7 +251,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->assertSee(__('filament-file-manager::file-manager.misc.select_file_preview'))
             ->assertSee(__('filament-file-manager::file-manager.misc.info'));
     }
@@ -260,19 +263,19 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->assertSeeHtml('report.pdf');
     }
 
     public function test_file_item_to_preview_array(): void
     {
-        $item = new \MmesDesign\FilamentFileManager\DTOs\FileItem(
+        $item = new FileItem(
             name: 'photo.jpg',
             path: 'images/photo.jpg',
             size: 2048,
             lastModified: 1700000000,
             extension: 'jpg',
-            category: \MmesDesign\FilamentFileManager\Enums\FileCategory::Image,
+            category: FileCategory::Image,
             mimeType: 'image/jpeg',
             url: 'http://example.com/photo.jpg',
             thumbnailUrl: 'http://example.com/thumb.jpg',
@@ -299,7 +302,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->assertDontSee(trans_choice('filament-file-manager::file-manager.toolbar.selected_count', 1, ['count' => 1]))
             ->assertDontSee(trans_choice('filament-file-manager::file-manager.toolbar.selected_count', 2, ['count' => 2]));
     }
@@ -312,7 +315,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->set('selectedItems', ['file1.txt', 'file2.txt'])
             ->assertSee(__('filament-file-manager::file-manager.labels.selected', ['count' => 2]));
     }
@@ -325,7 +328,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $component = Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class);
+        $component = Livewire::test(FileManager::class);
 
         $nodes = $component->instance()->buildTreeNodes();
         $this->assertArrayHasKey('', $nodes);
@@ -343,7 +346,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $component = Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        $component = Livewire::test(FileManager::class)
             ->call('toggleTreeFolder', 'images');
 
         $this->assertContains('images', $component->get('expandedFolders'));
@@ -363,7 +366,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $component = Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        $component = Livewire::test(FileManager::class)
             ->call('toggleTreeFolder', 'images')
             ->assertSet('expandedFolders', ['images'])
             ->call('toggleTreeFolder', 'images');
@@ -378,7 +381,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $component = Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        $component = Livewire::test(FileManager::class)
             ->call('navigateViaTree', 'images/vacation/beach');
 
         $this->assertSame('images/vacation/beach', $component->get('currentPath'));
@@ -401,7 +404,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $component = Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        $component = Livewire::test(FileManager::class)
             ->call('toggleTreeFolder', 'images');
 
         $this->assertContains('images', $component->get('expandedFolders'));
@@ -429,7 +432,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $component = Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        $component = Livewire::test(FileManager::class)
             ->call('navigateTo', 'images/vacation');
 
         // Tree should auto-expand ancestors when navigating
@@ -442,7 +445,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->assertSeeHtml(__('filament-file-manager::file-manager.sidebar.show_folders'))
             ->assertSeeHtml('fm-folder-sidebar');
     }
@@ -452,7 +455,7 @@ class FileManagerPageTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->assertSeeHtml(__('filament-file-manager::file-manager.sidebar.show_preview'))
             ->assertSeeHtml('fm-preview-sidebar');
     }

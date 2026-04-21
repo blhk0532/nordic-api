@@ -10,13 +10,12 @@ use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Auth;
 use Usamamuneerchaudhary\Notifier\Models\NotificationChannel;
 use Usamamuneerchaudhary\Notifier\Models\NotificationEvent;
 use Usamamuneerchaudhary\Notifier\Models\NotificationPreference;
 use Usamamuneerchaudhary\Notifier\Models\NotificationSetting;
-use Illuminate\Contracts\Support\Htmlable;
-
 
 class NotificationPreferences extends Page implements HasForms
 {
@@ -37,9 +36,9 @@ class NotificationPreferences extends Page implements HasForms
     public ?array $data = [];
 
     public function getHeading(): string|Htmlable|null
-{
-    return null;
-}
+    {
+        return null;
+    }
 
     public function mount(): void
     {

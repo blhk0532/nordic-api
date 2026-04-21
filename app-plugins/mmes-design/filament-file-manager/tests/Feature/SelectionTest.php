@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
+use MmesDesign\FilamentFileManager\Livewire\FileManager;
 use MmesDesign\FilamentFileManager\Tests\Feature\Concerns\ResetsPermissions;
 use Tests\TestCase;
 
@@ -30,7 +31,7 @@ class SelectionTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->call('toggleSelection', 'file.txt')
             ->assertSet('selectedItems', ['file.txt']);
     }
@@ -42,7 +43,7 @@ class SelectionTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->call('toggleSelection', 'file.txt')
             ->assertSet('selectedItems', ['file.txt'])
             ->call('toggleSelection', 'file.txt')
@@ -58,7 +59,7 @@ class SelectionTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $component = Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        $component = Livewire::test(FileManager::class)
             ->call('selectAll');
 
         $selected = $component->get('selectedItems');
@@ -75,7 +76,7 @@ class SelectionTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->call('toggleSelection', 'file.txt')
             ->assertSet('selectedItems', ['file.txt'])
             ->call('clearSelection')
@@ -91,7 +92,7 @@ class SelectionTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->set('selectedItems', ['file1.txt', 'file2.txt'])
             ->callAction('deleteSelected')
             ->assertHasNoActionErrors();
@@ -109,7 +110,7 @@ class SelectionTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->set('selectedItems', ['file1.txt', 'file2.txt'])
             ->callAction('deleteSelected')
             ->assertSet('selectedItems', []);
@@ -124,7 +125,7 @@ class SelectionTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->set('selectedItems', ['file1.txt', 'file2.txt'])
             ->callAction('moveSelected', data: ['destination' => 'target'])
             ->assertHasNoActionErrors();
@@ -143,7 +144,7 @@ class SelectionTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->set('selectedItems', ['file1.txt'])
             ->callAction('moveSelected', data: ['destination' => 'target'])
             ->assertSet('selectedItems', []);
@@ -157,7 +158,7 @@ class SelectionTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->call('moveItem', 'document.txt', 'folder');
 
         Storage::disk('public')->assertExists('folder/document.txt');
@@ -169,7 +170,7 @@ class SelectionTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $component = Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        $component = Livewire::test(FileManager::class)
             ->set('selectedItems', ['file1.txt', 'file2.txt']);
 
         $this->assertSame(2, $component->instance()->getSelectedCount());
@@ -180,7 +181,7 @@ class SelectionTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $component = Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        $component = Livewire::test(FileManager::class)
             ->set('selectedItems', ['file1.txt']);
 
         $this->assertTrue($component->instance()->isSelected('file1.txt'));

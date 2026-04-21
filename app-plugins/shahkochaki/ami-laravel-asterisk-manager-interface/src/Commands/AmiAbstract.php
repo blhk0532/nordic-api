@@ -2,13 +2,13 @@
 
 namespace Shahkochaki\Ami\Commands;
 
-use Exception;
-use Shahkochaki\Ami\Factory;
 use Clue\React\Ami\Client;
-use Illuminate\Support\Arr;
-use Illuminate\Events\Dispatcher;
-use React\EventLoop\LoopInterface;
 use Clue\React\Ami\Protocol\Response;
+use Exception;
+use Illuminate\Events\Dispatcher;
+use Illuminate\Support\Arr;
+use React\EventLoop\LoopInterface;
+use Shahkochaki\Ami\Factory;
 
 abstract class AmiAbstract extends Command
 {

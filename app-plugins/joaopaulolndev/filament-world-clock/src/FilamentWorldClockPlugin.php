@@ -12,15 +12,15 @@ class FilamentWorldClockPlugin implements Plugin
 {
     use EvaluatesClosures;
 
-    public Closure | bool $shouldShowTitle = true;
+    public Closure|bool $shouldShowTitle = true;
 
-    public Closure | int $quantityPerRow = 1;
+    public Closure|int $quantityPerRow = 1;
 
-    public Closure | string $timeFormat = 'H:i';
+    public Closure|string $timeFormat = 'H:i';
 
-    public Closure | null | int $sort = null;
+    public Closure|null|int $sort = null;
 
-    public int | string | array $columnSpan = '1/2';
+    public int|string|array $columnSpan = '1/2';
 
     public array $timezones = [];
 
@@ -56,7 +56,7 @@ class FilamentWorldClockPlugin implements Plugin
         return $plugin;
     }
 
-    public function shouldShowTitle(Closure | bool $value = true): static
+    public function shouldShowTitle(Closure|bool $value = true): static
     {
         $this->shouldShowTitle = $value;
 
@@ -68,7 +68,7 @@ class FilamentWorldClockPlugin implements Plugin
         return $this->evaluate($this->shouldShowTitle);
     }
 
-    public function setTitle(Closure | string $value = ''): static
+    public function setTitle(Closure|string $value = ''): static
     {
         $this->title = $value;
 
@@ -80,7 +80,7 @@ class FilamentWorldClockPlugin implements Plugin
         return ! empty($this->title) ? $this->evaluate($this->title) : null;
     }
 
-    public function setDescription(Closure | string $value = ''): static
+    public function setDescription(Closure|string $value = ''): static
     {
         $this->description = $value;
 
@@ -116,7 +116,7 @@ class FilamentWorldClockPlugin implements Plugin
         return $this->customFlags;
     }
 
-    public function setQuantityPerRow(Closure | int $value = 1): static
+    public function setQuantityPerRow(Closure|int $value = 1): static
     {
         if ($value < 1) {
             $value = 1;
@@ -134,7 +134,7 @@ class FilamentWorldClockPlugin implements Plugin
         return $this->evaluate($this->quantityPerRow);
     }
 
-    public function setTimeFormat(Closure | string $value = 'H:i'): static
+    public function setTimeFormat(Closure|string $value = 'H:i'): static
     {
         $this->timeFormat = $value;
 
@@ -146,7 +146,7 @@ class FilamentWorldClockPlugin implements Plugin
         return $this->evaluate($this->timeFormat);
     }
 
-    public function setSort(Closure | int | null $value = null): static
+    public function setSort(Closure|int|null $value = null): static
     {
         $this->sort = $value;
 
@@ -158,14 +158,14 @@ class FilamentWorldClockPlugin implements Plugin
         return $this->evaluate($this->sort);
     }
 
-    public function setColumnSpan(int | string | array $value = '1/2'): static
+    public function setColumnSpan(int|string|array $value = '1/2'): static
     {
         $this->columnSpan = $value;
 
         return $this;
     }
 
-    public function getColumnSpan(): int | string | array
+    public function getColumnSpan(): int|string|array
     {
         return $this->evaluate($this->columnSpan);
     }

@@ -2,8 +2,8 @@
 
 namespace Shahkochaki\Ami\Listeners;
 
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Log;
 
 /**
  * AMI Event Listener
@@ -98,7 +98,7 @@ class AmiEventListener
     /**
      * Handle Dial event
      *
-     * @param array $event
+     * @param  array  $event
      * @return void
      */
     public function handleDialEvent($event)
@@ -107,7 +107,7 @@ class AmiEventListener
             'caller' => $event['CallerIDNum'] ?? 'Unknown',
             'destination' => $event['Destination'] ?? 'Unknown',
             'channel' => $event['Channel'] ?? 'Unknown',
-            'timestamp' => now()->toISOString()
+            'timestamp' => now()->toISOString(),
         ]);
 
         // Fire custom application event
@@ -117,7 +117,7 @@ class AmiEventListener
     /**
      * Handle Hangup event
      *
-     * @param array $event
+     * @param  array  $event
      * @return void
      */
     public function handleHangupEvent($event)
@@ -126,7 +126,7 @@ class AmiEventListener
             'channel' => $event['Channel'] ?? 'Unknown',
             'cause' => $event['Cause'] ?? 'Unknown',
             'cause_text' => $event['Cause-txt'] ?? 'Unknown',
-            'timestamp' => now()->toISOString()
+            'timestamp' => now()->toISOString(),
         ]);
 
         // Fire custom application event
@@ -136,7 +136,7 @@ class AmiEventListener
     /**
      * Handle NewChannel event
      *
-     * @param array $event
+     * @param  array  $event
      * @return void
      */
     public function handleNewChannelEvent($event)
@@ -145,7 +145,7 @@ class AmiEventListener
             'channel' => $event['Channel'] ?? 'Unknown',
             'state' => $event['ChannelState'] ?? 'Unknown',
             'caller_id' => $event['CallerIDNum'] ?? 'Unknown',
-            'timestamp' => now()->toISOString()
+            'timestamp' => now()->toISOString(),
         ]);
 
         // Fire custom application event
@@ -155,7 +155,7 @@ class AmiEventListener
     /**
      * Handle Bridge event
      *
-     * @param array $event
+     * @param  array  $event
      * @return void
      */
     public function handleBridgeEvent($event)
@@ -163,7 +163,7 @@ class AmiEventListener
         $this->log('info', 'Channels bridged', [
             'channel1' => $event['Channel1'] ?? 'Unknown',
             'channel2' => $event['Channel2'] ?? 'Unknown',
-            'timestamp' => now()->toISOString()
+            'timestamp' => now()->toISOString(),
         ]);
 
         // Fire custom application event
@@ -173,7 +173,7 @@ class AmiEventListener
     /**
      * Handle SMS Status event
      *
-     * @param array $event
+     * @param  array  $event
      * @return void
      */
     public function handleSmsStatusEvent($event)
@@ -181,7 +181,7 @@ class AmiEventListener
         $this->log('info', 'SMS status update', [
             'device' => $event['Device'] ?? 'Unknown',
             'status' => $event['Status'] ?? 'Unknown',
-            'timestamp' => now()->toISOString()
+            'timestamp' => now()->toISOString(),
         ]);
 
         // Fire custom application event
@@ -191,7 +191,7 @@ class AmiEventListener
     /**
      * Handle New SMS event
      *
-     * @param array $event
+     * @param  array  $event
      * @return void
      */
     public function handleNewSmsEvent($event)
@@ -200,7 +200,7 @@ class AmiEventListener
             'device' => $event['Device'] ?? 'Unknown',
             'from' => $event['From'] ?? 'Unknown',
             'message' => $event['Message'] ?? '',
-            'timestamp' => now()->toISOString()
+            'timestamp' => now()->toISOString(),
         ]);
 
         // Fire custom application event
@@ -210,14 +210,14 @@ class AmiEventListener
     /**
      * Handle Reload event
      *
-     * @param array $event
+     * @param  array  $event
      * @return void
      */
     public function handleReloadEvent($event)
     {
         $this->log('warning', 'System reload', [
             'module' => $event['Module'] ?? 'All',
-            'timestamp' => now()->toISOString()
+            'timestamp' => now()->toISOString(),
         ]);
 
         // Fire custom application event
@@ -227,14 +227,14 @@ class AmiEventListener
     /**
      * Handle Shutdown event
      *
-     * @param array $event
+     * @param  array  $event
      * @return void
      */
     public function handleShutdownEvent($event)
     {
         $this->log('critical', 'System shutdown', [
             'reason' => $event['Shutdown'] ?? 'Unknown',
-            'timestamp' => now()->toISOString()
+            'timestamp' => now()->toISOString(),
         ]);
 
         // Fire custom application event
@@ -244,7 +244,7 @@ class AmiEventListener
     /**
      * Handle PeerStatus event
      *
-     * @param array $event
+     * @param  array  $event
      * @return void
      */
     public function handlePeerStatusEvent($event)
@@ -252,7 +252,7 @@ class AmiEventListener
         $this->log('info', 'Peer status changed', [
             'peer' => $event['Peer'] ?? 'Unknown',
             'peer_status' => $event['PeerStatus'] ?? 'Unknown',
-            'timestamp' => now()->toISOString()
+            'timestamp' => now()->toISOString(),
         ]);
 
         // Fire custom application event
@@ -262,7 +262,7 @@ class AmiEventListener
     /**
      * Handle QueueMember event
      *
-     * @param array $event
+     * @param  array  $event
      * @return void
      */
     public function handleQueueMemberEvent($event)
@@ -271,7 +271,7 @@ class AmiEventListener
             'queue' => $event['Queue'] ?? 'Unknown',
             'location' => $event['Location'] ?? 'Unknown',
             'status' => $event['Status'] ?? 'Unknown',
-            'timestamp' => now()->toISOString()
+            'timestamp' => now()->toISOString(),
         ]);
 
         // Fire custom application event
@@ -281,7 +281,7 @@ class AmiEventListener
     /**
      * Handle QueueParams event
      *
-     * @param array $event
+     * @param  array  $event
      * @return void
      */
     public function handleQueueParamsEvent($event)
@@ -290,7 +290,7 @@ class AmiEventListener
             'queue' => $event['Queue'] ?? 'Unknown',
             'calls' => $event['Calls'] ?? 0,
             'holdtime' => $event['Holdtime'] ?? 0,
-            'timestamp' => now()->toISOString()
+            'timestamp' => now()->toISOString(),
         ]);
 
         // Fire custom application event
@@ -300,7 +300,7 @@ class AmiEventListener
     /**
      * Handle QueueSummary event
      *
-     * @param array $event
+     * @param  array  $event
      * @return void
      */
     public function handleQueueSummaryEvent($event)
@@ -310,7 +310,7 @@ class AmiEventListener
             'logged_in' => $event['LoggedIn'] ?? 0,
             'available' => $event['Available'] ?? 0,
             'callers' => $event['Callers'] ?? 0,
-            'timestamp' => now()->toISOString()
+            'timestamp' => now()->toISOString(),
         ]);
 
         // Fire custom application event
@@ -320,14 +320,13 @@ class AmiEventListener
     /**
      * Log event information
      *
-     * @param string $level
-     * @param string $message
-     * @param array $context
+     * @param  string  $level
+     * @param  string  $message
      * @return void
      */
     protected function log($level, $message, array $context = [])
     {
-        if (!$this->enableLogging) {
+        if (! $this->enableLogging) {
             return;
         }
 
@@ -342,24 +341,26 @@ class AmiEventListener
     /**
      * Enable/disable logging
      *
-     * @param bool $enable
+     * @param  bool  $enable
      * @return self
      */
     public function setLogging($enable)
     {
         $this->enableLogging = $enable;
+
         return $this;
     }
 
     /**
      * Set log channel
      *
-     * @param string $channel
+     * @param  string  $channel
      * @return self
      */
     public function setLogChannel($channel)
     {
         $this->logChannel = $channel;
+
         return $this;
     }
 }

@@ -20,7 +20,7 @@ class NotificationEventResource extends Resource
 
     protected static string|null|\UnitEnum $navigationGroup = 'Notifications';
 
-     protected static bool $isScopedToTenant = false;
+    protected static bool $isScopedToTenant = false;
 
     protected static ?int $navigationSort = 2;
 
@@ -41,9 +41,9 @@ class NotificationEventResource extends Resource
         ];
     }
 
-        public static function getPluralModelLabel(): string
+    public static function getPluralModelLabel(): string
     {
-        return __('⩍ Notify Events @APP');
+        return __('Notify Events');
     }
 
     public static function getPages(): array

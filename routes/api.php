@@ -23,11 +23,11 @@ use App\Http\Controllers\Api\RatsitDataController;
 use App\Http\Controllers\Api\RatsitForetagQueueController;
 use App\Http\Controllers\Api\RatsitKommunApiController;
 use App\Http\Controllers\Api\RatsitQueueController;
+use App\Http\Controllers\Api\SwedenAdresserQueueController;
+use App\Http\Controllers\Api\SwedenGatorQueueController;
+use App\Http\Controllers\Api\SwedenPersonerQueueController;
 use App\Http\Controllers\Api\SwedenPostnummerApiController;
 use App\Http\Controllers\Api\SwedenPostnummerQueueController;
-use App\Http\Controllers\Api\SwedenPersonerQueueController;
-use App\Http\Controllers\Api\SwedenGatorQueueController;
-use App\Http\Controllers\Api\SwedenAdresserQueueController;
 use App\Http\Controllers\Api\UpplysningDataController;
 use App\Http\Controllers\RingaDataOutcomeController;
 use Illuminate\Http\Request;
@@ -73,9 +73,9 @@ Route::apiResource('data-private', DataPrivateController::class);
 Route::post('/data-private/bulk', [DataPrivateController::class, 'bulkStore']);
 
 // SwedenPersoner bulk import endpoints
-use App\Http\Controllers\Api\SwedenPersonerImportController;
 use App\Http\Controllers\Api\SwedenAdresserImportController;
 use App\Http\Controllers\Api\SwedenGatorImportController;
+use App\Http\Controllers\Api\SwedenPersonerImportController;
 
 Route::post('/sweden-personer/import-json', [SwedenPersonerImportController::class, 'importJson']);
 Route::post('/sweden-personer/import-file', [SwedenPersonerImportController::class, 'importFile']);

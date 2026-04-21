@@ -1,9 +1,11 @@
 <?php
 
+use Shahkochaki\Ami\Services\AmiService;
+use Shahkochaki\Ami\Services\SystemManager;
+
 /**
  * تست سریع برای بررسی حل شدن مشکل "Target class [ami] does not exist"
  */
-
 echo "=== تست حل مشکل Target class [ami] does not exist ===\n\n";
 
 // تست 1: بررسی وجود کلاس‌های اصلی
@@ -13,7 +15,7 @@ $classes = [
     'Shahkochaki\Ami\Services\AmiService',
     'Shahkochaki\Ami\Services\SystemManager',
     'Shahkochaki\Ami\Providers\AmiServiceProvider',
-    'Shahkochaki\Ami\Facades\Ami'
+    'Shahkochaki\Ami\Facades\Ami',
 ];
 
 foreach ($classes as $class) {
@@ -31,10 +33,10 @@ try {
         'host' => '127.0.0.1',
         'port' => 5038,
         'username' => 'test',
-        'secret' => 'test'
+        'secret' => 'test',
     ];
 
-    $ami = new \Shahkochaki\Ami\Services\AmiService($config);
+    $ami = new AmiService($config);
     echo "   ✅ AmiService با موفقیت ایجاد شد\n";
 
     // تست متدهای موجود
@@ -47,13 +49,13 @@ try {
         }
     }
 } catch (Exception $e) {
-    echo "   ❌ خطا در ایجاد AmiService: " . $e->getMessage() . "\n";
+    echo '   ❌ خطا در ایجاد AmiService: '.$e->getMessage()."\n";
 }
 
 echo "\n3. تست SystemManager:\n";
 
 try {
-    $systemManager = new \Shahkochaki\Ami\Services\SystemManager($config);
+    $systemManager = new SystemManager($config);
     echo "   ✅ SystemManager با موفقیت ایجاد شد\n";
 
     // تست متدهای موجود
@@ -66,7 +68,7 @@ try {
         }
     }
 } catch (Exception $e) {
-    echo "   ❌ خطا در ایجاد SystemManager: " . $e->getMessage() . "\n";
+    echo '   ❌ خطا در ایجاد SystemManager: '.$e->getMessage()."\n";
 }
 
 echo "\n4. راهنمای استفاده:\n";
@@ -92,11 +94,11 @@ function testConnection($host = '127.0.0.1', $port = 5038, $username = 'admin', 
     echo "\n=== تست اتصال به سرور AMI ===\n";
 
     try {
-        $ami = new \Shahkochaki\Ami\Services\AmiService([
+        $ami = new AmiService([
             'host' => $host,
             'port' => $port,
             'username' => $username,
-            'secret' => $secret
+            'secret' => $secret,
         ]);
 
         echo "Service ایجاد شد، تست اتصال...\n";
@@ -108,7 +110,7 @@ function testConnection($host = '127.0.0.1', $port = 5038, $username = 'admin', 
         echo "💡 برای تست اتصال واقعی، دستور زیر را اجرا کنید:\n";
         echo "php artisan ami:action Ping --host=$host --port=$port --username=$username --secret=$secret\n";
     } catch (Exception $e) {
-        echo "❌ خطا: " . $e->getMessage() . "\n";
+        echo '❌ خطا: '.$e->getMessage()."\n";
     }
 }
 

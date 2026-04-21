@@ -37,7 +37,7 @@ class MerinfoDataResource extends Resource
 
     protected static bool $isDiscovered = false;
 
-     protected static ?int $navigationSort = -98;
+    protected static ?int $navigationSort = -98;
 
     // place resource under Databaser cluster
     protected static ?string $slug = 'databaser/merinfo-data';

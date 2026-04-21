@@ -29,7 +29,7 @@ class PersonResource extends Resource
 
     protected static UnitEnum|string|null $navigationGroup = 'Database NR';
 
-      protected static ?int $navigationSort = -55;
+    protected static ?int $navigationSort = -55;
 
     protected static ?string $navigationLabel = 'Persons NEW';
 

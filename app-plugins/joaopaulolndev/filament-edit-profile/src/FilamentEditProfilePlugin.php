@@ -24,53 +24,53 @@ class FilamentEditProfilePlugin implements Plugin
 {
     use EvaluatesClosures;
 
-    public Closure | bool $access = true;
+    public Closure|bool $access = true;
 
-    public Closure | bool $shouldRegisterNavigation = true;
+    public Closure|bool $shouldRegisterNavigation = true;
 
-    public Closure | int $sort = 90;
+    public Closure|int $sort = 90;
 
-    protected string | BackedEnum | Htmlable | Closure | false | null $icon = null;
+    protected string|BackedEnum|Htmlable|Closure|false|null $icon = null;
 
-    public Closure | string $navigationGroup = '';
+    public Closure|string $navigationGroup = '';
 
-    public Closure | string $title = '';
+    public Closure|string $title = '';
 
-    public Closure | string $slug = '';
+    public Closure|string $slug = '';
 
-    public Closure | string $navigationLabel = '';
+    public Closure|string $navigationLabel = '';
 
-    public Closure | bool $shouldShowEditProfileForm = true;
+    public Closure|bool $shouldShowEditProfileForm = true;
 
-    public Closure | bool $shouldShowEmailForm = true;
+    public Closure|bool $shouldShowEmailForm = true;
 
-    public Closure | bool $shouldShowLocaleForm = false;
+    public Closure|bool $shouldShowLocaleForm = false;
 
     public array $localeOptions = [];
 
-    public Closure | bool $shouldShowThemeColorForm = false;
+    public Closure|bool $shouldShowThemeColorForm = false;
 
-    public Closure | bool $shouldShowEditPasswordForm = true;
+    public Closure|bool $shouldShowEditPasswordForm = true;
 
-    public Closure | bool $shouldShowDeleteAccountForm = true;
+    public Closure|bool $shouldShowDeleteAccountForm = true;
 
-    public Closure | bool $shouldShowBrowserSessionsForm = true;
+    public Closure|bool $shouldShowBrowserSessionsForm = true;
 
-    protected Closure | bool $sanctumTokens = false;
+    protected Closure|bool $sanctumTokens = false;
 
-    protected Closure | bool $multiFactorAuthentication = false;
+    protected Closure|bool $multiFactorAuthentication = false;
 
     protected array $sanctumPermissions = ['create', 'view', 'update', 'delete'];
 
-    protected Closure | bool $shouldShowAvatarForm = false;
+    protected Closure|bool $shouldShowAvatarForm = false;
 
     protected string $avatarDirectory = 'avatars';
 
-    protected array | string $avatarRules = ['max:1024'];
+    protected array|string $avatarRules = ['max:1024'];
 
-    protected array | string $localeRules = [];
+    protected array|string $localeRules = [];
 
-    protected array | string $themeColorRules = [];
+    protected array|string $themeColorRules = [];
 
     protected array $registeredCustomProfileComponents = [];
 
@@ -84,8 +84,8 @@ class FilamentEditProfilePlugin implements Plugin
         $panel
             ->pages($this->preparePages())
             ->authMiddleware([
-                SetUserThemeColor::class . ':' . $panel->getAuthGuard(),
-                SetUserLocale::class . ':' . $panel->getAuthGuard(),
+                SetUserThemeColor::class.':'.$panel->getAuthGuard(),
+                SetUserLocale::class.':'.$panel->getAuthGuard(),
             ]);
     }
 
@@ -114,7 +114,7 @@ class FilamentEditProfilePlugin implements Plugin
         return $plugin;
     }
 
-    public function setTitle(Closure | string $value = ''): static
+    public function setTitle(Closure|string $value = ''): static
     {
         $this->title = $value;
 
@@ -126,7 +126,7 @@ class FilamentEditProfilePlugin implements Plugin
         return ! empty($this->title) ? $this->evaluate($this->title) : null;
     }
 
-    public function slug(Closure | string $value = 'edit-profile'): static
+    public function slug(Closure|string $value = 'edit-profile'): static
     {
         $this->slug = $value;
 
@@ -138,7 +138,7 @@ class FilamentEditProfilePlugin implements Plugin
         return $this->evaluate($this->slug);
     }
 
-    public function setNavigationLabel(Closure | string $value = ''): static
+    public function setNavigationLabel(Closure|string $value = ''): static
     {
         $this->navigationLabel = $value;
 
@@ -150,7 +150,7 @@ class FilamentEditProfilePlugin implements Plugin
         return ! empty($this->navigationLabel) ? $this->evaluate($this->navigationLabel) : null;
     }
 
-    public function setNavigationGroup(Closure | string $value = ''): static
+    public function setNavigationGroup(Closure|string $value = ''): static
     {
         $this->navigationGroup = $value;
 
@@ -162,7 +162,7 @@ class FilamentEditProfilePlugin implements Plugin
         return ! empty($this->navigationGroup) ? $this->evaluate($this->navigationGroup) : null;
     }
 
-    public function setIcon(string | BackedEnum | Htmlable | Closure | null $value): static
+    public function setIcon(string|BackedEnum|Htmlable|Closure|null $value): static
     {
         $this->icon = filled($value) ? $value : false;
 
@@ -174,7 +174,7 @@ class FilamentEditProfilePlugin implements Plugin
         return ! empty($this->icon) ? $this->evaluate($this->icon) : null;
     }
 
-    public function setSort(Closure | int $value = 100): static
+    public function setSort(Closure|int $value = 100): static
     {
         $this->sort = $value;
 
@@ -186,7 +186,7 @@ class FilamentEditProfilePlugin implements Plugin
         return $this->evaluate($this->sort);
     }
 
-    public function canAccess(Closure | bool $value = true): static
+    public function canAccess(Closure|bool $value = true): static
     {
         $this->access = $value;
 
@@ -198,7 +198,7 @@ class FilamentEditProfilePlugin implements Plugin
         return $this->evaluate($this->access);
     }
 
-    public function shouldRegisterNavigation(Closure | bool $value = true): static
+    public function shouldRegisterNavigation(Closure|bool $value = true): static
     {
         $this->shouldRegisterNavigation = $value;
 
@@ -210,7 +210,7 @@ class FilamentEditProfilePlugin implements Plugin
         return $this->evaluate($this->shouldRegisterNavigation);
     }
 
-    public function shouldShowEditProfileForm(Closure | bool $value = true): static
+    public function shouldShowEditProfileForm(Closure|bool $value = true): static
     {
         $this->shouldShowEditProfileForm = $value;
 
@@ -222,7 +222,7 @@ class FilamentEditProfilePlugin implements Plugin
         return $this->evaluate($this->shouldShowEditProfileForm);
     }
 
-    public function shouldShowEditPasswordForm(Closure | bool $value = true): static
+    public function shouldShowEditPasswordForm(Closure|bool $value = true): static
     {
         $this->shouldShowEditPasswordForm = $value;
 
@@ -234,7 +234,7 @@ class FilamentEditProfilePlugin implements Plugin
         return $this->evaluate($this->shouldShowEditPasswordForm);
     }
 
-    public function shouldShowDeleteAccountForm(Closure | bool $value = true): static
+    public function shouldShowDeleteAccountForm(Closure|bool $value = true): static
     {
         $this->shouldShowDeleteAccountForm = $value;
 
@@ -246,7 +246,7 @@ class FilamentEditProfilePlugin implements Plugin
         return $this->evaluate($this->shouldShowDeleteAccountForm);
     }
 
-    public function shouldShowBrowserSessionsForm(Closure | bool $value = true): static
+    public function shouldShowBrowserSessionsForm(Closure|bool $value = true): static
     {
         $this->shouldShowBrowserSessionsForm = $value;
 
@@ -275,7 +275,7 @@ class FilamentEditProfilePlugin implements Plugin
         return $this->evaluate($this->multiFactorAuthentication);
     }
 
-    public function shouldShowMultiFactorAuthentication(Closure | bool $condition = true)
+    public function shouldShowMultiFactorAuthentication(Closure|bool $condition = true)
     {
         $this->multiFactorAuthentication = $condition;
 
@@ -291,7 +291,7 @@ class FilamentEditProfilePlugin implements Plugin
         return $this->evaluate($this->sanctumTokens);
     }
 
-    public function shouldShowSanctumTokens(Closure | bool $condition = true, ?array $permissions = null)
+    public function shouldShowSanctumTokens(Closure|bool $condition = true, ?array $permissions = null)
     {
         $this->sanctumTokens = $condition;
 
@@ -311,7 +311,7 @@ class FilamentEditProfilePlugin implements Plugin
         })->toArray();
     }
 
-    public function shouldShowEmailForm(Closure | bool $value = true): static
+    public function shouldShowEmailForm(Closure|bool $value = true): static
     {
         $this->shouldShowEmailForm = $value;
 
@@ -323,7 +323,7 @@ class FilamentEditProfilePlugin implements Plugin
         return $this->evaluate($this->shouldShowEmailForm);
     }
 
-    public function shouldShowLocaleForm(Closure | bool $value = true, array $options = [], string | array | null $rules = null): static
+    public function shouldShowLocaleForm(Closure|bool $value = true, array $options = [], string|array|null $rules = null): static
     {
         if (empty($options)) {
             $value = false;
@@ -347,7 +347,7 @@ class FilamentEditProfilePlugin implements Plugin
         return $this->evaluate($this->localeOptions);
     }
 
-    public function shouldShowThemeColorForm(Closure | bool $value = true, string | array | null $rules = null): static
+    public function shouldShowThemeColorForm(Closure|bool $value = true, string|array|null $rules = null): static
     {
         $this->shouldShowThemeColorForm = $value;
         if (! is_null($rules)) {
@@ -362,7 +362,7 @@ class FilamentEditProfilePlugin implements Plugin
         return $this->evaluate($this->shouldShowThemeColorForm);
     }
 
-    public function shouldShowAvatarForm(Closure | bool $value = true, ?string $directory = null, string | array | null $rules = null): static
+    public function shouldShowAvatarForm(Closure|bool $value = true, ?string $directory = null, string|array|null $rules = null): static
     {
         $this->shouldShowAvatarForm = $value;
 
@@ -387,17 +387,17 @@ class FilamentEditProfilePlugin implements Plugin
         return $this->avatarDirectory;
     }
 
-    public function getAvatarRules(): array | string
+    public function getAvatarRules(): array|string
     {
         return $this->avatarRules;
     }
 
-    public function getLocaleRules(): array | string
+    public function getLocaleRules(): array|string
     {
         return $this->localeRules;
     }
 
-    public function getThemeColorRules(): array | string
+    public function getThemeColorRules(): array|string
     {
         return $this->themeColorRules;
     }

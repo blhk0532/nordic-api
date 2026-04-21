@@ -2,22 +2,23 @@
 
 namespace Shahkochaki\Ami\Tests;
 
-use React\Stream\Stream;
 use Illuminate\Config\Repository;
-use React\EventLoop\LoopInterface;
-use Illuminate\Container\Container;
-use Illuminate\Events\EventServiceProvider;
 use Illuminate\Console\Application as Console;
+use Illuminate\Container\Container;
+use Illuminate\Events\Dispatcher;
+use Illuminate\Events\EventServiceProvider;
+use React\EventLoop\LoopInterface;
+use React\Stream\Stream;
 
 abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \React\EventLoop\LoopInterface
+     * @var LoopInterface
      */
     protected $loop;
 
     /**
-     * @var \React\Stream\Stream
+     * @var Stream
      */
     protected $stream;
 
@@ -27,7 +28,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     protected $running;
 
     /**
-     * @var \Illuminate\Events\Dispatcher
+     * @var Dispatcher
      */
     protected $events;
 
@@ -36,13 +37,13 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $app = new Container();
-        $app->instance('config', new Repository());
+        $app = new Container;
+        $app->instance('config', new Repository);
         (new EventServiceProvider($app))->register();
         (new AmiServiceProvider($app))->register();
         $this->loop = $app[LoopInterface::class];
         $this->loop->nextTick(function () {
-            if (!$this->running) {
+            if (! $this->running) {
                 $this->loop->stop();
             }
         });
@@ -54,8 +55,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     /**
      * Call console command.
      *
-     * @param string $command
-     * @param array  $options
+     * @param  string  $command
      */
     protected function console($command, array $options = [])
     {

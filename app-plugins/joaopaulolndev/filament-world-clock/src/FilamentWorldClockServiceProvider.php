@@ -57,7 +57,7 @@ class FilamentWorldClockServiceProvider extends PackageServiceProvider
     protected function getAssets(): array
     {
         return [
-            Css::make('filament-world-clock-styles', __DIR__ . '/../resources/build/filament-world-clock.css'),
+            Css::make('filament-world-clock-styles', __DIR__.'/../resources/build/filament-world-clock.css'),
         ];
     }
 }

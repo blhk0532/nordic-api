@@ -43,8 +43,8 @@ class NotificationChannelResource extends Resource
         ];
     }
 
-        public static function getPluralModelLabel(): string
+    public static function getPluralModelLabel(): string
     {
-        return __('⩍ Notifications @APP');
+        return __('Notifications');
     }
 }

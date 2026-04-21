@@ -24,7 +24,7 @@ class MerinfoResource extends Resource
 
     protected static ?string $navigationLabel = 'Merinfo NEW';
 
-     protected static ?int $navigationSort = -60;
+    protected static ?int $navigationSort = -60;
 
     public static function getModelLabel(): string
     {

@@ -14,7 +14,7 @@ trait HasUser
      */
     public $user;
 
-    protected function getUser(): Authenticatable & Model
+    protected function getUser(): Authenticatable&Model
     {
         $user = Filament::auth()->user();
 

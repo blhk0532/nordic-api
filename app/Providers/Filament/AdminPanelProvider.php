@@ -6,6 +6,16 @@ use AchyutN\FilamentLogViewer\FilamentLogViewer;
 use Adultdate\FilamentBooking\FilamentBookingPlugin;
 use App\Filament\Pages\AuthLogin;
 use App\Filament\Pages\Tenancy\EditTeamProfile;
+use App\Filament\Resources\HittaDatas\HittaDataResource;
+use App\Filament\Resources\Merinfos\MerinfoResource;
+use App\Filament\Resources\People\PersonResource;
+use App\Filament\Resources\RatsitDatas\RatsitDataResource;
+use App\Filament\Resources\SwedenAdressers\SwedenAdresserResource;
+use App\Filament\Resources\SwedenGators\SwedenGatorResource;
+use App\Filament\Resources\SwedenKommuners\SwedenKommunerResource;
+use App\Filament\Resources\SwedenPersoners\SwedenPersonerResource;
+use App\Filament\Resources\SwedenPostnummers\SwedenPostnummerResource;
+use App\Filament\Resources\SwedenPostorters\SwedenPostorterResource;
 use App\Http\Middleware\ApplyTenantScopes;
 use App\Http\Middleware\CurrentTenant;
 use App\Models\Team;
@@ -18,6 +28,9 @@ use BinaryBuilds\CommandRunner\CommandRunnerPlugin;
 use BinaryBuilds\FilamentFailedJobs\FilamentFailedJobsPlugin;
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
 use Caresome\FilamentAuthDesigner\Enums\MediaPosition;
+use Cyberline\FilamentNavigationFootermenu\Data\FooterMenuItem;
+// use Flexpik\FilamentStudio\FilamentStudioPlugin;
+use Cyberline\FilamentNavigationFootermenu\FooterMenuPlugin;
 use Devletes\FilamentPinnableNavigation\PinnableNavigationPlugin;
 use DutchCodingCompany\FilamentSocialite\FilamentSocialitePlugin;
 use Filament\Actions\Action;
@@ -29,7 +42,6 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\NavigationGroup;
 use Filament\Panel;
 use Filament\PanelProvider;
-// use Flexpik\FilamentStudio\FilamentStudioPlugin;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\Width;
 use Filament\Widgets\AccountWidget;
@@ -49,32 +61,21 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
 use Joaopaulolndev\FilamentGeneralSettings\FilamentGeneralSettingsPlugin;
+use Kirschbaum\FilamentDiffs\FilamentDiffsPlugin;
 use Laravel\Socialite\Contracts\User as SocialiteUserContract;
 use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
 use MmesDesign\FilamentFileManager\FileManagerPlugin;
 use Muazzam\SlickScrollbar\SlickScrollbarPlugin;
+use MWGuerra\WebTerminal\Filament\Resources\TerminalLogResource;
 use MWGuerra\WebTerminal\WebTerminalPlugin;
+use OsamaAtef\DrilldownSidebar\DrilldownSidebarPlugin;
+use Qalainau\UniverSheet\UniverSheetPlugin;
 use Usamamuneerchaudhary\Notifier\FilamentNotifierPlugin;
+use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 use Wezlo\FilamentGridList\FilamentGridListPlugin;
 use Wezlo\FilamentWorkspaceTabs\WorkspaceTabsPlugin;
-use App\Filament\Resources\Merinfos\MerinfoResource;
-use App\Models\SwedenPostnummer;
-use OsamaAtef\DrilldownSidebar\DrilldownSidebarPlugin;
-use App\Filament\Resources\People\PersonResource;
-use App\Filament\Resources\RatsitDatas\RatsitDataResource;
-use App\Filament\Resources\HittaDatas\HittaDataResource;
-use App\Filament\Resources\SwedenPostnummers\SwedenPostnummerResource;
-use App\Filament\Resources\SwedenPostorters\SwedenPostorterResource;
-use App\Filament\Resources\SwedenAdressers\SwedenAdresserResource;
-use App\Filament\Resources\SwedenGators\SwedenGatorResource;
-use App\Filament\Resources\SwedenPersoners\SwedenPersonerResource;
-use App\Filament\Resources\SwedenKommuners\SwedenKommunerResource;
 use YousefAman\ModalRepeater\ModalRepeaterPlugin;
-use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
-use Kirschbaum\FilamentDiffs\Infolists\Components\FileEntry;
-use Kirschbaum\FilamentDiffs\FilamentDiffsPlugin;
-use MWGuerra\WebTerminal\Filament\Resources\TerminalLogResource;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -96,9 +97,9 @@ class AdminPanelProvider extends PanelProvider
             ->maxContentWidth(Width::Full)
             ->spaUrlExceptions(['tel:*', 'mailto:*'])
             ->sidebarCollapsibleOnDesktop(true)
-            ->favicon(fn() => asset('favicon.svg'))
-            ->brandLogo(fn() => view('filament.app.logo'))
-            ->brandLogoHeight('48px')
+            ->favicon(fn () => asset('favicon.svg'))
+            ->brandLogo(fn () => view('filament.app.logo'))
+            ->brandLogoHeight('42px')
             ->sidebarWidth('21rem')
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->brandName('Noridic Digital')
@@ -116,10 +117,10 @@ class AdminPanelProvider extends PanelProvider
                 CurrentTenant::class,
             ], isPersistent: true)
             ->tenantMenuItems([
-                'register' => fn(Action $action) => $action->label('Register team')
+                'register' => fn (Action $action) => $action->label('Register team')
                     ->icon('heroicon-m-user-plus')
-                    ->visible(fn() => ! filament()->getTenant()),
-                'profile' => fn(Action $action) => $action->label('Team Settings')
+                    ->visible(fn () => ! filament()->getTenant()),
+                'profile' => fn (Action $action) => $action->label('Team Settings')
                     ->sort(-1),
             ])
             ->navigationGroups([
@@ -164,8 +165,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->userMenuItems([
                 'profile' => Action::make('profile')
-                    ->label(fn() => Str::ucfirst(Auth::user()->name))
-                    ->url(fn() => EditProfilePage::getUrl())
+                    ->label(fn () => Str::ucfirst(Auth::user()->name))
+                    ->url(fn () => EditProfilePage::getUrl())
                     ->icon('heroicon-o-user-circle'),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
@@ -192,19 +193,19 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-                    ->plugins([
-            FilamentDiffsPlugin::make(),
-        ])
+            ->plugins([
+                FilamentDiffsPlugin::make(),
+            ])
             ->plugin(
                 AuthDesignerPlugin::make()
                     ->defaults(
-                        fn($config) => $config
+                        fn ($config) => $config
                             ->media(asset('assets/pattaya.webp'))
                             ->mediaPosition(MediaPosition::Cover)
                             ->blur(1)
                     )
                     ->login(
-                        fn($config) => $config
+                        fn ($config) => $config
                             ->media(asset('video/beach-at-sunset.1920x1080.mp4'))
                             ->usingPage(AuthLogin::class)
                     )
@@ -233,7 +234,7 @@ class AdminPanelProvider extends PanelProvider
                             ->badge(5, 'danger'),
                         MobileBottomNavItem::make('Profile')
                             ->icon('heroicon-o-user')
-                            ->url(fn() => EditProfilePage::getUrl()),
+                            ->url(fn () => EditProfilePage::getUrl()),
                     ]),
 
             ])
@@ -264,7 +265,7 @@ class AdminPanelProvider extends PanelProvider
                     ->registration(true)
                     // (optional) Enable/disable registration of new (socialite-) users using a callback.
                     // In this example, a login flow can only continue if there exists a user (Authenticatable) already.
-                    ->registration(fn(string $provider, SocialiteUserContract $oauthUser, ?Authenticatable $user) => (bool) $user)
+                    ->registration(fn (string $provider, SocialiteUserContract $oauthUser, ?Authenticatable $user) => (bool) $user)
                     // (optional) Change the associated model class.
                     ->userModelClass(User::class)
                     // (optional) Change the associated socialite class (see below).
@@ -273,10 +274,10 @@ class AdminPanelProvider extends PanelProvider
             ->plugins(array_filter([
                 class_exists(FilamentGridListPlugin::class)
                     ? FilamentGridListPlugin::make()
-                    ->gridColumns(['default' => 1, 'sm' => 2, 'lg' => 3])
-                    ->gap(4)
-                    ->recordsPerPage(12)
-                    ->recordsPerPageOptions([12, 24, 48, 96])
+                        ->gridColumns(['default' => 1, 'sm' => 2, 'lg' => 3])
+                        ->gap(4)
+                        ->recordsPerPage(12)
+                        ->recordsPerPageOptions([12, 24, 48, 96])
                     : null,
             ]))
             ->plugins([
@@ -346,7 +347,17 @@ class AdminPanelProvider extends PanelProvider
                         label: 'Terminal',
                         sort: 100,
                         group: 'System LOGS',
-                    )
+                    ),
+            ])
+            ->plugins([
+                FooterMenuPlugin::make()
+                    ->triggerLabel(fn () => auth()->user()->name)
+                    ->triggerIcon('heroicon-o-user-circle')
+                    ->items([
+                        FooterMenuItem::make('Dashboard')
+                            ->icon('heroicon-o-shield-check')
+                            ->url(fn () => url('admin')),
+                    ]),
             ])
             ->plugins([
                 FilamentGeneralSettingsPlugin::make()
@@ -364,6 +375,7 @@ class AdminPanelProvider extends PanelProvider
                 SlickScrollbarPlugin::make(),
                 ResizedColumnPlugin::make(),
                 FilamentLogViewer::make(),
+                UniverSheetPlugin::make(),
             ]);
     }
 }

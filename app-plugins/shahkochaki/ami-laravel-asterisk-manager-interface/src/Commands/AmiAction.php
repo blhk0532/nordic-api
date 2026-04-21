@@ -2,11 +2,11 @@
 
 namespace Shahkochaki\Ami\Commands;
 
-use Exception;
 use Clue\React\Ami\Client;
+use Clue\React\Ami\Protocol\Response;
+use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Clue\React\Ami\Protocol\Response;
 
 class AmiAction extends AmiAbstract
 {
@@ -44,7 +44,7 @@ class AmiAction extends AmiAbstract
         $options = [];
         $isAssoc = Arr::isAssoc($arguments);
         foreach ($arguments as $key => $value) {
-            if (Str::contains($value, ':') && !$isAssoc) {
+            if (Str::contains($value, ':') && ! $isAssoc) {
                 $array = explode(':', $value);
                 if ($key = Arr::get($array, 0)) {
                     $value = Arr::get($array, 1, '');

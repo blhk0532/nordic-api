@@ -13,11 +13,10 @@ use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
+use Illuminate\Contracts\Support\Htmlable;
 use Usamamuneerchaudhary\Notifier\Filament\Widgets\NotificationStatsOverview;
 use Usamamuneerchaudhary\Notifier\Models\NotificationChannel;
 use Usamamuneerchaudhary\Notifier\Models\NotificationSetting;
-use Illuminate\Contracts\Support\Htmlable;
-
 
 class NotificationSettings extends Page
 {
@@ -37,10 +36,10 @@ class NotificationSettings extends Page
 
     public array $data;
 
-        public function getHeading(): string|Htmlable|null
-{
-    return null;
-}
+    public function getHeading(): string|Htmlable|null
+    {
+        return null;
+    }
 
     public function mount(): void
     {

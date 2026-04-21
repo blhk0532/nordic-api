@@ -14,6 +14,7 @@ use MmesDesign\FilamentFileManager\DTOs\FolderItem;
 use MmesDesign\FilamentFileManager\Enums\SortDirection;
 use MmesDesign\FilamentFileManager\Enums\SortField;
 use MmesDesign\FilamentFileManager\Support\PathSanitizer;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class FileManagerService
 {
@@ -238,7 +239,7 @@ class FileManagerService
         return $count;
     }
 
-    public function download(string $disk, string $path): \Symfony\Component\HttpFoundation\StreamedResponse
+    public function download(string $disk, string $path): StreamedResponse
     {
         $path = $this->pathSanitizer->sanitize($path);
 

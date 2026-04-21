@@ -3,12 +3,12 @@
 namespace Shahkochaki\Ami\Jobs;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Shahkochaki\Ami\Services\BulkSmsService;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Shahkochaki\Ami\Services\BulkSmsService;
 
 /**
  * Background job for bulk SMS processing
@@ -44,10 +44,6 @@ class BulkSmsJob implements ShouldQueue
 
     /**
      * Create a new job instance.
-     *
-     * @param array $recipients
-     * @param string $message
-     * @param array $options
      */
     public function __construct(array $recipients, string $message, array $options = [])
     {
@@ -134,7 +130,6 @@ class BulkSmsJob implements ShouldQueue
     /**
      * Handle a job failure.
      *
-     * @param  \Exception  $exception
      * @return void
      */
     public function failed(\Exception $exception)

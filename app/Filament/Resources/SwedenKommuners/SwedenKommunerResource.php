@@ -25,7 +25,7 @@ class SwedenKommunerResource extends Resource
 
     protected static bool $isScopedToTenant = false;
 
-     protected static ?int $navigationSort = -95;
+    protected static ?int $navigationSort = -95;
 
     protected static ?string $navigationLabel = 'Kommuner';
 

@@ -25,12 +25,12 @@
         "caresome/filament-auth-designer": "^3.1",
         "cheesegrits/filament-google-maps": "@dev",
         "croustibat/filament-jobs-monitor": "^4.4",
+        "cyberline/filament-navigation-footermenu": "^1.0",
         "deldius/filament-user-field": "^1.1",
         "devletes/filament-pinnable-navigation": "^1.0",
         "devletes/filament-progress-bar": "^1.0",
         "dutchcodingcompany/filament-socialite": "^3.2",
         "eduardoribeirodev/filament-leaflet": "@dev",
-        "eightynine/filament-excel-import": "dev-main",
         "fahiem/filament-pinpoint": "^1.1",
         "filament/filament": "^5.4",
         "flexpik/filament-studio": "^1.1",
@@ -52,10 +52,11 @@
         "laravel/tinker": "^3.0",
         "laraveljutsu/zap": "^1.15",
         "leandrocfe/filament-apex-charts": "^5.1",
+        "leek/filament-header-filters": "^1.0",
         "livewire/blaze": "^1.0",
         "livewire/flux": "^2.12.0",
         "livewire/livewire": "^4.1",
-        "maatwebsite/excel": "^3.1",
+        "maatwebsite/excel": "^1.1",
         "mallardduck/blade-lucide-icons": "^1.26",
         "malzariey/filament-daterangepicker-filter": "^5.0",
         "mmes-design/filament-file-manager": "@dev",
@@ -66,7 +67,8 @@
         "nativephp/mobile": "^3.2",
         "nunomaduro/pokio": "^1.0",
         "osamaatef/filament-drilldown-sidebar": "@dev",
-        "pxlrbt/filament-excel": "^3.6",
+        "qalainau/filament-univer-sheet": "^1.1",
+        "rawand201/filament-connection-badge": "^1.0",
         "secondnetwork/blade-tabler-icons": "^3.41",
         "shahkochaki/ami-laravel-asterisk-manager-interface": "*",
         "spatie/laravel-google-calendar": "^3.8",
@@ -77,6 +79,7 @@
         "spiral/roadrunner-http": "^3.3.0",
         "stechstudio/filament-impersonate": "^5.2",
         "usamamuneerchaudhary/filament-notifier": "@dev",
+        "waad/filament-import-wizard": "@dev",
         "wallacemartinss/filament-icon-picker": "@dev",
         "wallacemartinss/filament-whatsapp-conector": "v2.x-dev",
         "wezlo/filament-grid-list": "^1.0",
@@ -181,21 +184,35 @@
                 "symlink": true
             }
         },
-                {
+        {
             "type": "path",
             "url": "app-plugins/awcodes/overlook",
             "options": {
                 "symlink": true
             }
         },
-                        {
+            {
+            "type": "path",
+            "url": "app-plugins/qalainau/filament-univer-sheet",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "app-plugins/waad/filament-import-wizard",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
             "type": "path",
             "url": "app-plugins/wallacemartinss/filament-icon-picker",
             "options": {
                 "symlink": true
             }
         },
-                        {
+        {
             "type": "path",
             "url": "app-plugins/osamaatef1/filament-drilldown-sidebar",
             "options": {

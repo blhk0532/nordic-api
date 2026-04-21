@@ -6,7 +6,7 @@ use Clue\React\Ami\Protocol\Response;
 
 class ActionTest extends TestCase
 {
-    public function testActions()
+    public function test_actions()
     {
         $messages = [
             [

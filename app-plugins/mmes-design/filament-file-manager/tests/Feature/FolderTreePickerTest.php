@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
 use MmesDesign\FilamentFileManager\Forms\Components\FolderTreePicker;
+use MmesDesign\FilamentFileManager\Livewire\FileManager;
 use MmesDesign\FilamentFileManager\Tests\Feature\Concerns\ResetsPermissions;
 use Tests\TestCase;
 
@@ -93,7 +94,7 @@ class FolderTreePickerTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->set('selectedItems', ['file1.txt', 'file2.txt'])
             ->callAction('moveSelected', data: ['destination' => 'target'])
             ->assertHasNoActionErrors();
@@ -112,7 +113,7 @@ class FolderTreePickerTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        Livewire::test(\MmesDesign\FilamentFileManager\Livewire\FileManager::class)
+        Livewire::test(FileManager::class)
             ->call('navigateTo', 'subfolder')
             ->set('selectedItems', ['subfolder/file1.txt', 'subfolder/file2.txt'])
             ->callAction('moveSelected', data: ['destination' => ''])

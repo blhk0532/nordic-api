@@ -46,6 +46,9 @@ class MentorPhone extends Page
 
     public static function shouldRegisterNavigation(): bool
     {
+
+        return false;
+
         $role = Auth::user()->role;
 
         // Check if role is enum

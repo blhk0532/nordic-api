@@ -2,6 +2,7 @@
 
 namespace Shahkochaki\Ami\Jobs;
 
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -9,11 +10,10 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Shahkochaki\Ami\Services\SystemManager;
-use Exception;
 
 /**
  * System Management Job
- * 
+ *
  * Job for executing scheduled system operations like shutdown, restart, etc.
  */
 class SystemManagementJob implements ShouldQueue
@@ -52,9 +52,7 @@ class SystemManagementJob implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param string $operation
-     * @param array $parameters
-     * @param array $connectionOptions
+     * @param  string  $operation
      */
     public function __construct($operation, array $parameters = [], array $connectionOptions = [])
     {
@@ -67,13 +65,14 @@ class SystemManagementJob implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     *
      * @throws Exception
      */
     public function handle()
     {
         Log::info("Starting system operation: {$this->operation}", [
             'parameters' => $this->parameters,
-            'job_id' => $this->job->getJobId()
+            'job_id' => $this->job->getJobId(),
         ]);
 
         try {
@@ -82,13 +81,13 @@ class SystemManagementJob implements ShouldQueue
 
             Log::info("System operation completed successfully: {$this->operation}", [
                 'result' => $result,
-                'job_id' => $this->job->getJobId()
+                'job_id' => $this->job->getJobId(),
             ]);
         } catch (Exception $e) {
             Log::error("System operation failed: {$this->operation}", [
                 'error' => $e->getMessage(),
                 'job_id' => $this->job->getJobId(),
-                'attempt' => $this->attempts()
+                'attempt' => $this->attempts(),
             ]);
 
             throw $e;
@@ -98,8 +97,8 @@ class SystemManagementJob implements ShouldQueue
     /**
      * Execute the specific operation
      *
-     * @param SystemManager $systemManager
      * @return mixed
+     *
      * @throws Exception
      */
     protected function executeOperation(SystemManager $systemManager)
@@ -125,7 +124,6 @@ class SystemManagementJob implements ShouldQueue
     /**
      * Execute shutdown operation
      *
-     * @param SystemManager $systemManager
      * @return mixed
      */
     protected function executeShutdown(SystemManager $systemManager)
@@ -136,9 +134,9 @@ class SystemManagementJob implements ShouldQueue
         // Check for active calls if graceful shutdown
         if ($graceful) {
             $channels = $systemManager->getActiveChannels();
-            if (!empty($channels)) {
-                Log::warning("Active calls detected during scheduled shutdown", [
-                    'active_channels' => count($channels)
+            if (! empty($channels)) {
+                Log::warning('Active calls detected during scheduled shutdown', [
+                    'active_channels' => count($channels),
                 ]);
 
                 // You might want to implement a retry logic here
@@ -152,7 +150,6 @@ class SystemManagementJob implements ShouldQueue
     /**
      * Execute restart operation
      *
-     * @param SystemManager $systemManager
      * @return mixed
      */
     protected function executeRestart(SystemManager $systemManager)
@@ -166,7 +163,6 @@ class SystemManagementJob implements ShouldQueue
     /**
      * Execute reload operation
      *
-     * @param SystemManager $systemManager
      * @return mixed
      */
     protected function executeReload(SystemManager $systemManager)
@@ -179,7 +175,6 @@ class SystemManagementJob implements ShouldQueue
     /**
      * Execute health check operation
      *
-     * @param SystemManager $systemManager
      * @return array
      */
     protected function executeHealthCheck(SystemManager $systemManager)
@@ -192,7 +187,7 @@ class SystemManagementJob implements ShouldQueue
             'timestamp' => date('Y-m-d H:i:s'),
             'server_status' => $status,
             'system_resources' => $resources,
-            'active_channels_count' => is_array($channels) ? count($channels) : 0
+            'active_channels_count' => is_array($channels) ? count($channels) : 0,
         ];
 
         // You can add custom health checks here
@@ -204,7 +199,6 @@ class SystemManagementJob implements ShouldQueue
     /**
      * Calculate system health score
      *
-     * @param array $healthData
      * @return int Health score (0-100)
      */
     protected function calculateHealthScore(array $healthData)
@@ -234,16 +228,15 @@ class SystemManagementJob implements ShouldQueue
     /**
      * Handle a job failure.
      *
-     * @param Exception $exception
      * @return void
      */
     public function failed(Exception $exception)
     {
-        Log::error("System management job failed permanently", [
+        Log::error('System management job failed permanently', [
             'operation' => $this->operation,
             'parameters' => $this->parameters,
             'error' => $exception->getMessage(),
-            'attempts' => $this->attempts()
+            'attempts' => $this->attempts(),
         ]);
 
         // You might want to send notifications here
@@ -263,56 +256,52 @@ class SystemManagementJob implements ShouldQueue
     /**
      * Static helper to schedule a shutdown
      *
-     * @param int $delayMinutes
-     * @param bool $graceful
-     * @param string $reason
-     * @param array $connectionOptions
+     * @param  int  $delayMinutes
+     * @param  bool  $graceful
+     * @param  string  $reason
      * @return void
      */
     public static function scheduleShutdown($delayMinutes, $graceful = true, $reason = 'Scheduled shutdown', array $connectionOptions = [])
     {
         self::dispatch('shutdown', [
             'graceful' => $graceful,
-            'reason' => $reason
+            'reason' => $reason,
         ], $connectionOptions)->delay(now()->addMinutes($delayMinutes));
     }
 
     /**
      * Static helper to schedule a restart
      *
-     * @param int $delayMinutes
-     * @param bool $graceful
-     * @param string $reason
-     * @param array $connectionOptions
+     * @param  int  $delayMinutes
+     * @param  bool  $graceful
+     * @param  string  $reason
      * @return void
      */
     public static function scheduleRestart($delayMinutes, $graceful = true, $reason = 'Scheduled restart', array $connectionOptions = [])
     {
         self::dispatch('restart', [
             'graceful' => $graceful,
-            'reason' => $reason
+            'reason' => $reason,
         ], $connectionOptions)->delay(now()->addMinutes($delayMinutes));
     }
 
     /**
      * Static helper to schedule a configuration reload
      *
-     * @param int $delayMinutes
-     * @param string|null $module
-     * @param array $connectionOptions
+     * @param  int  $delayMinutes
+     * @param  string|null  $module
      * @return void
      */
     public static function scheduleReload($delayMinutes, $module = null, array $connectionOptions = [])
     {
         self::dispatch('reload', [
-            'module' => $module
+            'module' => $module,
         ], $connectionOptions)->delay(now()->addMinutes($delayMinutes));
     }
 
     /**
      * Static helper to schedule periodic health checks
      *
-     * @param array $connectionOptions
      * @return void
      */
     public static function scheduleHealthCheck(array $connectionOptions = [])

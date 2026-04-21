@@ -20,7 +20,7 @@ class ExceptionResource extends Resource
 {
     protected static bool $isScopedToTenant = false;
 
-      protected static ?int $navigationSort = -70;
+    protected static ?int $navigationSort = -70;
 
     public static function getCluster(): ?string
     {

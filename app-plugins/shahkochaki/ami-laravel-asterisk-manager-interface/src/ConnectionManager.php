@@ -6,7 +6,7 @@ use Illuminate\Support\Arr;
 
 /**
  * Connection Manager for AMI
- * 
+ *
  * Provides advanced connection management features
  */
 class ConnectionManager
@@ -34,9 +34,8 @@ class ConnectionManager
     /**
      * Store connection in pool
      *
-     * @param string $key
-     * @param mixed $connection
-     * @param array $config
+     * @param  string  $key
+     * @param  mixed  $connection
      * @return void
      */
     public static function store($key, $connection, array $config = [])
@@ -50,7 +49,7 @@ class ConnectionManager
     /**
      * Get connection from pool
      *
-     * @param string $key
+     * @param  string  $key
      * @return mixed|null
      */
     public static function get($key)
@@ -61,7 +60,7 @@ class ConnectionManager
     /**
      * Remove connection from pool
      *
-     * @param string $key
+     * @param  string  $key
      * @return void
      */
     public static function remove($key)
@@ -73,7 +72,6 @@ class ConnectionManager
     /**
      * Generate connection key
      *
-     * @param array $options
      * @return string
      */
     public static function generateKey(array $options)
@@ -124,14 +122,14 @@ class ConnectionManager
     /**
      * Enable/disable connection pooling
      *
-     * @param bool $enable
+     * @param  bool  $enable
      * @return void
      */
     public static function setPooling($enable)
     {
         self::$enablePooling = $enable;
 
-        if (!$enable) {
+        if (! $enable) {
             self::closeAll();
         }
     }
@@ -139,7 +137,7 @@ class ConnectionManager
     /**
      * Set maximum connections
      *
-     * @param int $max
+     * @param  int  $max
      * @return void
      */
     public static function setMaxConnections($max)
@@ -150,7 +148,7 @@ class ConnectionManager
     /**
      * Check if connection exists and is valid
      *
-     * @param string $key
+     * @param  string  $key
      * @return bool
      */
     public static function exists($key)

@@ -20,6 +20,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 
@@ -39,7 +40,7 @@ class DialerCampaignResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
-        public function getHeading(): \Illuminate\Contracts\Support\Htmlable|string|null
+    public function getHeading(): Htmlable|string|null
     {
         return null;
     }

@@ -6,12 +6,8 @@ namespace App\Filament\Resources\Jobs\Pages;
 
 use App\Filament\Resources\Jobs\JobResource;
 use App\Filament\Resources\Jobs\Widgets\QueueMonitorWidget;
-use Exception;
-use Filament\Actions\Action;
-use Filament\Actions\CreateAction;
-use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Contracts\Support\Htmlable;
 
 class ListJobs extends ListRecords
 {
@@ -24,7 +20,7 @@ class ListJobs extends ListRecords
         ];
     }
 
-    public function getHeading(): \Illuminate\Contracts\Support\Htmlable|string|null
+    public function getHeading(): Htmlable|string|null
     {
         return null;
     }

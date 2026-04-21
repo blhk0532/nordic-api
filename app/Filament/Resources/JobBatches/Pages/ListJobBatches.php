@@ -7,6 +7,7 @@ namespace App\Filament\Resources\JobBatches\Pages;
 use App\Filament\Resources\JobBatches\JobBatchResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Contracts\Support\Htmlable;
 
 class ListJobBatches extends ListRecords
 {
@@ -15,11 +16,11 @@ class ListJobBatches extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-           // CreateAction::make(),
+            // CreateAction::make(),
         ];
     }
 
-        public function getHeading(): \Illuminate\Contracts\Support\Htmlable|string|null
+    public function getHeading(): Htmlable|string|null
     {
         return null;
     }

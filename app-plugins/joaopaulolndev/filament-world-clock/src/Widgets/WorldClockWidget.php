@@ -97,7 +97,7 @@ class WorldClockWidget extends Widget
         return static::getPluginInstance()?->getSort() ?? -1;
     }
 
-    public function getColumnSpan(): int | string | array
+    public function getColumnSpan(): int|string|array
     {
         return static::getPluginInstance()?->getColumnSpan() ?? '1/2';
     }

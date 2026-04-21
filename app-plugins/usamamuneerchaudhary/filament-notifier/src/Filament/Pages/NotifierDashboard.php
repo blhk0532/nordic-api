@@ -3,13 +3,13 @@
 namespace Usamamuneerchaudhary\Notifier\Filament\Pages;
 
 use Filament\Pages\Page;
+use Illuminate\Contracts\Support\Htmlable;
 use Usamamuneerchaudhary\Notifier\Filament\Widgets\NotificationAnalyticsChart;
 use Usamamuneerchaudhary\Notifier\Filament\Widgets\NotificationChannelPerformance;
 use Usamamuneerchaudhary\Notifier\Filament\Widgets\NotificationEngagementStats;
 use Usamamuneerchaudhary\Notifier\Filament\Widgets\NotificationStatsOverview;
 use Usamamuneerchaudhary\Notifier\Filament\Widgets\NotificationTimeSeriesChart;
 use Usamamuneerchaudhary\Notifier\Filament\Widgets\RateLimitingStatusWidget;
-use Illuminate\Contracts\Support\Htmlable;
 
 class NotifierDashboard extends Page
 {
@@ -25,10 +25,10 @@ class NotifierDashboard extends Page
 
     protected string $view = 'notifier::pages.dashboard';
 
-        public function getHeading(): string|Htmlable|null
-{
-    return null;
-}
+    public function getHeading(): string|Htmlable|null
+    {
+        return null;
+    }
 
     protected function getWidgets(): array
     {

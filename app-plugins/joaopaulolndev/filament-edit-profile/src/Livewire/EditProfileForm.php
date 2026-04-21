@@ -145,7 +145,7 @@ class EditProfileForm extends BaseProfileForm
         }
     }
 
-    private function sendEmailChangeVerification(Authenticatable & Model $user, string $newEmail): void
+    private function sendEmailChangeVerification(Authenticatable&Model $user, string $newEmail): void
     {
         if ($user->getAttributeValue('email') === $newEmail) {
             return;

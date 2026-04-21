@@ -170,7 +170,7 @@ class RoleResource extends Resource
         return FilamentShieldPlugin::get();
     }
 
-        public static function getPluralModelLabel(): string
+    public static function getPluralModelLabel(): string
     {
         return __('★ Roles @APP');
     }

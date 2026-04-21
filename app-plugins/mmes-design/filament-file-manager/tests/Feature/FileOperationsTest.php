@@ -5,6 +5,7 @@ namespace MmesDesign\FilamentFileManager\Tests\Feature;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use MmesDesign\FilamentFileManager\Services\FileManagerService;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Tests\TestCase;
 
 class FileOperationsTest extends TestCase
@@ -150,7 +151,7 @@ class FileOperationsTest extends TestCase
 
         $response = $this->service->download('public', 'download-me.txt');
 
-        $this->assertInstanceOf(\Symfony\Component\HttpFoundation\StreamedResponse::class, $response);
+        $this->assertInstanceOf(StreamedResponse::class, $response);
     }
 
     public function test_move_file(): void

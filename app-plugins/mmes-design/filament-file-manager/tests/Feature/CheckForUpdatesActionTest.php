@@ -3,6 +3,7 @@
 namespace MmesDesign\FilamentFileManager\Tests\Feature;
 
 use App\Models\User;
+use Composer\InstalledVersions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Livewire\Livewire;
@@ -34,7 +35,7 @@ class CheckForUpdatesActionTest extends TestCase
 
     public function test_shows_up_to_date_notification_when_current_version(): void
     {
-        $installedVersion = \Composer\InstalledVersions::getPrettyVersion('mmes-design/filament-file-manager');
+        $installedVersion = InstalledVersions::getPrettyVersion('mmes-design/filament-file-manager');
 
         Http::fake([
             'repo.packagist.org/*' => Http::response([

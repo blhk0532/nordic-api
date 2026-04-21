@@ -2,10 +2,9 @@
 
 namespace Shahkochaki\Ami\Commands;
 
-use Exception;
 use Clue\React\Ami\Client;
-use Illuminate\Support\Arr;
 use Clue\React\Ami\Protocol\Response;
+use Exception;
 
 class AmiSystemControl extends AmiAbstract
 {
@@ -48,9 +47,10 @@ class AmiSystemControl extends AmiAbstract
         $force = $this->option('force');
 
         // Confirmation for destructive operations
-        if (!$force && in_array($operation, ['shutdown', 'restart']) && $this->runningInConsole()) {
-            if (!$this->confirm("Are you sure you want to {$operation} the Asterisk server?")) {
+        if (! $force && in_array($operation, ['shutdown', 'restart']) && $this->runningInConsole()) {
+            if (! $this->confirm("Are you sure you want to {$operation} the Asterisk server?")) {
                 $this->info('Operation cancelled.');
+
                 return;
             }
         }
@@ -69,7 +69,7 @@ class AmiSystemControl extends AmiAbstract
                     $this->stop();
                 },
                 function (Exception $exception) use ($operation) {
-                    $this->error("System operation '{$operation}' failed: " . $exception->getMessage());
+                    $this->error("System operation '{$operation}' failed: ".$exception->getMessage());
                     throw $exception;
                 }
             );
@@ -82,9 +82,9 @@ class AmiSystemControl extends AmiAbstract
     /**
      * Execute system operation
      *
-     * @param string $operation
-     * @param bool $graceful
-     * @param string|null $module
+     * @param  string  $operation
+     * @param  bool  $graceful
+     * @param  string|null  $module
      * @return mixed|null
      */
     protected function executeSystemOperation($operation, $graceful = false, $module = null)
@@ -110,7 +110,7 @@ class AmiSystemControl extends AmiAbstract
     /**
      * Shutdown the server
      *
-     * @param bool $graceful
+     * @param  bool  $graceful
      * @return mixed
      */
     protected function shutdownServer($graceful)
@@ -127,7 +127,7 @@ class AmiSystemControl extends AmiAbstract
     /**
      * Restart the server
      *
-     * @param bool $graceful
+     * @param  bool  $graceful
      * @return mixed
      */
     protected function restartServer($graceful)
@@ -144,7 +144,7 @@ class AmiSystemControl extends AmiAbstract
     /**
      * Reload configuration
      *
-     * @param string|null $module
+     * @param  string|null  $module
      * @return mixed
      */
     protected function reloadConfiguration($module)
@@ -166,7 +166,7 @@ class AmiSystemControl extends AmiAbstract
     protected function getServerStatus()
     {
         if ($this->runningInConsole()) {
-            $this->info("Getting server status...");
+            $this->info('Getting server status...');
         }
 
         return $this->request('Command', ['Command' => 'core show version']);
@@ -175,8 +175,7 @@ class AmiSystemControl extends AmiAbstract
     /**
      * Display system response
      *
-     * @param string $operation
-     * @param Response $response
+     * @param  string  $operation
      * @return void
      */
     public function displaySystemResponse($operation, Response $response)
@@ -185,7 +184,7 @@ class AmiSystemControl extends AmiAbstract
         $message = $response->getFieldValue('Message') ?? 'No message';
 
         $this->table($this->headers, [
-            [$operation, $status, $message]
+            [$operation, $status, $message],
         ]);
 
         // Additional details for status operation
@@ -193,7 +192,7 @@ class AmiSystemControl extends AmiAbstract
             $this->line('');
             $this->info('System Details:');
             foreach ($response->getFields() as $key => $value) {
-                if (!in_array($key, ['Response', 'Message', 'ActionID'])) {
+                if (! in_array($key, ['Response', 'Message', 'ActionID'])) {
                     $this->line("  {$key}: {$value}");
                 }
             }

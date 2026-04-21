@@ -19,7 +19,7 @@ class NotificationResource extends Resource
 
     protected static string|null|\UnitEnum $navigationGroup = 'Notifications';
 
-     protected static bool $isScopedToTenant = false;
+    protected static bool $isScopedToTenant = false;
 
     protected static ?string $modelLabel = 'Notifications';
 

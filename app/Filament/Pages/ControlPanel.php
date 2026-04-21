@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages;
 
+use App\Filament\Resources\HittaDatas\HittaDataResource;
 use App\Filament\Resources\Merinfos\MerinfoResource;
 use App\Filament\Resources\People\PersonResource;
-use App\Filament\Resources\HittaDatas\HittaDataResource;
 use App\Filament\Resources\RatsitDatas\RatsitDataResource;
 use App\Filament\Resources\SwedenAdressers\SwedenAdresserResource;
 use App\Filament\Resources\SwedenGators\SwedenGatorResource;
@@ -23,13 +23,14 @@ use Harvirsidhu\FilamentCards\Filament\Pages\CardsPage;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Auth;
 use UnitEnum;
+
 class ControlPanel extends CardsPage
 {
     // protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-squares-2x2';
 
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-squares-2x2';
 
-       protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-squares-2x2';
-       protected static string|BackedEnum|null $activeNavigationIcon = 'heroicon-o-squares-2x2';
+    protected static string|BackedEnum|null $activeNavigationIcon = 'heroicon-o-squares-2x2';
 
     //   protected static string|UnitEnum|null $navigationGroup = 'Dashboards';
 
@@ -41,15 +42,15 @@ class ControlPanel extends CardsPage
 
     protected static ?int $navigationSort = -1;
 
-        public static function getModelLabel(): string
+    public static function getModelLabel(): string
     {
         return __('#');
     }
 
-public function getHeading(): string|Htmlable|null
-{
-    return null;
-}
+    public function getHeading(): string|Htmlable|null
+    {
+        return null;
+    }
 
     public static function getPluralModelLabel(): string
     {

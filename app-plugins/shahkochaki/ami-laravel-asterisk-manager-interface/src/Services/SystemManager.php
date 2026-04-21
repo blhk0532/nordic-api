@@ -2,12 +2,12 @@
 
 namespace Shahkochaki\Ami\Services;
 
-use Illuminate\Support\Facades\Artisan;
 use Exception;
+use Illuminate\Support\Facades\Artisan;
 
 /**
  * System Management Service
- * 
+ *
  * Provides system-level operations for Asterisk/Issabel server management
  */
 class SystemManager
@@ -19,8 +19,6 @@ class SystemManager
 
     /**
      * Constructor
-     *
-     * @param array $connectionOptions
      */
     public function __construct(array $connectionOptions = [])
     {
@@ -30,8 +28,8 @@ class SystemManager
     /**
      * Shutdown the Asterisk server gracefully
      *
-     * @param bool $graceful Whether to shutdown gracefully (wait for calls to complete)
-     * @param string $reason Reason for shutdown
+     * @param  bool  $graceful  Whether to shutdown gracefully (wait for calls to complete)
+     * @param  string  $reason  Reason for shutdown
      * @return mixed
      */
     public function shutdownServer($graceful = true, $reason = 'System maintenance')
@@ -45,22 +43,22 @@ class SystemManager
             // If there are active calls, use graceful shutdown
             if ($this->hasActiveCalls($activeChannels)) {
                 return $this->executeAction('Command', [
-                    'Command' => 'core stop gracefully'
+                    'Command' => 'core stop gracefully',
                 ]);
             }
         }
 
         // Immediate shutdown
         return $this->executeAction('Command', [
-            'Command' => 'core stop now'
+            'Command' => 'core stop now',
         ]);
     }
 
     /**
      * Restart the Asterisk server
      *
-     * @param bool $graceful Whether to restart gracefully
-     * @param string $reason Reason for restart
+     * @param  bool  $graceful  Whether to restart gracefully
+     * @param  string  $reason  Reason for restart
      * @return mixed
      */
     public function restartServer($graceful = true, $reason = 'System maintenance')
@@ -68,14 +66,14 @@ class SystemManager
         $command = $graceful ? 'core restart gracefully' : 'core restart now';
 
         return $this->executeAction('Command', [
-            'Command' => $command
+            'Command' => $command,
         ]);
     }
 
     /**
      * Reload Asterisk configuration
      *
-     * @param string|null $module Specific module to reload (optional)
+     * @param  string|null  $module  Specific module to reload (optional)
      * @return mixed
      */
     public function reloadConfiguration($module = null)
@@ -83,7 +81,7 @@ class SystemManager
         $command = $module ? "module reload {$module}" : 'core reload';
 
         return $this->executeAction('Command', [
-            'Command' => $command
+            'Command' => $command,
         ]);
     }
 
@@ -99,12 +97,12 @@ class SystemManager
         try {
             // Get system info
             $status['system_info'] = $this->executeAction('Command', [
-                'Command' => 'core show version'
+                'Command' => 'core show version',
             ]);
 
             // Get uptime
             $status['uptime'] = $this->executeAction('Command', [
-                'Command' => 'core show uptime'
+                'Command' => 'core show uptime',
             ]);
 
             // Get active channels count
@@ -112,12 +110,12 @@ class SystemManager
 
             // Get memory usage
             $status['memory'] = $this->executeAction('Command', [
-                'Command' => 'memory show summary'
+                'Command' => 'memory show summary',
             ]);
 
             // Get call statistics
             $status['calls'] = $this->executeAction('Command', [
-                'Command' => 'core show calls'
+                'Command' => 'core show calls',
             ]);
         } catch (Exception $e) {
             $status['error'] = $e->getMessage();
@@ -134,7 +132,7 @@ class SystemManager
     public function emergencyShutdown()
     {
         return $this->executeAction('Command', [
-            'Command' => 'core stop now'
+            'Command' => 'core stop now',
         ]);
     }
 
@@ -146,14 +144,14 @@ class SystemManager
     public function emergencyRestart()
     {
         return $this->executeAction('Command', [
-            'Command' => 'core restart now'
+            'Command' => 'core restart now',
         ]);
     }
 
     /**
      * Check if there are active calls
      *
-     * @param mixed $channelsResponse
+     * @param  mixed  $channelsResponse
      * @return bool
      */
     protected function hasActiveCalls($channelsResponse)
@@ -176,9 +174,9 @@ class SystemManager
     /**
      * Schedule a shutdown
      *
-     * @param int $delayMinutes Delay in minutes
-     * @param bool $graceful Whether to shutdown gracefully
-     * @param string $reason Reason for shutdown
+     * @param  int  $delayMinutes  Delay in minutes
+     * @param  bool  $graceful  Whether to shutdown gracefully
+     * @param  string  $reason  Reason for shutdown
      * @return array
      */
     public function scheduleShutdown($delayMinutes, $graceful = true, $reason = 'Scheduled maintenance')
@@ -191,16 +189,16 @@ class SystemManager
             'graceful' => $graceful,
             'reason' => $reason,
             'scheduled_at' => date('Y-m-d H:i:s'),
-            'execute_at' => date('Y-m-d H:i:s', time() + ($delayMinutes * 60))
+            'execute_at' => date('Y-m-d H:i:s', time() + ($delayMinutes * 60)),
         ];
     }
 
     /**
      * Schedule a restart
      *
-     * @param int $delayMinutes Delay in minutes
-     * @param bool $graceful Whether to restart gracefully
-     * @param string $reason Reason for restart
+     * @param  int  $delayMinutes  Delay in minutes
+     * @param  bool  $graceful  Whether to restart gracefully
+     * @param  string  $reason  Reason for restart
      * @return array
      */
     public function scheduleRestart($delayMinutes, $graceful = true, $reason = 'Scheduled maintenance')
@@ -211,14 +209,14 @@ class SystemManager
             'graceful' => $graceful,
             'reason' => $reason,
             'scheduled_at' => date('Y-m-d H:i:s'),
-            'execute_at' => date('Y-m-d H:i:s', time() + ($delayMinutes * 60))
+            'execute_at' => date('Y-m-d H:i:s', time() + ($delayMinutes * 60)),
         ];
     }
 
     /**
      * Cancel scheduled system operation
      *
-     * @param string $operationId
+     * @param  string  $operationId
      * @return bool
      */
     public function cancelScheduledOperation($operationId)
@@ -239,15 +237,15 @@ class SystemManager
 
         try {
             $resources['memory'] = $this->executeAction('Command', [
-                'Command' => 'memory show summary'
+                'Command' => 'memory show summary',
             ]);
 
             $resources['tasks'] = $this->executeAction('Command', [
-                'Command' => 'core show taskprocessors'
+                'Command' => 'core show taskprocessors',
             ]);
 
             $resources['threads'] = $this->executeAction('Command', [
-                'Command' => 'core show threads'
+                'Command' => 'core show threads',
             ]);
         } catch (Exception $e) {
             $resources['error'] = $e->getMessage();
@@ -259,8 +257,7 @@ class SystemManager
     /**
      * Execute AMI action
      *
-     * @param string $action
-     * @param array $arguments
+     * @param  string  $action
      * @return mixed
      */
     protected function executeAction($action, array $arguments = [])
@@ -269,7 +266,7 @@ class SystemManager
             'action' => $action,
         ], $this->connectionOptions);
 
-        if (!empty($arguments)) {
+        if (! empty($arguments)) {
             $command['--arguments'] = $arguments;
         }
 
@@ -279,12 +276,12 @@ class SystemManager
     /**
      * Set connection options
      *
-     * @param array $options
      * @return self
      */
     public function setConnectionOptions(array $options)
     {
         $this->connectionOptions = $options;
+
         return $this;
     }
 

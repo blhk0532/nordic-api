@@ -10,7 +10,7 @@ class ListSwedenGators extends ListRecords
 {
     protected static string $resource = SwedenGatorResource::class;
 
-      protected static ?string $title = '@ Gator DB';
+    protected static ?string $title = '@ Gator DB';
 
     protected function getHeaderActions(): array
     {
@@ -31,7 +31,4 @@ class ListSwedenGators extends ListRecords
     {
         return null;
     }
-
-
-
-    }
+}

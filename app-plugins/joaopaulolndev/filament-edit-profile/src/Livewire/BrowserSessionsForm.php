@@ -109,7 +109,7 @@ class BrowserSessionsForm extends BaseProfileForm
         Auth::guard()->logoutOtherDevices($password);
 
         request()->session()->put([
-            'password_hash_' . Auth::getDefaultDriver() => Auth::user()->getAuthPassword(),
+            'password_hash_'.Auth::getDefaultDriver() => Auth::user()->getAuthPassword(),
         ]);
 
         self::deleteOtherSessionRecords();

@@ -12,6 +12,9 @@
 
 @source '../../../../vendor/wezlo/filament-grid-list/resources/views/**/*';
 
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+@import '../../../../vendor/leek/filament-header-filters/resources/dist/filament-header-filters.css';
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 footer{

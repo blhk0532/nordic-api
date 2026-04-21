@@ -14,11 +14,11 @@ class ListMerinfos extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-         //   Actions\CreateAction::make(),
+            //   Actions\CreateAction::make(),
         ];
     }
 
-        public function getHeading(): string|Htmlable|null
+    public function getHeading(): string|Htmlable|null
     {
         return null;
     }

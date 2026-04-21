@@ -6,7 +6,7 @@ use Clue\React\Ami\Protocol\Event;
 
 class EventTest extends TestCase
 {
-    public function testEvents()
+    public function test_events()
     {
         $messages = [
             [

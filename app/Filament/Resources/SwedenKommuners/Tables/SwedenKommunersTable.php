@@ -12,7 +12,7 @@ use App\Jobs\RunGatorRatsitJob;
 use App\Jobs\RunPersonerRatsitJob;
 use App\Models\SwedenPersoner;
 use Devletes\FilamentProgressBar\Tables\Columns\ProgressBarColumn;
-use EightyNine\ExcelImport\ExcelImportAction;
+use Waad\FilamentImportWizard\Actions\ImportWizardAction as ExcelImportAction;
 use Filament\Actions\Action;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;

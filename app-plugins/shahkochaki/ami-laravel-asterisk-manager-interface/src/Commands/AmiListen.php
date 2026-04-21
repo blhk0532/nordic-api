@@ -3,8 +3,8 @@
 namespace Shahkochaki\Ami\Commands;
 
 use Clue\React\Ami\Client;
-use Illuminate\Support\Arr;
 use Clue\React\Ami\Protocol\Event;
+use Illuminate\Support\Arr;
 
 class AmiListen extends AmiAbstract
 {
@@ -52,7 +52,7 @@ class AmiListen extends AmiAbstract
         $options = Arr::get($this->events, $name, []);
         $params = [$event, $options];
         $this->dispatcher->dispatch('ami.events.*', $params);
-        $this->dispatcher->dispatch('ami.events.' . $name, $params);
+        $this->dispatcher->dispatch('ami.events.'.$name, $params);
     }
 
     public function client(Client $client)

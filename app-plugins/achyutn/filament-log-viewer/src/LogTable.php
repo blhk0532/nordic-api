@@ -213,26 +213,26 @@ final class LogTable extends Page implements HasTable
                 ]
             )
             ->toolbarActions([
-                 Action::make('refresh')
-                ->label(__('filament-log-viewer::log.table.actions.refresh.label'))
-                ->icon(Heroicon::ArrowPath)
-                ->outlined()
-                ->action(function (): void {
-                    $this->refresh();
-                }),
-            Action::make('clear')
-                ->label(__('filament-log-viewer::log.table.actions.clear.label'))
-                ->icon(Heroicon::Trash)
-                ->color(Color::Red)
-                ->visible(fn () => config('filament-log-viewer.enable_delete', true))
-                ->requiresConfirmation()
-                ->action(function (): void {
-                    Log::destroyAllLogs();
-                    Notification::make()
-                        ->title(__('filament-log-viewer::log.table.actions.clear.success'))
-                        ->success()
-                        ->send();
-                }),
+                Action::make('refresh')
+                    ->label(__('filament-log-viewer::log.table.actions.refresh.label'))
+                    ->icon(Heroicon::ArrowPath)
+                    ->outlined()
+                    ->action(function (): void {
+                        $this->refresh();
+                    }),
+                Action::make('clear')
+                    ->label(__('filament-log-viewer::log.table.actions.clear.label'))
+                    ->icon(Heroicon::Trash)
+                    ->color(Color::Red)
+                    ->visible(fn () => config('filament-log-viewer.enable_delete', true))
+                    ->requiresConfirmation()
+                    ->action(function (): void {
+                        Log::destroyAllLogs();
+                        Notification::make()
+                            ->title(__('filament-log-viewer::log.table.actions.clear.success'))
+                            ->success()
+                            ->send();
+                    }),
             ])
             ->filtersFormWidth(Width::Large)
             ->filtersFormColumns(3)

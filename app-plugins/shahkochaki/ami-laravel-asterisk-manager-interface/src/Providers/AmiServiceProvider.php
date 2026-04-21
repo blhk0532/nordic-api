@@ -2,20 +2,19 @@
 
 namespace Shahkochaki\Ami\Providers;
 
-use Shahkochaki\Ami\Factory;
-use Shahkochaki\Ami\Commands\AmiCli;
-use Shahkochaki\Ami\Commands\AmiSms;
-use Shahkochaki\Ami\Commands\AmiUssd;
-use Shahkochaki\Ami\Commands\AmiSystemControl;
-use Shahkochaki\Ami\Services\SystemManager;
-use Shahkochaki\Ami\Services\AmiService;
-use React\Socket\Connector;
-use Shahkochaki\Ami\Commands\AmiAction;
-use Shahkochaki\Ami\Commands\AmiListen;
+use Illuminate\Support\ServiceProvider;
 use React\EventLoop\LoopInterface;
 use React\EventLoop\StreamSelectLoop;
-use Illuminate\Support\ServiceProvider;
-use React\Dns\Resolver\Factory as DnsResolver;
+use React\Socket\Connector;
+use Shahkochaki\Ami\Commands\AmiAction;
+use Shahkochaki\Ami\Commands\AmiCli;
+use Shahkochaki\Ami\Commands\AmiListen;
+use Shahkochaki\Ami\Commands\AmiSms;
+use Shahkochaki\Ami\Commands\AmiSystemControl;
+use Shahkochaki\Ami\Commands\AmiUssd;
+use Shahkochaki\Ami\Factory;
+use Shahkochaki\Ami\Services\AmiService;
+use Shahkochaki\Ami\Services\SystemManager;
 
 class AmiServiceProvider extends ServiceProvider
 {
@@ -25,7 +24,7 @@ class AmiServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            realpath(__DIR__ . '/../../config/ami.php') => config_path('ami.php'),
+            realpath(__DIR__.'/../../config/ami.php') => config_path('ami.php'),
         ], 'ami');
     }
 
@@ -61,7 +60,7 @@ class AmiServiceProvider extends ServiceProvider
      */
     protected function registerConfig()
     {
-        $this->mergeConfigFrom(realpath(__DIR__ . '/../../config/ami.php'), 'ami');
+        $this->mergeConfigFrom(realpath(__DIR__.'/../../config/ami.php'), 'ami');
     }
 
     /**
@@ -114,7 +113,7 @@ class AmiServiceProvider extends ServiceProvider
     protected function registerDongleUssd()
     {
         $this->app->singleton(AmiUssd::class, function ($app) {
-            return new AmiUssd();
+            return new AmiUssd;
         });
         $this->app->alias(AmiUssd::class, 'command.ami.dongle.ussd');
     }
@@ -125,7 +124,7 @@ class AmiServiceProvider extends ServiceProvider
     protected function registerEventLoop()
     {
         $this->app->singleton(LoopInterface::class, function () {
-            return new StreamSelectLoop();
+            return new StreamSelectLoop;
         });
         $this->app->alias(LoopInterface::class, 'ami.eventloop');
     }

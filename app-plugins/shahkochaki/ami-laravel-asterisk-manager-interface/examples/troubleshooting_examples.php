@@ -2,7 +2,7 @@
 
 /**
  * مثال حل مشکل "Target class [ami] does not exist"
- * 
+ *
  * این فایل راه‌حل‌های مختلف برای حل این مشکل رایج را نمایش می‌دهد
  */
 
@@ -17,15 +17,15 @@ $ami = new AmiService([
     'host' => '192.168.1.100',
     'port' => 5038,
     'username' => 'admin',
-    'secret' => 'mypass'
+    'secret' => 'mypass',
 ]);
 
 // تست اتصال
 try {
     $result = $ami->ping();
-    echo "✅ اتصال موفق: " . json_encode($result) . "\n";
+    echo '✅ اتصال موفق: '.json_encode($result)."\n";
 } catch (Exception $e) {
-    echo "❌ خطا در اتصال: " . $e->getMessage() . "\n";
+    echo '❌ خطا در اتصال: '.$e->getMessage()."\n";
 }
 
 // ==============================================
@@ -45,12 +45,12 @@ class ExampleController
             return response()->json([
                 'status' => 'success',
                 'message' => 'اتصال برقرار شد',
-                'data' => $result
+                'data' => $result,
             ]);
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'خطا در اتصال: ' . $e->getMessage()
+                'message' => 'خطا در اتصال: '.$e->getMessage(),
             ], 500);
         }
     }
@@ -64,12 +64,12 @@ class ExampleController
 
             return response()->json([
                 'status' => 'success',
-                'active_channels' => $channels
+                'active_channels' => $channels,
             ]);
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ], 500);
         }
     }
@@ -101,12 +101,12 @@ class CallController
             return response()->json([
                 'status' => 'success',
                 'message' => 'تماس برقرار شد',
-                'call_id' => $result
+                'call_id' => $result,
             ]);
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'خطا در برقراری تماس: ' . $e->getMessage()
+                'message' => 'خطا در برقراری تماس: '.$e->getMessage(),
             ], 500);
         }
     }
@@ -131,12 +131,12 @@ class SmsController
             return response()->json([
                 'status' => 'success',
                 'message' => 'پیام ارسال شد',
-                'result' => $result
+                'result' => $result,
             ]);
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'خطا در ارسال پیام: ' . $e->getMessage()
+                'message' => 'خطا در ارسال پیام: '.$e->getMessage(),
             ], 500);
         }
     }
@@ -209,7 +209,7 @@ class CustomAmiServiceProvider extends ServiceProvider
     public function boot()
     {
         // بروزرسانی config
-        $this->mergeConfigFrom(__DIR__ . '/../config/ami.php', 'ami');
+        $this->mergeConfigFrom(__DIR__.'/../config/ami.php', 'ami');
     }
 }
 
@@ -233,7 +233,7 @@ $config = [
     'host' => '192.168.1.100',
     'port' => 5038,
     'username' => 'admin',
-    'secret' => 'mypass'
+    'secret' => 'mypass',
 ];
 
 $ami = new AmiService($config);
@@ -250,7 +250,7 @@ try {
     echo "✅ دریافت وضعیت موفق\n";
     print_r($status);
 } catch (Exception $e) {
-    echo "❌ خطا: " . $e->getMessage() . "\n";
+    echo '❌ خطا: '.$e->getMessage()."\n";
     echo "📝 بررسی کنید:\n";
     echo "  - آدرس و پورت سرور\n";
     echo "  - نام کاربری و رمز عبور AMI\n";
@@ -285,9 +285,9 @@ php artisan ami:action Ping --host=192.168.1.100 --port=5038 --username=admin --
 php artisan route:list | grep ami
 */
 
-echo "\n" . str_repeat("=", 50) . "\n";
+echo "\n".str_repeat('=', 50)."\n";
 echo "راهنمای حل مشکل Target class [ami] does not exist\n";
-echo str_repeat("=", 50) . "\n";
+echo str_repeat('=', 50)."\n";
 echo "1. استفاده مستقیم از AmiService\n";
 echo "2. Dependency Injection در Controller\n";
 echo "3. استفاده از app() یا resolve()\n";
@@ -295,4 +295,4 @@ echo "4. بررسی Service Provider\n";
 echo "5. پاک کردن cache‌های Laravel\n";
 echo "6. تست در php artisan tinker\n";
 echo "7. مراجعه به docs/TROUBLESHOOTING.md\n";
-echo str_repeat("=", 50) . "\n";
+echo str_repeat('=', 50)."\n";

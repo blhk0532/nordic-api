@@ -8,7 +8,6 @@ use BezhanSalleh\FilamentExceptions\Resources\ExceptionResource;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Contracts\Support\Htmlable;
 
-
 class ListExceptions extends ListRecords
 {
     protected static string $resource = ExceptionResource::class;
@@ -25,7 +24,7 @@ class ListExceptions extends ListRecords
         return __('filament-exceptions::filament-exceptions.empty_list');
     }
 
-        public function getHeading(): string|Htmlable|null
+    public function getHeading(): string|Htmlable|null
     {
         return null;
     }

@@ -23,7 +23,7 @@ class ListCommandRuns extends ListRecords
         ];
     }
 
-        public function getHeading(): string|Htmlable|null
+    public function getHeading(): string|Htmlable|null
     {
         return null;
     }

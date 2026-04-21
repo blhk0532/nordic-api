@@ -58,7 +58,7 @@ class FileManagerMarkdownEditor extends MarkdownEditor
             ->modalContent(fn (): View => view(
                 'filament-file-manager::markdown-editor.file-picker-modal',
                 [
-                    'fieldId' => 'md-editor-fm-' . $this->getKey(),
+                    'fieldId' => 'md-editor-fm-'.$this->getKey(),
                     'multiple' => $multiple,
                     'disk' => $disk,
                     'acceptedCategories' => $acceptedCategories,

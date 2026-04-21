@@ -5,26 +5,27 @@ declare(strict_types=1);
 namespace App\Filament\Pages;
 
 use App\Filament\Widgets\DatabaseBackupWidget;
+use App\Filament\Widgets\ExternalAppWidget;
 use App\Filament\Widgets\GeoMapWidget;
 use App\Filament\Widgets\LocationMapPickerWidgetFull;
 use App\Filament\Widgets\MapPinsTableWidget;
+use App\Filament\Widgets\SwedenPersonersWidget;
 use Awcodes\Overlook\Widgets\OverlookWidget;
 use BackedEnum;
 use Filament\Pages\Dashboard as BaseDashboard;
 use Filament\Support\Enums\Width;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Auth;
 use UnitEnum;
 use Wallacemartinss\FilamentIconPicker\Enums\BootstrapIcons;
 use Wallacemartinss\FilamentIconPicker\Enums\Remix;
 use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
-use Illuminate\Contracts\Support\Htmlable;
-
 
 class Dashboard extends BaseDashboard
 {
     // protected static ?string $navigationLabel = 'Dashboard';
 
-     protected static ?string $title = '# Dashboard';
+    protected static ?string $title = '# Dashboard';
 
     protected static ?string $slug = 'dashboard';
 
@@ -38,10 +39,9 @@ class Dashboard extends BaseDashboard
 
     protected static bool $shouldRegisterNavigation = false;
 
+    protected string $view = 'filament.app.dashboard';
 
-     protected string $view = 'filament.app.dashboard';
-
-     protected static string|UnitEnum|null $navigationGroup = 'Dashboard';
+    protected static string|UnitEnum|null $navigationGroup = 'Dashboard';
 
     // protected static UnitEnum|string|null $navigationGroup = 'Dashboard';
 
@@ -99,7 +99,7 @@ class Dashboard extends BaseDashboard
         return [
             // AccountInfoStackWidget::class,
             // WorldClockWidget::class,
-            OverlookWidget::class
+            OverlookWidget::class,
             //    AccountWidget::class,
             //    FilamentInfosWidget::class,
             //    StatsOverviewWidget::class,
@@ -116,6 +116,7 @@ class Dashboard extends BaseDashboard
     public function getWidgets(): array
     {
         return [
+            SwedenPersonersWidget::class,
             //  DatabaseBackupWidget::class,
             //    LocationMapPickerWidgetFull::class,
             // GeoMapWidget::class,
@@ -126,7 +127,7 @@ class Dashboard extends BaseDashboard
     {
         return [
             //    MapPinsTableWidget::class,
-
+            ExternalAppWidget::class,
         ];
     }
 
@@ -142,6 +143,6 @@ class Dashboard extends BaseDashboard
 
     public function getFooterWidgetsColumns(): int|array
     {
-        return 1;
+        return 3;
     }
 }

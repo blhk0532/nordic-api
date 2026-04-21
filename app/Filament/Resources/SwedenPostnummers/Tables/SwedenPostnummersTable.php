@@ -12,10 +12,9 @@ use App\Jobs\RunMerinfoDataScriptJob;
 use App\Jobs\RunRatsitDataScriptJob;
 use App\Jobs\RunScriptForPostnummerJob;
 use App\Models\HittaData;
-use App\Models\MerinfoData;
 use App\Models\Merinfo;
+use App\Models\MerinfoData;
 use App\Models\RatsitData;
-use App\Models\SwedenPersoner;
 use App\Models\SwedenPostnummer;
 use App\Services\GoogleSheets\PeopleSheetsSyncService;
 use App\Services\Import\PeopleImportService;
@@ -249,180 +248,210 @@ class SwedenPostnummersTable
                                 ->send();
                         })
                         ->deselectRecordsAfterCompletion(),
-                BulkAction::make('runScript')
-                    ->label('Run Queue Script')
-                    ->icon('heroicon-o-command-line')
-                    ->color('warning')
-                    ->requiresConfirmation()
-                    ->modalHeading('Run script from scripts folder')
-                    ->modalDescription('Select a script from /scripts and run it now.')
-                    ->schema([
-                        Select::make('script_name')
-                            ->label('Script')
-                            ->options(function (): array {
-                                $scriptPaths = glob(base_path('scripts/*')) ?: [];
+                    BulkAction::make('runScript')
+                        ->label('Run Queue Script')
+                        ->icon('heroicon-o-command-line')
+                        ->color('warning')
+                        ->requiresConfirmation()
+                        ->modalHeading('Run script from scripts folder')
+                        ->modalDescription('Select a script from /scripts and run it now.')
+                        ->schema([
+                            Select::make('script_name')
+                                ->label('Script')
+                                ->options(function (): array {
+                                    $scriptPaths = glob(base_path('scripts/*')) ?: [];
 
-                                return collect($scriptPaths)
-                                    ->filter(fn (string $path): bool => is_file($path))
-                                    ->map(fn (string $path): string => basename($path))
-                                    ->sort()
-                                    ->values()
-                                    ->mapWithKeys(fn (string $name): array => [$name => $name])
-                                    ->all();
-                            })
-                            ->searchable()
-                            ->required(),
-                    ])
-                    ->action(function (Collection $records, array $data): void {
-                        try {
-                            $scriptName = trim((string) ($data['script_name'] ?? ''));
+                                    return collect($scriptPaths)
+                                        ->filter(fn (string $path): bool => is_file($path))
+                                        ->map(fn (string $path): string => basename($path))
+                                        ->sort()
+                                        ->values()
+                                        ->mapWithKeys(fn (string $name): array => [$name => $name])
+                                        ->all();
+                                })
+                                ->searchable()
+                                ->required(),
+                        ])
+                        ->action(function (Collection $records, array $data): void {
+                            try {
+                                $scriptName = trim((string) ($data['script_name'] ?? ''));
 
-                            if ($scriptName === '' || ! preg_match('/^[A-Za-z0-9._-]+$/', $scriptName)) {
-                                throw new \Exception('Invalid script name.');
+                                if ($scriptName === '' || ! preg_match('/^[A-Za-z0-9._-]+$/', $scriptName)) {
+                                    throw new \Exception('Invalid script name.');
+                                }
+
+                                $scriptPath = base_path("scripts/{$scriptName}");
+
+                                if (! is_file($scriptPath)) {
+                                    throw new \Exception("Script not found: {$scriptName}");
+                                }
+
+                                $queued = 0;
+
+                                foreach ($records as $record) {
+                                    dispatch(new RunScriptForPostnummerJob(
+                                        scriptName: $scriptName,
+                                        postNummer: (string) $record->postnummer,
+                                    ));
+
+                                    $queued++;
+                                }
+
+                                Notification::make()
+                                    ->success()
+                                    ->title('Script jobs queued')
+                                    ->body("Queued {$queued} job(s) for {$scriptName} on queue: script.")
+                                    ->send();
+                            } catch (\Throwable $exception) {
+                                report($exception);
+
+                                Notification::make()
+                                    ->danger()
+                                    ->title('Script failed')
+                                    ->body($exception->getMessage())
+                                    ->send();
                             }
-
-                            $scriptPath = base_path("scripts/{$scriptName}");
-
-                            if (! is_file($scriptPath)) {
-                                throw new \Exception("Script not found: {$scriptName}");
-                            }
-
-                            $queued = 0;
+                        })
+                        ->deselectRecordsAfterCompletion(),
+                    BulkAction::make('setAllQueueFlags1')
+                        ->label('Set All Queue = 1')
+                        ->icon('heroicon-o-queue-list')
+                        ->color('warning')
+                        ->requiresConfirmation()
+                        ->modalHeading('Set Queue Columns')
+                        ->modalDescription('This will set personer_hitta_queue, personer_merinfo_queue, and personer_ratsit_queue to 1 for all selected records.')
+                        ->modalSubmitActionLabel('Set Queue = 1')
+                        ->action(function (Collection $records): void {
+                            $updated = 0;
 
                             foreach ($records as $record) {
-                                dispatch(new RunScriptForPostnummerJob(
-                                    scriptName: $scriptName,
-                                    postNummer: (string) $record->postnummer,
-                                ));
+                                SwedenPostnummer::query()
+                                    ->whereKey($record->getKey())
+                                    ->update([
+                                        'personer_hitta_queue' => 1,
+                                        'personer_merinfo_queue' => 1,
+                                        'personer_ratsit_queue' => 1,
+                                    ]);
 
-                                $queued++;
+                                $updated++;
                             }
 
                             Notification::make()
                                 ->success()
-                                ->title('Script jobs queued')
-                                ->body("Queued {$queued} job(s) for {$scriptName} on queue: script.")
+                                ->title('Queue Columns Updated')
+                                ->body("Set all queue columns to 1 for {$updated} record(s).")
                                 ->send();
-                        } catch (\Throwable $exception) {
-                            report($exception);
+                        })
+                        ->deselectRecordsAfterCompletion(),
+                    BulkAction::make('setAllQueueFlags0')
+                        ->label('Set All Queue = 0')
+                        ->icon('heroicon-o-queue-list')
+                        ->color('warning')
+                        ->requiresConfirmation()
+                        ->modalHeading('Set Queue Columns')
+                        ->modalDescription('This will set personer_hitta_queue, personer_merinfo_queue, and personer_ratsit_queue to 1 for all selected records.')
+                        ->modalSubmitActionLabel('Set Queue = 0')
+                        ->action(function (Collection $records): void {
+                            $updated = 0;
+
+                            foreach ($records as $record) {
+                                SwedenPostnummer::query()
+                                    ->whereKey($record->getKey())
+                                    ->update([
+                                        'personer_hitta_queue' => 0,
+                                        'personer_merinfo_queue' => 0,
+                                        'personer_ratsit_queue' => 0,
+                                    ]);
+
+                                $updated++;
+                            }
 
                             Notification::make()
-                                ->danger()
-                                ->title('Script failed')
-                                ->body($exception->getMessage())
+                                ->success()
+                                ->title('Queue Columns Updated')
+                                ->body("Set all queue columns to 1 for {$updated} record(s).")
                                 ->send();
-                        }
-                    })
-                    ->deselectRecordsAfterCompletion(),
-                BulkAction::make('setAllQueueFlags')
-                    ->label('Set All Queue = 1')
-                    ->icon('heroicon-o-queue-list')
-                    ->color('warning')
-                    ->requiresConfirmation()
-                    ->modalHeading('Set Queue Columns')
-                    ->modalDescription('This will set personer_hitta_queue, personer_merinfo_queue, and personer_ratsit_queue to 1 for all selected records.')
-                    ->modalSubmitActionLabel('Set Queue = 1')
-                    ->action(function (Collection $records): void {
-                        $updated = 0;
+                        })
+                        ->deselectRecordsAfterCompletion(),
+                    BulkAction::make('checkDbCounts')
+                        ->label('Check DB Counts')
+                        ->icon('heroicon-o-calculator')
+                        ->color('info')
+                        ->requiresConfirmation()
+                        ->modalHeading('Check Database Counts')
+                        ->modalDescription('This will count matching rows in hitta_data, merinfo_data, and ratsit_data and update personer_hitta_saved, personer_merinfo_saved, and personer_ratsit_saved for selected records.')
+                        ->modalSubmitActionLabel('Update Counts')
+                        ->action(function (Collection $records): void {
+                            $updated = 0;
 
-                        foreach ($records as $record) {
-                            SwedenPostnummer::query()
-                                ->whereKey($record->getKey())
-                                ->update([
-                                    'personer_hitta_queue' => 1,
-                                    'personer_merinfo_queue' => 1,
-                                    'personer_ratsit_queue' => 1,
-                                ]);
+                            foreach ($records as $record) {
+                                $postNummer = (string) $record->postnummer;
+                                $normalizedPostNummer = $record->csv_id;
 
-                            $updated++;
-                        }
+                                $hittaCount = HittaData::query()
+                                    ->where('postnummer', $postNummer)
+                                    ->count();
 
-                        Notification::make()
-                            ->success()
-                            ->title('Queue Columns Updated')
-                            ->body("Set all queue columns to 1 for {$updated} record(s).")
-                            ->send();
-                    })
-                    ->deselectRecordsAfterCompletion(),
-                BulkAction::make('checkDbCounts')
-                    ->label('Check DB Counts')
-                    ->icon('heroicon-o-calculator')
-                    ->color('info')
-                    ->requiresConfirmation()
-                    ->modalHeading('Check Database Counts')
-                    ->modalDescription('This will count matching rows in hitta_data, merinfo_data, and ratsit_data and update personer_hitta_saved, personer_merinfo_saved, and personer_ratsit_saved for selected records.')
-                    ->modalSubmitActionLabel('Update Counts')
-                    ->action(function (Collection $records): void {
-                        $updated = 0;
+                                $merinfoCount = MerinfoData::query()
+                                    ->where('postnummer', $postNummer)
+                                    ->count();
 
-                        foreach ($records as $record) {
-                            $postNummer = (string) $record->postnummer;
-                            $normalizedPostNummer = $record->csv_id;
+                                $ratsitCount = RatsitData::query()
+                                    ->where('postnummer', $postNummer)
+                                    ->count();
 
-                            $hittaCount = HittaData::query()
-                                ->where('postnummer', $postNummer)
-                                ->count();
+                                SwedenPostnummer::query()
+                                    ->whereKey($record->getKey())
+                                    ->update([
+                                        'personer_hitta_saved' => $hittaCount,
+                                        'personer_merinfo_saved' => $merinfoCount,
+                                        'personer_ratsit_saved' => $ratsitCount,
+                                    ]);
 
-                            $merinfoCount = MerinfoData::query()
-                                ->where('postnummer', $postNummer)
-                                ->count();
+                                $updated++;
+                            }
 
-                            $ratsitCount = RatsitData::query()
-                                ->where('postnummer', $postNummer)
-                                ->count();
-
-                            SwedenPostnummer::query()
-                                ->whereKey($record->getKey())
-                                ->update([
-                                    'personer_hitta_saved' => $hittaCount,
-                                    'personer_merinfo_saved' => $merinfoCount,
-                                    'personer_ratsit_saved' => $ratsitCount,
-                                ]);
-
-                            $updated++;
-                        }
-
-                        Notification::make()
-                            ->success()
-                            ->title('DB Counts Updated')
-                            ->body("Updated saved counts for {$updated} record(s).")
-                            ->send();
-                    })
-                    ->deselectRecordsAfterCompletion(),
-                BulkAction::make('runAllData')
-                    ->label('Run All Data Scripts')
-                    ->icon('heroicon-o-play')
-                    ->color('success')
-                    ->requiresConfirmation()
-                    ->modalHeading('Run All Data Scripts')
-                    ->modalDescription('This will queue data collection jobs (Hitta, Merinfo, Ratsit) for all selected records.')
-                    ->modalSubmitActionLabel('Run All Scripts')
-                    ->action(function (Collection $records): void {
-                        $batchCount = 0;
-                        $totalJobs = 0;
-                        foreach ($records as $record) {
-                            $postNummer = (string) $record->postnummer;
-                            $normalizedPostNummer = str_replace(' ', '', $postNummer);
-                            $batch = Bus::batch([
-                                new RunHittaDataScriptJob($normalizedPostNummer),
-                                new RunMerinfoDataScriptJob($normalizedPostNummer),
-                                new RunRatsitDataScriptJob($postNummer),
-                            ])
-                                ->name("SwedenPostnummer {$postNummer} data scripts")
-                                ->onConnection(config('queue.default'))
-                                ->onQueue('ratsit-hitta')
-                                ->allowFailures()
-                                ->dispatch();
-                            $batchCount++;
-                            $totalJobs += 3;
-                        }
-                        Notification::make()
-                            ->success()
-                            ->title('Batches Queued')
-                            ->body("Queued {$batchCount} batch(es) with {$totalJobs} total job(s) for data collection.")
-                            ->send();
-                    })
-                    ->deselectRecordsAfterCompletion(),
+                            Notification::make()
+                                ->success()
+                                ->title('DB Counts Updated')
+                                ->body("Updated saved counts for {$updated} record(s).")
+                                ->send();
+                        })
+                        ->deselectRecordsAfterCompletion(),
+                    BulkAction::make('runAllData')
+                        ->label('Run All Data Scripts')
+                        ->icon('heroicon-o-play')
+                        ->color('success')
+                        ->requiresConfirmation()
+                        ->modalHeading('Run All Data Scripts')
+                        ->modalDescription('This will queue data collection jobs (Hitta, Merinfo, Ratsit) for all selected records.')
+                        ->modalSubmitActionLabel('Run All Scripts')
+                        ->action(function (Collection $records): void {
+                            $batchCount = 0;
+                            $totalJobs = 0;
+                            foreach ($records as $record) {
+                                $postNummer = (string) $record->postnummer;
+                                $normalizedPostNummer = str_replace(' ', '', $postNummer);
+                                $batch = Bus::batch([
+                                    new RunHittaDataScriptJob($normalizedPostNummer),
+                                    new RunMerinfoDataScriptJob($normalizedPostNummer),
+                                    new RunRatsitDataScriptJob($postNummer),
+                                ])
+                                    ->name("SwedenPostnummer {$postNummer} data scripts")
+                                    ->onConnection(config('queue.default'))
+                                    ->onQueue('ratsit-hitta')
+                                    ->allowFailures()
+                                    ->dispatch();
+                                $batchCount++;
+                                $totalJobs += 3;
+                            }
+                            Notification::make()
+                                ->success()
+                                ->title('Batches Queued')
+                                ->body("Queued {$batchCount} batch(es) with {$totalJobs} total job(s) for data collection.")
+                                ->send();
+                        })
+                        ->deselectRecordsAfterCompletion(),
                 ]),
                 BulkAction::make('refreshTable')
                     ->label('Refresh')
@@ -555,5 +584,4 @@ class SwedenPostnummersTable
                     ->color('danger'),
             ]);
     }
-
 }

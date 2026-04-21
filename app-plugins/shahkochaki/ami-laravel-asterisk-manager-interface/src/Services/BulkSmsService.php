@@ -2,12 +2,14 @@
 
 namespace Shahkochaki\Ami\Services;
 
-use Illuminate\Support\Facades\Artisan;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Queue;
 
 /**
  * Bulk SMS Service
- * 
+ *
  * Provides bulk SMS sending functionality with queue management
  */
 class BulkSmsService
@@ -40,8 +42,7 @@ class BulkSmsService
     /**
      * Constructor
      *
-     * @param string|null $device
-     * @param array $connectionOptions
+     * @param  string|null  $device
      */
     public function __construct($device = null, array $connectionOptions = [])
     {
@@ -52,9 +53,7 @@ class BulkSmsService
     /**
      * Send bulk SMS to multiple recipients
      *
-     * @param Collection|array $recipients
-     * @param string $message
-     * @param array $options
+     * @param  Collection|array  $recipients
      * @return array
      */
     public function sendBulkSms($recipients, string $message, array $options = [])
@@ -69,14 +68,14 @@ class BulkSmsService
             $retries = 0;
             $success = false;
 
-            while ($retries < $this->maxRetries && !$success) {
+            while ($retries < $this->maxRetries && ! $success) {
                 try {
                     $result = $this->sendSingleSms($number, $message, $device, $usePdu);
                     $results[$number] = [
                         'status' => 'success',
                         'result' => $result,
                         'retries' => $retries,
-                        'timestamp' => now()->toISOString()
+                        'timestamp' => now()->toISOString(),
                     ];
                     $success = true;
                 } catch (\Exception $e) {
@@ -87,7 +86,7 @@ class BulkSmsService
                             'status' => 'error',
                             'message' => $e->getMessage(),
                             'retries' => $retries,
-                            'timestamp' => now()->toISOString()
+                            'timestamp' => now()->toISOString(),
                         ];
                     } else {
                         // Wait before retry
@@ -108,10 +107,10 @@ class BulkSmsService
     /**
      * Send SMS to a single recipient
      *
-     * @param string $number
-     * @param string $message
-     * @param string|null $device
-     * @param bool $usePdu
+     * @param  string  $number
+     * @param  string  $message
+     * @param  string|null  $device
+     * @param  bool  $usePdu
      * @return mixed
      */
     public function sendSingleSms($number, $message, $device = null, $usePdu = null)
@@ -135,10 +134,8 @@ class BulkSmsService
     /**
      * Send scheduled SMS
      *
-     * @param Collection|array $recipients
-     * @param string $message
-     * @param \Carbon\Carbon $scheduledAt
-     * @param array $options
+     * @param  Collection|array  $recipients
+     * @param  Carbon  $scheduledAt
      * @return array
      */
     public function scheduleBulkSms($recipients, string $message, $scheduledAt, array $options = [])
@@ -152,13 +149,12 @@ class BulkSmsService
         ];
 
         // Schedule the job (pseudo-code, would need actual job class)
-        return \Illuminate\Support\Facades\Queue::later($scheduledAt, 'BulkSmsJob', $jobData);
+        return Queue::later($scheduledAt, 'BulkSmsJob', $jobData);
     }
 
     /**
      * Get SMS delivery report
      *
-     * @param array $messageIds
      * @return array
      */
     public function getDeliveryReport(array $messageIds)
@@ -170,7 +166,7 @@ class BulkSmsService
             try {
                 $result = Artisan::call('ami:action', array_merge([
                     'action' => 'DongleSMSStatus',
-                    '--arguments' => ['MessageId' => $messageId]
+                    '--arguments' => ['MessageId' => $messageId],
                 ], $this->connectionOptions));
 
                 $reports[$messageId] = $result;
@@ -185,7 +181,7 @@ class BulkSmsService
     /**
      * Validate phone numbers
      *
-     * @param Collection|array $numbers
+     * @param  Collection|array  $numbers
      * @return array
      */
     public function validateNumbers($numbers)
@@ -207,27 +203,28 @@ class BulkSmsService
             'invalid' => $invalid,
             'total' => count($numbers),
             'valid_count' => count($valid),
-            'invalid_count' => count($invalid)
+            'invalid_count' => count($invalid),
         ];
     }
 
     /**
      * Check if phone number is valid
      *
-     * @param string $number
+     * @param  string  $number
      * @return bool
      */
     protected function isValidPhoneNumber($number)
     {
         // Basic Iranian mobile number validation
         $pattern = '/^(\+98|0098|98|0)?9\d{9}$/';
+
         return preg_match($pattern, $number);
     }
 
     /**
      * Format phone number
      *
-     * @param string $number
+     * @param  string  $number
      * @return string
      */
     protected function formatPhoneNumber($number)
@@ -237,11 +234,11 @@ class BulkSmsService
 
         // Convert to international format
         if (substr($number, 0, 1) === '0') {
-            $number = '+98' . substr($number, 1);
+            $number = '+98'.substr($number, 1);
         } elseif (substr($number, 0, 2) === '98') {
-            $number = '+' . $number;
+            $number = '+'.$number;
         } elseif (substr($number, 0, 1) !== '+') {
-            $number = '+98' . $number;
+            $number = '+98'.$number;
         }
 
         return $number;
@@ -250,48 +247,52 @@ class BulkSmsService
     /**
      * Set device
      *
-     * @param string $device
+     * @param  string  $device
      * @return self
      */
     public function setDevice($device)
     {
         $this->device = $device;
+
         return $this;
     }
 
     /**
      * Set delay between messages
      *
-     * @param int $microseconds
+     * @param  int  $microseconds
      * @return self
      */
     public function setDelay($microseconds)
     {
         $this->delayBetweenMessages = $microseconds;
+
         return $this;
     }
 
     /**
      * Set maximum retries
      *
-     * @param int $retries
+     * @param  int  $retries
      * @return self
      */
     public function setMaxRetries($retries)
     {
         $this->maxRetries = $retries;
+
         return $this;
     }
 
     /**
      * Set PDU threshold
      *
-     * @param int $threshold
+     * @param  int  $threshold
      * @return self
      */
     public function setPduThreshold($threshold)
     {
         $this->pduThreshold = $threshold;
+
         return $this;
     }
 

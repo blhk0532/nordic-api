@@ -5,6 +5,8 @@ namespace MmesDesign\FilamentFileManager\Tests\Feature;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
+use MmesDesign\FilamentFileManager\Enums\SortDirection;
+use MmesDesign\FilamentFileManager\Enums\SortField;
 use MmesDesign\FilamentFileManager\Services\FileManagerService;
 use Tests\TestCase;
 
@@ -43,8 +45,8 @@ class MetadataCacheTest extends TestCase
         $this->service->listDirectory(
             'public',
             '',
-            \MmesDesign\FilamentFileManager\Enums\SortField::Size,
-            \MmesDesign\FilamentFileManager\Enums\SortDirection::Desc,
+            SortField::Size,
+            SortDirection::Desc,
         );
         $this->assertTrue(Cache::has('fml:public:v0::size:desc'));
     }
@@ -126,8 +128,8 @@ class MetadataCacheTest extends TestCase
 
         // Populate cache with multiple sort combos
         $this->service->listDirectory('public');
-        $this->service->listDirectory('public', '', \MmesDesign\FilamentFileManager\Enums\SortField::Size);
-        $this->service->listDirectory('public', '', \MmesDesign\FilamentFileManager\Enums\SortField::Date);
+        $this->service->listDirectory('public', '', SortField::Size);
+        $this->service->listDirectory('public', '', SortField::Date);
 
         $this->assertTrue(Cache::has('fml:public:v0::name:asc'));
         $this->assertTrue(Cache::has('fml:public:v0::size:asc'));

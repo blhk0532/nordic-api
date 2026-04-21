@@ -3,13 +3,10 @@
 namespace Shahkochaki\Ami\Services;
 
 use Illuminate\Support\Facades\Artisan;
-use Shahkochaki\Ami\Services\SystemManager;
-use Shahkochaki\Ami\Services\CallManager;
-use Shahkochaki\Ami\Services\BulkSmsService;
 
 /**
  * Main AMI Service
- * 
+ *
  * Central service for all AMI operations
  */
 class AmiService
@@ -36,8 +33,6 @@ class AmiService
 
     /**
      * Constructor
-     *
-     * @param array $connectionOptions
      */
     public function __construct(array $connectionOptions = [])
     {
@@ -52,14 +47,13 @@ class AmiService
     {
         $this->systemManager = new SystemManager($this->connectionOptions);
         $this->callManager = new CallManager($this->connectionOptions);
-        $this->smsService = new BulkSmsService();
+        $this->smsService = new BulkSmsService;
     }
 
     /**
      * Execute AMI action
      *
-     * @param string $action
-     * @param array $arguments
+     * @param  string  $action
      * @return mixed
      */
     public function action($action, array $arguments = [])
@@ -68,7 +62,7 @@ class AmiService
             'action' => $action,
         ], $this->connectionOptions);
 
-        if (!empty($arguments)) {
+        if (! empty($arguments)) {
             $command['--arguments'] = $arguments;
         }
 
@@ -78,9 +72,9 @@ class AmiService
     /**
      * Make a call
      *
-     * @param string $from
-     * @param string $to
-     * @param string $context
+     * @param  string  $from
+     * @param  string  $to
+     * @param  string  $context
      * @return mixed
      */
     public function makeCall($from, $to, $context = 'default')
@@ -91,7 +85,7 @@ class AmiService
     /**
      * Hangup a call
      *
-     * @param string $channel
+     * @param  string  $channel
      * @return mixed
      */
     public function hangupCall($channel)
@@ -102,16 +96,16 @@ class AmiService
     /**
      * Send SMS
      *
-     * @param string $number
-     * @param string $message
-     * @param string|null $device
+     * @param  string  $number
+     * @param  string  $message
+     * @param  string|null  $device
      * @return mixed
      */
     public function sendSms($number, $message, $device = null)
     {
         $command = [
             'number' => $number,
-            'message' => $message
+            'message' => $message,
         ];
 
         if ($device) {
@@ -126,15 +120,15 @@ class AmiService
     /**
      * Send USSD
      *
-     * @param string $device
-     * @param string $ussd
+     * @param  string  $device
+     * @param  string  $ussd
      * @return mixed
      */
     public function sendUssd($device, $ussd)
     {
         $command = array_merge([
             'device' => $device,
-            'ussd' => $ussd
+            'ussd' => $ussd,
         ], $this->connectionOptions);
 
         return Artisan::call('ami:dongle:ussd', $command);
@@ -143,7 +137,7 @@ class AmiService
     /**
      * Get channel status
      *
-     * @param string|null $channel
+     * @param  string|null  $channel
      * @return mixed
      */
     public function getChannelStatus($channel = null)
@@ -172,7 +166,7 @@ class AmiService
             'server_status' => $this->systemManager->getServerStatus(),
             'active_channels' => $this->getActiveChannels(),
             'system_resources' => $this->systemManager->getSystemResources(),
-            'timestamp' => date('Y-m-d H:i:s')
+            'timestamp' => date('Y-m-d H:i:s'),
         ];
     }
 
@@ -219,13 +213,13 @@ class AmiService
     /**
      * Listen to events
      *
-     * @param bool $monitor
+     * @param  bool  $monitor
      * @return mixed
      */
     public function listen($monitor = false)
     {
         $command = array_merge($this->connectionOptions, [
-            '--monitor' => $monitor
+            '--monitor' => $monitor,
         ]);
 
         return Artisan::call('ami:listen', $command);
@@ -234,13 +228,13 @@ class AmiService
     /**
      * Set connection options
      *
-     * @param array $options
      * @return self
      */
     public function setConnectionOptions(array $options)
     {
         $this->connectionOptions = array_merge($this->connectionOptions, $options);
         $this->initializeServices(); // Reinitialize with new options
+
         return $this;
     }
 

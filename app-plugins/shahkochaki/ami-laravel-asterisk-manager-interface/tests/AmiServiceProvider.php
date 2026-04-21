@@ -2,10 +2,10 @@
 
 namespace Shahkochaki\Ami\Tests;
 
-use Shahkochaki\Ami\Factory;
-use React\Stream\Stream;
 use React\EventLoop\LoopInterface;
 use React\SocketClient\ConnectorInterface;
+use React\Stream\Stream;
+use Shahkochaki\Ami\Factory;
 use Shahkochaki\Ami\Tests\Factory as TestFactory;
 
 class AmiServiceProvider extends \Shahkochaki\Ami\Providers\AmiServiceProvider

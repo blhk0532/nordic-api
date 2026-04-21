@@ -5,9 +5,12 @@ namespace MmesDesign\FilamentFileManager\Concerns;
 use Filament\Actions\Action;
 use Filament\Forms;
 use Filament\Notifications\Notification;
+use Filament\Schemas\Components\Utilities\Get;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Storage;
 use MmesDesign\FilamentFileManager\Enums\FileCategory;
 use MmesDesign\FilamentFileManager\FileManagerPlugin;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 trait HandlesFileOperations
 {
@@ -72,7 +75,7 @@ trait HandlesFileOperations
                         'x-init' => "setTimeout(() => { const dot = \$el.value.lastIndexOf('.'); \$el.focus(); if (dot > 0) { \$el.setSelectionRange(0, dot); } else { \$el.select(); } }, 50)",
                     ])
                     ->live(debounce: 500)
-                    ->hint(function (?string $state, \Filament\Schemas\Components\Utilities\Get $get): ?string {
+                    ->hint(function (?string $state, Get $get): ?string {
                         $original = $get('originalExtension');
                         if (! $original) {
                             return null;
@@ -85,7 +88,7 @@ trait HandlesFileOperations
                         return null;
                     })
                     ->hintColor('warning')
-                    ->hintIcon(function (?string $state, \Filament\Schemas\Components\Utilities\Get $get): ?string {
+                    ->hintIcon(function (?string $state, Get $get): ?string {
                         $original = $get('originalExtension');
                         if (! $original) {
                             return null;
@@ -149,7 +152,7 @@ trait HandlesFileOperations
             ->modalCancelActionLabel(__('filament-file-manager::file-manager.modals.close'))
             ->modalWidth('4xl')
             ->modalHeading(fn (array $arguments): string => basename($arguments['path'] ?? ''))
-            ->modalContent(function (array $arguments): \Illuminate\Contracts\View\View {
+            ->modalContent(function (array $arguments): View {
                 $path = $arguments['path'] ?? '';
 
                 $name = basename($path);
@@ -200,7 +203,7 @@ trait HandlesFileOperations
         }
     }
 
-    public function downloadFile(string $path): \Symfony\Component\HttpFoundation\StreamedResponse
+    public function downloadFile(string $path): StreamedResponse
     {
         abort_unless(FileManagerPlugin::get()->canUserDownload($this->currentDisk, $path), 403, __('filament-file-manager::file-manager.messages.permission_denied'));
 
