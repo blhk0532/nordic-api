@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7dbd380a3fe3e2e79132f3cd4881fa22",
+    "content-hash": "ff788ede44256328ec29cc45eeeddbd3",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -2851,16 +2851,16 @@
         },
         {
             "name": "devletes/filament-pinnable-navigation",
-            "version": "v1.0.4",
+            "version": "v1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/devletes/filament-pinnable-navigation.git",
-                "reference": "8f2c824232afa0af032c0ed0579d15fc4a64444d"
+                "reference": "2dcb00a6362203d20524fb08dd37959dd0426a90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/devletes/filament-pinnable-navigation/zipball/8f2c824232afa0af032c0ed0579d15fc4a64444d",
-                "reference": "8f2c824232afa0af032c0ed0579d15fc4a64444d",
+                "url": "https://api.github.com/repos/devletes/filament-pinnable-navigation/zipball/2dcb00a6362203d20524fb08dd37959dd0426a90",
+                "reference": "2dcb00a6362203d20524fb08dd37959dd0426a90",
                 "shasum": ""
             },
             "require": {
@@ -2910,7 +2910,7 @@
                 "issues": "https://github.com/devletes/filament-pinnable-navigation/issues",
                 "source": "https://github.com/devletes/filament-pinnable-navigation"
             },
-            "time": "2026-04-14T09:34:34+00:00"
+            "time": "2026-04-21T06:18:38+00:00"
         },
         {
             "name": "devletes/filament-progress-bar",
@@ -11014,34 +11014,44 @@
         },
         {
             "name": "phiki/phiki",
-            "version": "v1.1.6",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phikiphp/phiki.git",
-                "reference": "3174d8cb309bdccc32b7a33500379de76148256b"
+                "reference": "24375dbc474dbc484de7d53c6bab0bb9e198f647"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phikiphp/phiki/zipball/3174d8cb309bdccc32b7a33500379de76148256b",
-                "reference": "3174d8cb309bdccc32b7a33500379de76148256b",
+                "url": "https://api.github.com/repos/phikiphp/phiki/zipball/24375dbc474dbc484de7d53c6bab0bb9e198f647",
+                "reference": "24375dbc474dbc484de7d53c6bab0bb9e198f647",
                 "shasum": ""
             },
             "require": {
-                "league/commonmark": "^2.5.3",
-                "php": "^8.2"
+                "ext-mbstring": "*",
+                "php": "^8.2",
+                "psr/simple-cache": "^3.0"
             },
             "require-dev": {
-                "illuminate/support": "^11.30",
+                "illuminate/support": "^11.45",
                 "laravel/pint": "^1.18.1",
+                "league/commonmark": "^2.5.3",
+                "orchestra/testbench": "^9.15",
                 "pestphp/pest": "^3.5.1",
                 "phpstan/extension-installer": "^1.4.3",
                 "phpstan/phpstan": "^2.0",
                 "symfony/var-dumper": "^7.1.6"
             },
-            "bin": [
-                "bin/phiki"
-            ],
+            "suggest": {
+                "league/commonmark": "Required to use the CommonMark adapter (^2.5.3)"
+            },
             "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Phiki\\Adapters\\Laravel\\PhikiServiceProvider"
+                    ]
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Phiki\\": "src/"
@@ -11062,9 +11072,19 @@
             "description": "Syntax highlighting using TextMate grammars in PHP.",
             "support": {
                 "issues": "https://github.com/phikiphp/phiki/issues",
-                "source": "https://github.com/phikiphp/phiki/tree/v1.1.6"
+                "source": "https://github.com/phikiphp/phiki/tree/v2.2.0"
             },
-            "time": "2025-06-06T20:18:29+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/ryangjchandler",
+                    "type": "github"
+                },
+                {
+                    "url": "https://buymeacoffee.com/ryangjchandler",
+                    "type": "other"
+                }
+            ],
+            "time": "2026-04-01T15:56:08+00:00"
         },
         {
             "name": "php-http/discovery",
@@ -12693,17 +12713,11 @@
         },
         {
             "name": "qalainau/filament-univer-sheet",
-            "version": "v1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/qalainau/filament-univer-sheet.git",
-                "reference": "a5677be822882e82f36b9433abfca4d761c6c2ef"
-            },
+            "version": "dev-main",
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/qalainau/filament-univer-sheet/zipball/a5677be822882e82f36b9433abfca4d761c6c2ef",
-                "reference": "a5677be822882e82f36b9433abfca4d761c6c2ef",
-                "shasum": ""
+                "type": "path",
+                "url": "app-plugins/qalainau/filament-univer-sheet",
+                "reference": "3bf86c30a05857a846e1df2e797ae2755ce94f3c"
             },
             "require": {
                 "filament/filament": "^5.0",
@@ -12729,7 +12743,19 @@
                     "Qalainau\\UniverSheet\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Qalainau\\UniverSheet\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "vendor/bin/pest"
+                ],
+                "format": [
+                    "vendor/bin/pint"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -12748,11 +12774,10 @@
                 "spreadsheet",
                 "univer"
             ],
-            "support": {
-                "issues": "https://github.com/qalainau/filament-univer-sheet/issues",
-                "source": "https://github.com/qalainau/filament-univer-sheet/tree/v1.1.0"
-            },
-            "time": "2026-04-20T07:55:30+00:00"
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "ralouphie/getallheaders",
@@ -23818,10 +23843,12 @@
         "eduardoribeirodev/filament-leaflet": 20,
         "joaopaulolndev/filament-general-settings": 20,
         "joaopaulolndev/filament-world-clock": 20,
+        "maatwebsite/excel": 20,
         "mmes-design/filament-file-manager": 20,
         "muazzam/slick-scrollbar": 20,
         "mwguerra/web-terminal": 20,
         "osamaatef/filament-drilldown-sidebar": 20,
+        "qalainau/filament-univer-sheet": 20,
         "usamamuneerchaudhary/filament-notifier": 20,
         "waad/filament-import-wizard": 20,
         "wallacemartinss/filament-icon-picker": 20,
