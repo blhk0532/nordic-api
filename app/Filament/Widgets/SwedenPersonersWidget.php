@@ -61,7 +61,7 @@ class SwedenPersonersWidget extends TableWidget
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->headerFilter(
                         SelectFilter::make('postnummer')
-                            ->options(fn () => SwedenPersoner::distinct()->pluck('postnummer', 'postnummer')->take(100)->toArray())
+                            ->options(fn () => SwedenPersoner::distinct()->whereNotNull('postnummer')->where('postnummer', '<>', '')->pluck('postnummer', 'postnummer')->take(100)->toArray())
                             ->native(false)
                             ->placeholder('Alla')
                     ),
@@ -72,7 +72,7 @@ class SwedenPersonersWidget extends TableWidget
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->headerFilter(
                         SelectFilter::make('postort')
-                            ->options(fn () => SwedenPersoner::distinct()->pluck('postort', 'postort')->take(100)->toArray())
+                            ->options(fn () => SwedenPersoner::distinct()->whereNotNull('postort')->where('postort', '<>', '')->pluck('postort', 'postort')->take(100)->toArray())
                             ->native(false)
                             ->placeholder('Alla')
                     ),
@@ -100,7 +100,7 @@ class SwedenPersonersWidget extends TableWidget
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->headerFilter(
                         SelectFilter::make('kommun')
-                            ->options(fn () => RatsitKommun::pluck('kommun', 'kommun')->toArray())
+                            ->options(fn () => RatsitKommun::whereNotNull('kommun')->where('kommun', '<>', '')->pluck('kommun', 'kommun')->toArray())
                             ->native(false)
                             ->placeholder('Alla')
                     ),

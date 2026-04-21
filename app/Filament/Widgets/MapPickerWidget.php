@@ -60,6 +60,8 @@ class MapPickerWidget extends MapTableWidget
                 ->options(
                     SwedenPostnummer::query()
                         ->distinct()
+                        ->whereNotNull('postort')
+                        ->where('postort', '<>', '')
                         ->pluck('postort', 'postort')
                         ->toArray()
                 ),
@@ -69,6 +71,8 @@ class MapPickerWidget extends MapTableWidget
                 ->options(
                     SwedenPostnummer::query()
                         ->distinct()
+                        ->whereNotNull('kommun')
+                        ->where('kommun', '<>', '')
                         ->pluck('kommun', 'kommun')
                         ->toArray()
                 ),
@@ -77,7 +81,7 @@ class MapPickerWidget extends MapTableWidget
                 ->options(
                     SwedenPostnummer::query()
                         ->distinct()
-                        ->pluck('lan', 'lan')
+                        ->whereNotNull('lan')                        ->where('lan', '<>', '')                        ->pluck('lan', 'lan')
                         ->toArray()
                 ),
             MapIsFilter::make('map')

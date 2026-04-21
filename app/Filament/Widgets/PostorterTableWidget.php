@@ -66,7 +66,7 @@ class PostorterTableWidget extends TableWidget
                 SelectFilter::make('kommun')
                     ->label('Kommun')
                     ->searchable()
-                    ->options(fn () => RatsitKommun::pluck('kommun', 'kommun')->toArray()),
+                    ->options(fn () => RatsitKommun::whereNotNull('kommun')->where('kommun', '<>', '')->pluck('kommun', 'kommun')->toArray()),
             ])
             ->defaultSort('personer_count', 'desc')
             ->paginated([10, 25, 50, 100])

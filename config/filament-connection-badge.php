@@ -26,7 +26,7 @@ return [
 
     'render_hook' => env(
         'FILAMENT_CONNECTION_BADGE_RENDER_HOOK',
-        'panels::topbar.end'
+        'panels::user-menu.before'
     ),
 
     /*
