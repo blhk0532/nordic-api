@@ -149,7 +149,7 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make('Settings SYS')
                     ->collapsed(true)
                     ->icon('heroicon-o-cog-6-tooth'),
-                NavigationGroup::make('Database NR')
+                NavigationGroup::make('Database DB')
                     ->collapsed(true)
                     ->icon('heroicon-o-chart-pie'),
                 NavigationGroup::make('System LOGS')
@@ -213,7 +213,7 @@ class AdminPanelProvider extends PanelProvider
             ->plugins([
                 DrilldownSidebarPlugin::make()
                     ->drilledGroups([
-                        'Database NR',
+                        'Database DB',
                         'Sverige GEO',
                     ]),
             ])

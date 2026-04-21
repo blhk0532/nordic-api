@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "91fc19dfe91aa3ec7f8bb188a74d335d",
+    "content-hash": "ad3f5efebf2fbfc2d5a898ee9e428bd5",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -23907,7 +23907,6 @@
         "eduardoribeirodev/filament-leaflet": 20,
         "joaopaulolndev/filament-general-settings": 20,
         "joaopaulolndev/filament-world-clock": 20,
-        "maatwebsite/excel": 20,
         "mmes-design/filament-file-manager": 20,
         "muazzam/slick-scrollbar": 20,
         "mwguerra/web-terminal": 20,

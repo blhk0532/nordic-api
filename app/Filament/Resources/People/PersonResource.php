@@ -27,7 +27,7 @@ class PersonResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUser;
 
-    protected static UnitEnum|string|null $navigationGroup = 'Database NR';
+    protected static UnitEnum|string|null $navigationGroup = 'Database DB';
 
     protected static ?int $navigationSort = -55;
 

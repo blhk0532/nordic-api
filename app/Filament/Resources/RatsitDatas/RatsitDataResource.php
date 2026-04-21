@@ -31,7 +31,7 @@ class RatsitDataResource extends Resource
 
     protected static ?string $navigationLabel = 'Ratsit Databas';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Database NR';
+    protected static string|UnitEnum|null $navigationGroup = 'Database DB';
 
     protected static ?int $navigationSort = -90;
 

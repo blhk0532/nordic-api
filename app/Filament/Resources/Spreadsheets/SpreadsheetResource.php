@@ -23,7 +23,9 @@ class SpreadsheetResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Database NR';
+    protected static string|UnitEnum|null $navigationGroup = 'Database DB';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema
     {
@@ -55,5 +57,15 @@ class SpreadsheetResource extends Resource
             'view' => ViewSpreadsheet::route('/{record}'),
             'edit' => EditSpreadsheet::route('/{record}/edit'),
         ];
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): string|array|null
+    {
+        return 'success';
     }
 }
