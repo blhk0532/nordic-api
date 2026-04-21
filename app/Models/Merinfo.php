@@ -29,6 +29,7 @@ class Merinfo extends Model
             'is_celebrity' => 'boolean',
             'has_company_engagement' => 'boolean',
             'is_house' => 'boolean',
+            'zip' => 'string',
         ];
     }
 }

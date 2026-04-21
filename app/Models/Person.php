@@ -25,4 +25,8 @@ class Person extends Model
     {
         return $this->belongsTo(Merinfo::class);
     }
+
+        protected $casts = [
+        'zip' => 'string',
+    ];
 }

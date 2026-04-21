@@ -12,12 +12,9 @@ use App\Jobs\RunMerinfoDataScriptJob;
 use App\Jobs\RunRatsitDataScriptJob;
 use App\Jobs\RunScriptForPostnummerJob;
 use App\Models\HittaData;
-use App\Models\Merinfo;
-use App\Models\MerinfoData;
-use App\Models\RatsitData;
-use App\Models\SwedenPostnummer;
-use App\Models\SwedenPersoner;
 use App\Models\Person;
+use App\Models\SwedenPersoner;
+use App\Models\SwedenPostnummer;
 use App\Services\GoogleSheets\PeopleSheetsSyncService;
 use App\Services\Import\PeopleImportService;
 use Filament\Actions\Action;
@@ -381,24 +378,23 @@ class SwedenPostnummersTable
                         ->color('info')
                         ->requiresConfirmation()
                         ->modalHeading('Check Database Counts')
-                        ->modalDescription('This will count matching rows in hitta_data, merinfo_data, and ratsit_data and update personer_hitta_saved, personer_merinfo_saved, and personer_ratsit_saved for selected records.')
+                        ->modalDescription('This will count matching rows in hitta_data, persons, and sweden_personer and update personer_hitta_saved, personer_merinfo_saved, and personer_ratsit_saved for selected records.')
                         ->modalSubmitActionLabel('Update Counts')
                         ->action(function (Collection $records): void {
                             $updated = 0;
 
                             foreach ($records as $record) {
                                 $postNummer = (string) $record->postnummer;
-                                $normalizedPostNummer = $record->csv_id;
 
                                 $hittaCount = HittaData::query()
                                     ->where('postnummer', $postNummer)
                                     ->count();
 
-                                $merinfoCount = MerinfoData::query()
-                                    ->where('postnummer', $postNummer)
+                                $merinfoCount = Person::query()
+                                    ->where('zip', $postNummer)
                                     ->count();
 
-                                $ratsitCount = RatsitData::query()
+                                $ratsitCount = SwedenPersoner::query()
                                     ->where('postnummer', $postNummer)
                                     ->count();
 
@@ -470,14 +466,13 @@ class SwedenPostnummersTable
 
                         foreach ($records as $record) {
                             $postNummer = (string) $record->postnummer;
-                            $normalizedPostNummer = $record->csv_id;
 
                             $hittaCount = HittaData::query()
                                 ->where('postnummer', $postNummer)
                                 ->count();
 
                             $merinfoCount = Person::query()
-                               ->where('zip', $normalizedPostNummer)
+                                ->where('zip', $postNummer)
                                 ->count();
 
                             $ratsitCount = SwedenPersoner::query()
