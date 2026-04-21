@@ -20,6 +20,11 @@ final class FilamentResourceAccess
             return $next($request);
         }
 
+        // Allow Livewire upload endpoints through
+        if ($request->path() && str_contains($request->path(), 'livewire') && str_contains($request->path(), 'upload-file')) {
+            return $next($request);
+        }
+
         $user = Auth::user();
 
         if (! $user) {

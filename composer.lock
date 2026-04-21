@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ff788ede44256328ec29cc45eeeddbd3",
+    "content-hash": "91fc19dfe91aa3ec7f8bb188a74d335d",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -19687,6 +19687,70 @@
                 "source": "https://github.com/timacdonald/json-api/releases/latest"
             },
             "time": "2026-03-26T00:18:05+00:00"
+        },
+        {
+            "name": "tinusg/filament-company-logo-column",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tinusg/filament-company-logo-column.git",
+                "reference": "460ff1f96c8b26dfb9f366118ba181552114ef9e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tinusg/filament-company-logo-column/zipball/460ff1f96c8b26dfb9f366118ba181552114ef9e",
+                "reference": "460ff1f96c8b26dfb9f366118ba181552114ef9e",
+                "shasum": ""
+            },
+            "require": {
+                "filament/tables": "^5.0",
+                "illuminate/support": "^11.0|^12.0|^13.0",
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "orchestra/testbench": "^11.0",
+                "pestphp/pest": "^4.0",
+                "pestphp/pest-plugin-laravel": "^4.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "TinusG\\FilamentCompanyLogoColumn\\CompanyLogoColumnServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "TinusG\\FilamentCompanyLogoColumn\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tinus G",
+                    "homepage": "https://github.com/tinusg"
+                }
+            ],
+            "description": "A Filament table column that renders a company logo via Logo.dev from a URL or domain",
+            "homepage": "https://github.com/tinusg/filament-company-logo-column",
+            "keywords": [
+                "column",
+                "company",
+                "filament",
+                "laravel",
+                "logo",
+                "logo.dev"
+            ],
+            "support": {
+                "issues": "https://github.com/tinusg/filament-company-logo-column/issues",
+                "source": "https://github.com/tinusg/filament-company-logo-column/tree/v1.0.0"
+            },
+            "time": "2026-04-21T08:15:04+00:00"
         },
         {
             "name": "twig/twig",

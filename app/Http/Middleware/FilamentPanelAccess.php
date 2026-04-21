@@ -22,6 +22,11 @@ final class FilamentPanelAccess
         $path = parse_url($requestPath, PHP_URL_PATH);
         $segments = array_values(array_filter(explode('/', $path)));
 
+        // Allow Livewire upload endpoints through
+        if (str_contains($requestPath, 'livewire') && str_contains($requestPath, 'upload-file')) {
+            return $next($request);
+        }
+
         if (($i = array_search('auth', $segments)) !== false) {
             $panelId = $segments[$i + 1] ?? null;
         } else {
