@@ -7,6 +7,8 @@ namespace App\Filament\Pages;
 use AchyutN\FilamentStorageMonitor\Widgets\StorageMonitorWidget;
 use App\Filament\Widgets\ExternalAppWidget;
 use App\Filament\Widgets\MapPinsTableWidget;
+use App\Filament\Widgets\SwedenAdresserGrowthChart;
+use App\Filament\Widgets\SwedenPersonerGrowthChart;
 use App\Filament\Widgets\SwedenPersonersWidget;
 use Awcodes\Overlook\Widgets\OverlookWidget;
 use BackedEnum;
@@ -115,6 +117,8 @@ class Dashboard extends BaseDashboard
     {
         return [
             StorageMonitorWidget::class,
+            SwedenPersonerGrowthChart::class,
+            SwedenAdresserGrowthChart::class,
         ];
     }
 

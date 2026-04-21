@@ -91,7 +91,7 @@ class SwedenPostnummersTable
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 TextColumn::make('personer_ratsit_saved')
-                    ->label('Ratsit')
+                    ->label('Pers DB')
                     ->numeric()
                     ->placeholder('-')
                     ->toggleable(isToggledHiddenByDefault: false)
@@ -109,13 +109,21 @@ class SwedenPostnummersTable
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
                 TextColumn::make('personer')
-                    ->label('DB')
+                    ->label('Ratsit')
                     ->numeric()
                     ->placeholder('-')
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
+                        ToggleColumn::make('personer_ratsit_queue')
+                    ->label('Rat Q')
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->sortable(),
+                ToggleColumn::make('personer_hitta_queue')
+                    ->label('Hit Q')
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->sortable(),
                 ToggleColumn::make('personer_merinfo_queue')
-                    ->label('Queue')
+                    ->label('Mer Q')
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
                 TextColumn::make('latitude')
