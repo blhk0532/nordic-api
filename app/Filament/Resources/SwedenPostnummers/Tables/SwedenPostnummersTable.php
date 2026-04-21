@@ -16,6 +16,8 @@ use App\Models\Merinfo;
 use App\Models\MerinfoData;
 use App\Models\RatsitData;
 use App\Models\SwedenPostnummer;
+use App\Models\SwedenPersoner;
+use App\Models\Person;
 use App\Services\GoogleSheets\PeopleSheetsSyncService;
 use App\Services\Import\PeopleImportService;
 use Filament\Actions\Action;
@@ -474,11 +476,11 @@ class SwedenPostnummersTable
                                 ->where('postnummer', $postNummer)
                                 ->count();
 
-                            $merinfoCount = Merinfo::query()
-                                ->where('address->zip', $postNummer)
+                            $merinfoCount = Person::query()
+                               ->where('zip', $normalizedPostNummer)
                                 ->count();
 
-                            $ratsitCount = RatsitData::query()
+                            $ratsitCount = SwedenPersoner::query()
                                 ->where('postnummer', $postNummer)
                                 ->count();
 
