@@ -11,7 +11,7 @@ class SpreadsheetField extends Field
 
     protected string|Closure|null $height = null;
 
-    protected string|Closure $minHeight = '400px';
+    protected string|Closure $minHeight = '645px';
 
     protected bool|Closure $showToolbar = true;
 

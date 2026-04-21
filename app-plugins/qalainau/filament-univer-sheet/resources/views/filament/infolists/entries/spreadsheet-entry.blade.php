@@ -36,7 +36,7 @@
                 if (this.instance) { this.instance.destroy(); this.instance = null; }
             },
         }"
-        style="width:100%; height:{{ $getHeight() ?? '100%' }}; min-height:300px; position:relative;"
+        style="width:100%; height:{{ $getHeight() ?? '100%' }}; min-height:780px; position:relative;"
         class="rounded-lg border border-gray-300 dark:border-gray-700"
     >
     </div>

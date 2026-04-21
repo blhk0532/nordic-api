@@ -9,7 +9,7 @@ class SpreadsheetEntry extends Entry
 {
     protected string $view = 'univer-sheet::filament.infolists.entries.spreadsheet-entry';
 
-    protected string|Closure $height = '300px';
+    protected string|Closure $height = '780px';
 
     protected bool|Closure $showToolbar = false;
 

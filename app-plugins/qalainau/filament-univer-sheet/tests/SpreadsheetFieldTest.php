@@ -22,16 +22,16 @@ it('has default min height', function () {
 
 it('can set custom height', function () {
     $field = SpreadsheetField::make('spreadsheet')
-        ->height('600px');
+        ->height('780px');
 
-    expect($field->getHeight())->toBe('600px');
+    expect($field->getHeight())->toBe('780px');
 });
 
 it('can set custom min height', function () {
     $field = SpreadsheetField::make('spreadsheet')
-        ->minHeight('300px');
+        ->minHeight('780px');
 
-    expect($field->getMinHeight())->toBe('300px');
+    expect($field->getMinHeight())->toBe('780px');
 });
 
 it('shows toolbar by default', function () {

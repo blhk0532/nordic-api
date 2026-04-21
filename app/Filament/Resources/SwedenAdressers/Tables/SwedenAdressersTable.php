@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Filament\Resources\SwedenAdressers\Tables;
 
 use App\Exports\SwedenAdresserExporter;
-use Waad\FilamentImportWizard\Actions\ImportWizardAction as ExcelImportAction;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -18,6 +17,7 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\DB;
+use Waad\FilamentImportWizard\Actions\ImportWizardAction as ExcelImportAction;
 
 class SwedenAdressersTable
 {

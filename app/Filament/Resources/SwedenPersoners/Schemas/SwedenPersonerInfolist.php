@@ -63,9 +63,15 @@ class SwedenPersonerInfolist
 
                         Section::make('Data')
                             ->schema([
-                                TextEntry::make('ratsit_data')->label('Ratsit Data'),
-                                TextEntry::make('hitta_data')->label('Hitta Data'),
-                                TextEntry::make('merinfo_data')->label('MerInfo Data'),
+                                TextEntry::make('ratsit_data')
+                                    ->label('Ratsit Data')
+                                    ->state(fn ($record) => $record->ratsit_data ? json_encode($record->ratsit_data, JSON_PRETTY_PRINT) : null),
+                                TextEntry::make('hitta_data')
+                                    ->label('Hitta Data')
+                                    ->state(fn ($record) => $record->hitta_data ? json_encode($record->hitta_data, JSON_PRETTY_PRINT) : null),
+                                TextEntry::make('merinfo_data')
+                                    ->label('MerInfo Data')
+                                    ->state(fn ($record) => $record->merinfo_data ? json_encode($record->merinfo_data, JSON_PRETTY_PRINT) : null),
                             ])
                             ->columns(5),
 

@@ -12,7 +12,6 @@ use App\Jobs\RunGatorRatsitJob;
 use App\Jobs\RunPersonerRatsitJob;
 use App\Models\SwedenPersoner;
 use Devletes\FilamentProgressBar\Tables\Columns\ProgressBarColumn;
-use Waad\FilamentImportWizard\Actions\ImportWizardAction as ExcelImportAction;
 use Filament\Actions\Action;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
@@ -30,6 +29,7 @@ use Filament\Tables\Table;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Throwable;
+use Waad\FilamentImportWizard\Actions\ImportWizardAction as ExcelImportAction;
 
 class SwedenKommunersTable
 {

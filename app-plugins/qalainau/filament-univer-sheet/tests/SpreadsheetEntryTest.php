@@ -17,7 +17,7 @@ it('has read-only defaults', function () {
         ->and($entry->getShowHeaderBar())->toBeFalse()
         ->and($entry->getShowContextMenu())->toBeFalse()
         ->and($entry->getRibbonType())->toBeNull()
-        ->and($entry->getHeight())->toBe('300px');
+        ->and($entry->getHeight())->toBe('780px');
 });
 
 it('can customize settings', function () {

@@ -104,8 +104,8 @@ You may customize the appearance:
 
 ```php
 SpreadsheetField::make('data')
-    ->height('600px')
-    ->minHeight('400px')
+    ->height('780px')
+    ->minHeight('645px')
     ->showToolbar(false)
     ->showFormulaBar(false)
     ->showSheetTabs(false)

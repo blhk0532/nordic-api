@@ -91,25 +91,25 @@ class SwedenPostnummersTable
                     ->dateTime()
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
-                TextColumn::make('live_ratsit_count')
+                TextColumn::make('personer_ratsit_saved')
                     ->label('Ratsit')
                     ->numeric()
                     ->placeholder('-')
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
-                TextColumn::make('live_hitta_count')
+                TextColumn::make('personer_hitta_saved')
                     ->label('Hitta')
                     ->numeric()
                     ->placeholder('-')
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
-                TextColumn::make('live_merinfo_count')
+                TextColumn::make('personer_merinfo_saved')
                     ->label('Mer')
                     ->numeric()
                     ->placeholder('-')
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
-                TextColumn::make('live_personer_count')
+                TextColumn::make('personer')
                     ->label('DB')
                     ->numeric()
                     ->placeholder('-')
@@ -143,7 +143,7 @@ class SwedenPostnummersTable
             ->defaultSort('updated_at', 'desc')
             ->paginated([10, 25, 50, 100, 200, 500])
             ->defaultPaginationPageOption(10)
-            ->modifyQueryUsing(fn (Builder $query): Builder => $query->withLiveCounts())
+            ->modifyQueryUsing(fn (Builder $query): Builder => $query)
             ->filters([
                 Filter::make('has_personer')
                     ->label('Has Personer')

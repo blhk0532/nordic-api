@@ -14,7 +14,7 @@ class ListSwedenPostnummers extends ListRecords
     protected function getFooterWidgets(): array
     {
         return [
-        //    MapPickerWidget::class,           // Table with map
+            //    MapPickerWidget::class,           // Table with map
         ];
     }
 

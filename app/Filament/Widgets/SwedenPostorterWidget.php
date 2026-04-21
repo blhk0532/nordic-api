@@ -8,7 +8,6 @@ use App\Enums\AuthRole;
 use App\Exports\SwedenPostorterExporter;
 use App\Filament\Resources\SwedenPostorters\SwedenPostorterResource;
 use App\Models\SwedenPostorter;
-use Waad\FilamentImportWizard\Actions\ImportWizardAction as ExcelImportAction;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -24,6 +23,7 @@ use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Waad\FilamentImportWizard\Actions\ImportWizardAction as ExcelImportAction;
 
 class SwedenPostorterWidget extends BaseWidget
 {

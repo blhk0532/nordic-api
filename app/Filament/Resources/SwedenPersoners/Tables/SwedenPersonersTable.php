@@ -8,7 +8,6 @@ use App\Actions\TransferSwedenPersonerToRingaDataAction;
 use App\Actions\UpdateSwedenPersonerAction;
 use App\Exports\SwedenPersonerExporter;
 use App\Models\SwedenPersoner;
-use Waad\FilamentImportWizard\Actions\ImportWizardAction as ExcelImportAction;
 use Filament\Actions\Action;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
@@ -30,6 +29,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Waad\FilamentImportWizard\Actions\ImportWizardAction as ExcelImportAction;
 
 class SwedenPersonersTable
 {

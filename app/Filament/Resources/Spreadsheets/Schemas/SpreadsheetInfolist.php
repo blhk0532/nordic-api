@@ -13,15 +13,13 @@ class SpreadsheetInfolist
         return $schema
             ->schema([
                 TextEntry::make('name')
-                    ->label('Name'),
+                    ->label('Name')
+                    ->hidden(),
                 SpreadsheetEntry::make('data')
-                    ->label('Spreadsheet Data'),
-                TextEntry::make('created_at')
-                    ->label('Created')
-                    ->dateTime(),
-                TextEntry::make('updated_at')
-                    ->label('Updated')
-                    ->dateTime(),
+                    ->label(fn ($record) => $record['name'] ?? 'Spreadsheet Database')
+                    ->extraAttributes(['class' => 'w-full', 'style' => 'min-height: 800px;'])
+                    ->columnSpanFull(),
+
             ]);
     }
 }

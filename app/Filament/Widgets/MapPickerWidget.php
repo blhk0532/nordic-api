@@ -81,7 +81,7 @@ class MapPickerWidget extends MapTableWidget
                 ->options(
                     SwedenPostnummer::query()
                         ->distinct()
-                        ->whereNotNull('lan')                        ->where('lan', '<>', '')                        ->pluck('lan', 'lan')
+                        ->whereNotNull('lan')->where('lan', '<>', '')->pluck('lan', 'lan')
                         ->toArray()
                 ),
             MapIsFilter::make('map')
