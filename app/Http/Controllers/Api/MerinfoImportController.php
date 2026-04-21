@@ -208,16 +208,15 @@ class MerinfoImportController extends Controller
             'merinfo_data' => $merinfo->toArray(),
         ];
 
-        $existingSwedenPerson = SwedenPersoner::where('personnummer', $merinfo->personalNumber)
-            ->where('personnamn', $merinfo->name)
-            ->first();
-
-        if ($existingSwedenPerson) {
-            $existingSwedenPerson->update(array_filter($swedenPersonData, fn ($v) => $v !== null));
-
-            return;
-        }
-
-        SwedenPersoner::create($swedenPersonData);
+        // Use updateOrCreate with the unique constraint keys (adress, fornamn, efternamn)
+        // This handles duplicate key violations by updating instead of failing
+        SwedenPersoner::updateOrCreate(
+            [
+                'adress' => $street,
+                'fornamn' => $firstName,
+                'efternamn' => $lastName,
+            ],
+            array_filter($swedenPersonData, fn ($v) => $v !== null)
+        );
     }
 }
