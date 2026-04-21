@@ -106,7 +106,7 @@ return [
     | responsive graph at the cost of slightly more network traffic.
     */
 
-    'ping_interval' => 5000,
+    'ping_interval' => 10000,
 
     /*
     |--------------------------------------------------------------------------
@@ -121,8 +121,8 @@ return [
     */
 
     'thresholds' => [
-        'full' => 200,
-        'medium' => 600,
+        'full' => 500,
+        'medium' => 1000,
     ],
 
     /*

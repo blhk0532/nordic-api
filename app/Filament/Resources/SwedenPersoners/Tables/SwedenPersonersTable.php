@@ -33,6 +33,57 @@ use Waad\FilamentImportWizard\Actions\ImportWizardAction as ExcelImportAction;
 
 class SwedenPersonersTable
 {
+    private static function toggleGroupAction(): Action
+    {
+        return Action::make('toggle-table-group')
+            ->label('Toggle Details')
+            ->icon('heroicon-o-arrows-pointing-out')
+            ->color('gray')
+            ->alpineClickHandler("
+                (() => {
+                    // Get all group header rows
+                    const headerRows = document.querySelectorAll('tr.fi-ta-group-header-row');
+                    if (headerRows.length === 0) return;
+
+                    // Track if any group is currently expanded (has visible content rows)
+                    let anyExpanded = false;
+                    const groupStates = [];
+
+                    headerRows.forEach(headerRow => {
+                        let hasVisibleContent = false;
+                        let current = headerRow.nextElementSibling;
+
+                        while (current && !current.classList.contains('fi-ta-group-header-row')) {
+                            if (current.classList.contains('fi-clickable')) {
+                                const style = window.getComputedStyle(current);
+                                if (style.display !== 'none') {
+                                    hasVisibleContent = true;
+                                    anyExpanded = true;
+                                }
+                            }
+                            current = current.nextElementSibling;
+                        }
+                        groupStates.push({ headerRow, hasVisibleContent });
+                    });
+
+                    // Toggle all groups
+                    groupStates.forEach(({ headerRow, hasVisibleContent }) => {
+                        let current = headerRow.nextElementSibling;
+                        while (current && !current.classList.contains('fi-ta-group-header-row')) {
+                            if (current.classList.contains('fi-clickable')) {
+                                if (anyExpanded) {
+                                    current.style.display = 'none';
+                                } else {
+                                    current.style.display = '';
+                                }
+                            }
+                            current = current.nextElementSibling;
+                        }
+                    });
+                })()
+            ");
+    }
+
     private static function transferToRingaDataBulkAction(): Action
     {
         return Action::make('transferToRingaData')
@@ -97,6 +148,10 @@ class SwedenPersonersTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->groups([
+                'adress',
+            ])
+            ->defaultGroup('adress')
             ->headerActions([
             ])
             ->columns([
@@ -108,10 +163,12 @@ class SwedenPersonersTable
                 TextColumn::make('adress')
                     ->label('Adress')
                     ->searchable()
+                    ->sortable()
                     ->limit(218)
                     ->toggleable(isToggledHiddenByDefault: false),
                 TextColumn::make('postnummer')
                     ->label('Postnr')
+                    ->sortable()
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: false),
                 TextColumn::make('postort')
@@ -365,6 +422,7 @@ class SwedenPersonersTable
                                 ->send();
                         }),
                 ]),
+                static::toggleGroupAction(),
                 BulkAction::make('refreshTable')
                     ->label('Refresh')
                     ->icon('heroicon-o-arrow-path')
