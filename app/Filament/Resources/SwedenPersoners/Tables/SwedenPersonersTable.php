@@ -132,6 +132,12 @@ class SwedenPersonersTable
                 allTableCondition: false
             )
             ->headerActions([
+                ExportAction::make()
+                    ->label('CSV')
+                    ->visible(fn () => auth()->user()->role === 'super')
+                    ->exporter(SwedenPersonerExporter::class)
+                    ->icon('heroicon-o-arrow-up-tray')
+                    ->color('danger'),
             ])
             ->columns([
                 TextColumn::make('id')
@@ -383,29 +389,17 @@ class SwedenPersonersTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                     static::exportToApiBulkAction(),
-                    BulkAction::make('transferToRingaData')
-                        ->label('Transfer to Ringa Data')
-                        ->icon('heroicon-o-arrow-right')
-                        ->color('success')
-                        ->requiresConfirmation()
-                        ->action(function (Collection $records, array $data): void {
-                            $action = new TransferSwedenPersonerToRingaDataAction;
-
-                            $createdCount = $action->handle($records, $data);
-                            $skippedCount = max(0, $records->count() - $createdCount);
-
-                            Notification::make()
-                                ->title('Success')
-                                ->body($createdCount.' records transferred to Ringa Data'.($skippedCount > 0 ? ' ('.$skippedCount.' duplicates skipped)' : ''))
-                                ->success()
-                                ->send();
-                        }),
                     BulkAction::make('export_selected')
                         ->label('Export Selected')
                         ->icon('heroicon-o-arrow-down-tray')
                         ->color('success')
-                        ->form(fn ($livewire) => method_exists($livewire, 'getExportForm') ? $livewire->getExportForm() : [])
+                        ->schema(fn ($livewire) => method_exists($livewire, 'getExportForm') ? $livewire->getExportForm() : [])
                         ->action(function (Collection $records, array $data, $livewire): ?BinaryFileResponse {
+                            // If grouping is requested, filter the records collection to only include one record per address
+                            if (! empty($data['group_by_address'])) {
+                                $records = $records->unique(fn ($record) => $record->adress.'|'.$record->postnummer.'|'.$record->postort);
+                            }
+
                             return $livewire->exportWithCustomColumns(
                                 $data['columns'] ?? [],
                                 $data['order_column'] ?? 'created_at',
@@ -449,12 +443,6 @@ class SwedenPersonersTable
                     ->color('success')
                     ->label('CSV'),
                 static::importSqlAction(),
-                ExportAction::make()
-                    ->label('CSV')
-                    ->visible(fn () => auth()->user()->role === 'super')
-                    ->exporter(SwedenPersonerExporter::class)
-                    ->icon('heroicon-o-arrow-up-tray')
-                    ->color('danger'),
                 static::exportSqlAction(),
             ])
             ->defaultSort('id', 'desc')

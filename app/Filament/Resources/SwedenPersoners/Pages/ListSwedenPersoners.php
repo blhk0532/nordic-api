@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Filament\Resources\SwedenPersoners\Pages;
 
 use App\Filament\Resources\SwedenPersoners\SwedenPersonerResource;
-use Filament\AdvancedExport\Traits\HasAdvancedExport;
 use Filament\AdvancedExport\Jobs\ProcessExportJob;
-use Filament\AdvancedExport\Support\ExportConfig;
+use Filament\AdvancedExport\Traits\HasAdvancedExport as BaseHasAdvancedExport;
+use Filament\Forms\Components\Checkbox;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,15 +15,26 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ListSwedenPersoners extends ListRecords
 {
-    use HasAdvancedExport;
+    use BaseHasAdvancedExport {
+        getExportForm as traitGetExportForm;
+    }
 
     protected static string $resource = SwedenPersonerResource::class;
+
+    public function getExportForm(): array
+    {
+        return [
+            ...$this->traitGetExportForm(),
+            Checkbox::make('group_by_address')
+                ->label('Group by address (One row per address, extra columns for household members)'),
+        ];
+    }
 
     protected function getHeaderActions(): array
     {
         return [
             $this->getAdvancedExportHeaderAction()
-                ->action(function (array $data): ?\Symfony\Component\HttpFoundation\BinaryFileResponse {
+                ->action(function (array $data): ?BinaryFileResponse {
                     // Check if we should queue this or process immediately
                     $recordCount = $this->getExportRecordCount();
                     $threshold = config('advanced-export.limits.queue_threshold', 2000);
@@ -31,7 +42,7 @@ class ListSwedenPersoners extends ListRecords
                     if ($recordCount > $threshold) {
                         $activeFilters = $this->extractActiveFilters();
                         $fileName = $this->generateFileName('advanced', $data['export_format'] ?? 'xlsx');
-                        
+
                         ProcessExportJob::dispatch(
                             $modelClass = static::$resource::getModel(),
                             $filters = $activeFilters,
@@ -138,6 +149,21 @@ class ListSwedenPersoners extends ListRecords
         $selectedRecords = $this->getSelectedTableRecords();
         if (! $selectedRecords || $selectedRecords->isEmpty()) {
             $this->applyFiltersToQuery($query, $activeFilters);
+        }
+
+        // Apply grouping if option is selected
+        if ($this->getMountedAction()?->getName() === 'advanced_export') {
+            $data = $this->getMountedActionFormState();
+            if (! empty($data['group_by_address'])) {
+                $query->whereIn(
+                    $query->getModel()->getQualifiedKeyName(),
+                    function ($subQuery) use ($query) {
+                        $subQuery->selectRaw('MIN('.$query->getModel()->getQualifiedKeyName().')')
+                            ->from($query->getModel()->getTable())
+                            ->groupBy('adress', 'postnummer', 'postort');
+                    }
+                );
+            }
         }
 
         return $query;

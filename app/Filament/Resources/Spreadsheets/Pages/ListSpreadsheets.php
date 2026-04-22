@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Spreadsheets\Pages;
 use App\Filament\Resources\Spreadsheets\SpreadsheetResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Contracts\Support\Htmlable;
 
 class ListSpreadsheets extends ListRecords
 {
@@ -13,7 +14,13 @@ class ListSpreadsheets extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+          //  CreateAction::make(),
         ];
+    }
+
+
+    public function getHeading(): string|Htmlable|null
+    {
+        return null;
     }
 }

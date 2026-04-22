@@ -79,6 +79,24 @@ class SwedenPersoner extends Model implements Exportable
         return $this->belongsTo(SwedenKommuner::class, 'kommun', 'kommun');
     }
 
+    public function getHushallMedlemmarAttribute(): array
+    {
+        $medlemmar = [];
+
+        if (! empty($this->ratsit_data['hushåll'])) {
+            foreach ($this->ratsit_data['hushåll'] as $person) {
+                if (($person['namn'] ?? '') !== $this->personnamn) {
+                    $medlemmar[] = [
+                        'namn' => $person['namn'] ?? '',
+                        'alder' => $person['ålder'] ?? $person['alder'] ?? '',
+                    ];
+                }
+            }
+        }
+
+        return $medlemmar;
+    }
+
     public static function getExportColumns(): array
     {
         return [

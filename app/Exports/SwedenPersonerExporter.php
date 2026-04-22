@@ -48,6 +48,24 @@ class SwedenPersonerExporter extends Exporter
                 ->label('Bostadstyp'),
             ExportColumn::make('personer')
                 ->label('Hushåll'),
+            ExportColumn::make('p2_namn')
+                ->label('Person 2 Namn')
+                ->state(fn (SwedenPersoner $record) => $record->hushall_medlemmar[0]['namn'] ?? ''),
+            ExportColumn::make('p2_alder')
+                ->label('Person 2 Ålder')
+                ->state(fn (SwedenPersoner $record) => $record->hushall_medlemmar[0]['alder'] ?? ''),
+            ExportColumn::make('p3_namn')
+                ->label('Person 3 Namn')
+                ->state(fn (SwedenPersoner $record) => $record->hushall_medlemmar[1]['namn'] ?? ''),
+            ExportColumn::make('p3_alder')
+                ->label('Person 3 Ålder')
+                ->state(fn (SwedenPersoner $record) => $record->hushall_medlemmar[1]['alder'] ?? ''),
+            ExportColumn::make('p4_namn')
+                ->label('Person 4 Namn')
+                ->state(fn (SwedenPersoner $record) => $record->hushall_medlemmar[2]['namn'] ?? ''),
+            ExportColumn::make('p4_alder')
+                ->label('Person 4 Ålder')
+                ->state(fn (SwedenPersoner $record) => $record->hushall_medlemmar[2]['alder'] ?? ''),
             ExportColumn::make('is_hus')
                 ->label('Hus')
                 ->formatStateUsing(fn ($state) => $state ? 'Ja' : 'Nej'),
