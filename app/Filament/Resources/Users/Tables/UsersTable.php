@@ -15,6 +15,7 @@ use Filament\Facades\Filament;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Waad\FilamentExportWizard\Actions\ExportWizardAction;
 
 class UsersTable
 {
@@ -87,6 +88,7 @@ class UsersTable
                 //
             ])
             ->toolbarActions([
+                ExportWizardAction::make(),
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),

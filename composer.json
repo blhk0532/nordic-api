@@ -81,6 +81,7 @@
         "stechstudio/filament-impersonate": "^5.2",
         "tinusg/filament-company-logo-column": "^1.0",
         "usamamuneerchaudhary/filament-notifier": "@dev",
+        "waad/filament-export-wizard": "@dev",
         "waad/filament-import-wizard": "@dev",
         "wallacemartinss/filament-icon-picker": "@dev",
         "wallacemartinss/filament-whatsapp-conector": "v2.x-dev",
@@ -210,6 +211,13 @@
         {
             "type": "path",
             "url": "app-plugins/waad/filament-import-wizard",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "app-plugins/waad/filament-export-wizard",
             "options": {
                 "symlink": true
             }

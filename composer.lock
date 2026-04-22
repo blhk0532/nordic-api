@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cebeee25f15e3470fad80c4458d28dfa",
+    "content-hash": "23b81246ffec012a6ce27988e55c2ff8",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -20198,6 +20198,47 @@
             "time": "2026-04-16T23:10:39+00:00"
         },
         {
+            "name": "waad/filament-export-wizard",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "app-plugins/waad/filament-export-wizard",
+                "reference": "754ac7404ff75d37fedd6a6df19b3cbd4174caac"
+            },
+            "require": {
+                "filament/filament": "^3.0|^4.0|^5.0",
+                "php": "^8.4",
+                "spatie/laravel-package-tools": "^1.15"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Waad\\FilamentExportWizard\\FilamentExportWizardServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Waad\\FilamentExportWizard\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Dynamic export wizard for Filament",
+            "keywords": [
+                "export",
+                "filament",
+                "laravel",
+                "wizard"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
             "name": "waad/filament-import-wizard",
             "version": "dev-main",
             "dist": {
@@ -23976,6 +24017,7 @@
         "qalainau/filament-univer-sheet": 20,
         "rawand201/filament-connection-badge": 20,
         "usamamuneerchaudhary/filament-notifier": 20,
+        "waad/filament-export-wizard": 20,
         "waad/filament-import-wizard": 20,
         "wallacemartinss/filament-icon-picker": 20,
         "wallacemartinss/filament-whatsapp-conector": 20,

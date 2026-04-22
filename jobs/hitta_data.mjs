@@ -362,16 +362,16 @@ class HittaScraper {
         is_active: true,
       };
 
-      // Check if already exists by adress, postnummer, and personnamn
+      // Check if already exists by adress, fornamn, and efternamn (to match unique constraint)
       const checkQuery = `
-        SELECT id FROM sweden_personer
-        WHERE adress = $1 AND postnummer = $2 AND personnamn = $3
+        SELECT id, telefon, telefonnummer FROM sweden_personer
+        WHERE adress = $1 AND fornamn = $2 AND efternamn = $3
         LIMIT 1
       `;
       const checkResult = await pool.query(checkQuery, [
         dataToSave.adress,
-        dataToSave.postnummer,
-        dataToSave.personnamn
+        dataToSave.fornamn,
+        dataToSave.efternamn
       ]);
       const existing = checkResult.rows[0];
 
@@ -379,7 +379,24 @@ class HittaScraper {
       let action;
 
       if (existing) {
-        // Update existing record
+        // Update existing record and merge phone numbers if necessary
+        let updatedTelefon = dataToSave.telefon || existing.telefon;
+        let updatedTelefonnummer = dataToSave.telefonnummer || [];
+        
+        // Merge phone numbers if existing record has some
+        if (existing.telefonnummer) {
+          const existingNums = Array.isArray(existing.telefonnummer) 
+            ? existing.telefonnummer 
+            : (typeof existing.telefonnummer === 'string' ? JSON.parse(existing.telefonnummer) : []);
+          
+          const combined = new Set([...(Array.isArray(updatedTelefonnummer) ? updatedTelefonnummer : []), ...existingNums]);
+          updatedTelefonnummer = Array.from(combined).filter(n => n && String(n).replace(/\D/g, '').length >= 9);
+          
+          if (updatedTelefonnummer.length > 0 && !updatedTelefon) {
+            updatedTelefon = updatedTelefonnummer[0];
+          }
+        }
+
         const updateQuery = `
           UPDATE sweden_personer
           SET adress = $1, postnummer = $2, postort = $3, fornamn = $4, efternamn = $5,
@@ -393,7 +410,7 @@ class HittaScraper {
           dataToSave.adress, dataToSave.postnummer, dataToSave.postort,
           dataToSave.fornamn, dataToSave.efternamn, dataToSave.personnamn,
           dataToSave.alder, dataToSave.kommun, dataToSave.lan, dataToSave.kon,
-          dataToSave.telefon, JSON.stringify(dataToSave.telefonnummer), dataToSave.bostadstyp, dataToSave.hitta_link,
+          updatedTelefon, JSON.stringify(updatedTelefonnummer), dataToSave.bostadstyp, dataToSave.hitta_link,
           dataToSave.hitta_data, dataToSave.is_hus, dataToSave.is_active, existing.id
         ]);
         action = 'updated';
