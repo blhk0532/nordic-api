@@ -109,6 +109,19 @@ class HittaScraper {
       return false;
     }
 
+    // Validate phone numbers if present
+    if (record.telefon) {
+      const phones = Array.isArray(record.telefon) ? record.telefon : [record.telefon];
+      for (const phone of phones) {
+        if (phone) {
+          const digits = String(phone).replace(/\D/g, '');
+          if (digits.length > 0 && digits.length < 9) {
+            return false;
+          }
+        }
+      }
+    }
+
     // If target postnummer specified, must match
     if (targetPostnummer) {
       const normalized = record.postnummer.replace(/\s+/g, '').toUpperCase();
@@ -837,13 +850,18 @@ class HittaScraper {
                   numbers.push(firstPhone);
                 }
 
-                // De-duplicate while preserving order
+                // De-duplicate while preserving order, and filter out incomplete numbers
                 const seen = new Set();
                 const deduped = [];
                 for (const n of numbers) {
-                  if (!seen.has(n)) {
+                  // Swedish phone numbers (mobile or landline) should have at least 9-10 digits.
+                  // Removing non-digits to check length.
+                  const digitCount = n.replace(/\D/g, '').length;
+                  if (digitCount >= 9 && !seen.has(n)) {
                     seen.add(n);
                     deduped.push(n);
+                  } else if (digitCount > 0 && digitCount < 9) {
+                    console.log(`  → Skipping incomplete phone number: ${n}`);
                   }
                 }
 
@@ -891,7 +909,9 @@ class HittaScraper {
                   const freshText = freshButton ? await freshButton.textContent() : phoneText;
                   const phoneMatches = freshText?.match(/(\+?\d[\d\s-]{7,})/g);
                   if (phoneMatches) {
-                    data.telefon = phoneMatches.map(m => m.trim());
+                    data.telefon = phoneMatches
+                      .map(m => m.trim())
+                      .filter(m => m.replace(/\D/g, '').length >= 9);
                   }
                 } catch {
                   // Ignore errors
@@ -902,7 +922,9 @@ class HittaScraper {
               // Fallback to extracting from text
               const phoneMatches = phoneText?.match(/(\+?\d[\d\s-]{7,})/g);
               if (phoneMatches) {
-                data.telefon = phoneMatches.map(m => m.trim());
+                data.telefon = phoneMatches
+                  .map(m => m.trim())
+                  .filter(m => m.replace(/\D/g, '').length >= 9);
               }
             }
           } else {
