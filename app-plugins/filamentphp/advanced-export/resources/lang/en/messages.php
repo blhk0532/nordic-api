@@ -1,0 +1,123 @@
+<?php
+
+return [
+    /*
+    |--------------------------------------------------------------------------
+    | Action Labels
+    |--------------------------------------------------------------------------
+    */
+    'action' => [
+        'label' => 'Export',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Modal
+    |--------------------------------------------------------------------------
+    */
+    'modal' => [
+        'heading' => 'Export Records',
+        'description' => 'Select the columns you want to export. Approximately :count records will be exported (limit: :limit) with the applied filters.',
+        'submit' => 'Export',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Form Fields
+    |--------------------------------------------------------------------------
+    */
+    'form' => [
+        'record_count' => [
+            'label' => 'Records to Export',
+            'content' => ':count records found (maximum :limit)',
+        ],
+        'export_format' => [
+            'label' => 'Export Format',
+            'helper' => 'Choose the output file format',
+        ],
+        'order_column' => [
+            'label' => 'Order by Column',
+            'placeholder' => 'Select the column to order by...',
+            'helper' => 'Choose which column the data will be sorted by in the Excel file',
+        ],
+        'order_direction' => [
+            'label' => 'Order Direction',
+            'options' => [
+                'asc' => 'Ascending (A→Z, 1→9, Oldest→Newest)',
+                'desc' => 'Descending (Z→A, 9→1, Newest→Oldest)',
+            ],
+            'helper' => 'Choose whether to sort ascending or descending',
+        ],
+        'columns' => [
+            'label' => 'Configure Export Columns',
+            'field' => [
+                'label' => 'Field',
+            ],
+            'title' => [
+                'label' => 'Custom Title',
+                'placeholder' => 'Enter the desired title...',
+            ],
+            'add' => 'Add Column',
+            'new' => 'New Column',
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Notifications
+    |--------------------------------------------------------------------------
+    */
+    'notifications' => [
+        'no_data' => [
+            'title' => 'No records found',
+            'body' => 'There is no data to export with the applied filters.',
+        ],
+        'success' => [
+            'title' => 'Export completed',
+            'body' => ':count records exported successfully.',
+        ],
+        'queued' => [
+            'title' => 'Export queued',
+            'body' => 'Your export is being processed in the background. You will be notified when it is ready.',
+        ],
+        'error' => [
+            'title' => 'Export error',
+            'body' => 'An error occurred while processing the export. Please try again or contact support.',
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Background Job Notifications
+    |--------------------------------------------------------------------------
+    */
+    'notification' => [
+        'export_complete' => 'Export Complete',
+        'export_body' => 'Your export with :records records is ready. File: :filename',
+        'download' => 'Download',
+        'export_failed' => 'Export Failed',
+        'export_failed_body' => 'The export :filename failed to process. Please try again.',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Background Export Action
+    |--------------------------------------------------------------------------
+    */
+    'background' => [
+        'action_label' => 'Background Export',
+        'modal_heading' => 'Background Export',
+        'modal_description' => 'The export will be processed in the background. You will receive a notification when the file is ready for download.',
+        'dispatched_title' => 'Export Started',
+        'dispatched_body' => 'Your export is being processed. You will receive a notification when it is ready.',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | General
+    |--------------------------------------------------------------------------
+    */
+    'undefined_title' => 'Undefined Title',
+    'yes' => 'Yes',
+    'no' => 'No',
+];

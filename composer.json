@@ -35,6 +35,7 @@
         "eduardoribeirodev/filament-leaflet": "@dev",
         "fahiem/filament-pinpoint": "^1.1",
         "filament/filament": "^5.4",
+        "filamentphp/advanced-export": "dev-main",
         "flexpik/filament-studio": "^1.1",
         "gheith3/filament-relation-pages": "^1.0",
         "hammadzafar05/mobile-bottom-nav": "^1.2",
@@ -218,6 +219,13 @@
         {
             "type": "path",
             "url": "app-plugins/waad/filament-export-wizard",
+            "options": {
+                "symlink": true
+            }
+        },
+                {
+            "type": "path",
+            "url": "app-plugins/filamentphp/advanced-export",
             "options": {
                 "symlink": true
             }

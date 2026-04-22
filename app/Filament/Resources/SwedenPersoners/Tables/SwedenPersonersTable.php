@@ -31,7 +31,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use Waad\FilamentExportWizard\Actions\ExportWizardAction;
 use Waad\FilamentImportWizard\Actions\ImportWizardAction as ExcelImportAction;
 
 class SwedenPersonersTable
@@ -242,7 +241,6 @@ class SwedenPersonersTable
             ->filters([
                 SelectFilter::make('telefon')
                     ->label('Phone')
-                    ->default('yes')
                     ->options([
                         'yes' => 'Yes',
                         'no' => 'No',
@@ -381,7 +379,6 @@ class SwedenPersonersTable
                 EditAction::make(),
             ])
             ->toolbarActions([
-                ExportWizardAction::make(),
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                     static::exportToApiBulkAction(),

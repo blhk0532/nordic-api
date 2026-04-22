@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Filament\AdvancedExport\Contracts\Exportable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class SwedenPersoner extends Model
+class SwedenPersoner extends Model implements Exportable
 {
     protected $table = 'sweden_personer';
 
@@ -76,5 +77,56 @@ class SwedenPersoner extends Model
     public function swedenKommun(): BelongsTo
     {
         return $this->belongsTo(SwedenKommuner::class, 'kommun', 'kommun');
+    }
+
+    public static function getExportColumns(): array
+    {
+        return [
+            'id' => 'ID',
+            'fornamn' => 'Förnamn',
+            'efternamn' => 'Efternamn',
+            'personnamn' => 'Fullständigt namn',
+            'personnummer' => 'Personnummer',
+            'alder' => 'Ålder',
+            'kon' => 'Kön',
+            'civilstand' => 'Civilstånd',
+            'telefon' => 'Telefon',
+            'adress' => 'Adress',
+            'postnummer' => 'Postnummer',
+            'postort' => 'Postort',
+            'kommun' => 'Kommun',
+            'lan' => 'Län',
+            'bostadstyp' => 'Bostadstyp',
+            'agandeform' => 'Ägandeform',
+            'boarea' => 'Boarea',
+            'byggar' => 'Byggår',
+            'personer' => 'Antal boende',
+            'is_hus' => 'Är hus',
+            'is_owner' => 'Är ägare',
+            'ratsit_link' => 'Ratsit Länk',
+            'hitta_link' => 'Hitta Länk',
+            'merinfo_link' => 'Merinfo Länk',
+            'eniro_link' => 'Eniro Länk',
+            'upplysning_link' => 'Upplysning Länk',
+            'mrkoll_link' => 'Mrkoll Länk',
+            'latitude' => 'Latitude',
+            'longitude' => 'Longitude',
+            'created_at' => 'Skapad',
+            'updated_at' => 'Uppdaterad',
+        ];
+    }
+
+    public static function getDefaultExportColumns(): array
+    {
+        return [
+            ['field' => 'fornamn', 'title' => 'Förnamn'],
+            ['field' => 'efternamn', 'title' => 'Efternamn'],
+            ['field' => 'personnummer', 'title' => 'Personnummer'],
+            ['field' => 'kon', 'title' => 'Kön'],
+            ['field' => 'adress', 'title' => 'Adress'],
+            ['field' => 'telefon', 'title' => 'Telefon'],
+            ['field' => 'postort', 'title' => 'Postort'],
+            ['field' => 'postnummer', 'title' => 'Postnummer'],
+        ];
     }
 }

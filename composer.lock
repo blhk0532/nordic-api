@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "23b81246ffec012a6ce27988e55c2ff8",
+    "content-hash": "f0330937e5451f6646e435f1f010a4af",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -4740,6 +4740,87 @@
             "time": "2026-04-21T15:39:57+00:00"
         },
         {
+            "name": "filamentphp/advanced-export",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "app-plugins/filamentphp/advanced-export",
+                "reference": "f5c47e6ba7d574313ce8f1d7520f833ec13a77b7"
+            },
+            "require": {
+                "filament/filament": "^4.0|^5.0",
+                "illuminate/contracts": "^11.0|^12.0|^13.0",
+                "illuminate/support": "^11.0|^12.0|^13.0",
+                "maatwebsite/excel": "^3.1|^4.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.16"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^7.0|^8.0",
+                "orchestra/testbench": "^9.0|^10.0|^11.0",
+                "pestphp/pest": "^2.0|^3.0",
+                "pestphp/pest-plugin-laravel": "^2.0|^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Filament\\AdvancedExport\\AdvancedExportServiceProvider"
+                    ],
+                    "aliases": {
+                        "AdvancedExport": "Filament\\AdvancedExport\\Facades\\AdvancedExport"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Filament\\AdvancedExport\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Filament\\AdvancedExport\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "vendor/bin/pest --no-coverage"
+                ],
+                "lint": [
+                    "vendor/bin/pint"
+                ],
+                "lint-fix": [
+                    "vendor/bin/pint --repair"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Anselmo Kossa",
+                    "email": "anselmo.cossa@enh.co.mz",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Advanced export functionality for Filament resources with dynamic column selection, filtering, ordering, and background processing.",
+            "homepage": "https://github.com/filamentphp/advanced-export",
+            "keywords": [
+                "dynamic-columns",
+                "excel",
+                "export",
+                "filament",
+                "filament-plugin",
+                "laravel",
+                "xlsx"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
             "name": "firebase/php-jwt",
             "version": "v7.0.5",
             "source": {
@@ -9159,6 +9240,87 @@
                 }
             ],
             "time": "2026-04-02T20:48:35+00:00"
+        },
+        {
+            "name": "maatwebsite/excel",
+            "version": "4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SpartnerNL/Laravel-Excel.git",
+                "reference": "4ff49665499e2698a3861d5804063b1424269e28"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SpartnerNL/Laravel-Excel/zipball/4ff49665499e2698a3861d5804063b1424269e28",
+                "reference": "4ff49665499e2698a3861d5804063b1424269e28",
+                "shasum": ""
+            },
+            "require": {
+                "composer/semver": "^3.3",
+                "ext-json": "*",
+                "illuminate/support": "^11.0||^12.0||^13.0",
+                "php": "^8.2",
+                "phpoffice/phpspreadsheet": "^5.3",
+                "psr/simple-cache": "^1.0||^2.0||^3.0"
+            },
+            "require-dev": {
+                "laravel/scout": "^10.0||^11.0",
+                "orchestra/testbench": "^9.0||^10.0||^11.0",
+                "predis/predis": "^1.1"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "Excel": "Maatwebsite\\Excel\\Facades\\Excel"
+                    },
+                    "providers": [
+                        "Maatwebsite\\Excel\\ExcelServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Maatwebsite\\Excel\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Patrick Brouwers",
+                    "email": "patrick@spartner.nl"
+                }
+            ],
+            "description": "Supercharged Excel exports and imports in Laravel",
+            "keywords": [
+                "PHPExcel",
+                "batch",
+                "csv",
+                "excel",
+                "export",
+                "import",
+                "laravel",
+                "php",
+                "phpspreadsheet"
+            ],
+            "support": {
+                "issues": "https://github.com/SpartnerNL/Laravel-Excel/issues",
+                "source": "https://github.com/SpartnerNL/Laravel-Excel/tree/4.x"
+            },
+            "funding": [
+                {
+                    "url": "https://laravel-excel.com/commercial-support",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/patrickbrouwers",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-03-18T15:43:56+00:00"
         },
         {
             "name": "maennchen/zipstream-php",
@@ -24008,6 +24170,7 @@
         "cachethq/core": 20,
         "cheesegrits/filament-google-maps": 20,
         "eduardoribeirodev/filament-leaflet": 20,
+        "filamentphp/advanced-export": 20,
         "joaopaulolndev/filament-general-settings": 20,
         "joaopaulolndev/filament-world-clock": 20,
         "mmes-design/filament-file-manager": 20,
