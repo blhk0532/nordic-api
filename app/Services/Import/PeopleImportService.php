@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Import;
 
 use App\Models\Person;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Support\Facades\Excel;
 
 class PeopleImportService
 {
@@ -17,7 +17,7 @@ class PeopleImportService
      */
     public function importFromFile(string $filePath): int
     {
-        $rows = Excel::toArray([], $filePath);
+        $rows = Excel::toArray(null, $filePath);
 
         if (empty($rows) || empty($rows[0])) {
             return 0;

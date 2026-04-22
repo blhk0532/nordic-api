@@ -82,7 +82,7 @@ class FilamentConnectionBadgeServiceProvider extends PackageServiceProvider
         FilamentView::registerRenderHook(
             config(
                 'filament-connection-badge.render_hook',
-                'panels::user-menu.before'
+                'panels::topbar-logo.after'
             ),
             function (): string {
                 $permission = config('filament-connection-badge.permission');

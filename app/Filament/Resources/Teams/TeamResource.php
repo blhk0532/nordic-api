@@ -51,12 +51,12 @@ class TeamResource extends Resource
 
     public static function getPluralModelLabel(): string
     {
-        return __('★ Teams @APP');
+        return __('Teams');
     }
 
     public static function getNavigationLabel(): string
     {
-        return __('★ Teams @APP');
+        return __('Teams');
     }
 
     public static function getNavigationGroup(): ?string

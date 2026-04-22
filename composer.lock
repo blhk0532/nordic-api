@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "243bf4807093ed0b5e4b666857c6a0f8",
+    "content-hash": "cebeee25f15e3470fad80c4458d28dfa",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -9161,65 +9161,6 @@
             "time": "2026-04-02T20:48:35+00:00"
         },
         {
-            "name": "maatwebsite/excel",
-            "version": "v1.1.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Maatwebsite/Laravel-Excel.git",
-                "reference": "0c67aba8387726458d42461eae91a3415593bbc4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Maatwebsite/Laravel-Excel/zipball/0c67aba8387726458d42461eae91a3415593bbc4",
-                "reference": "0c67aba8387726458d42461eae91a3415593bbc4",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0",
-                "phpoffice/phpexcel": "~1.8.0"
-            },
-            "require-dev": {
-                "mockery/mockery": "~0.9",
-                "orchestra/testbench": "~2.2.0@dev",
-                "phpunit/phpunit": "~4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Maatwebsite\\Excel\\": "src/"
-                },
-                "classmap": [
-                    "src/Maatwebsite/Excel",
-                    "tests/TestCase.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL"
-            ],
-            "authors": [
-                {
-                    "name": "Maatwebsite.nl",
-                    "email": "patrick@maatwebsite.nl"
-                }
-            ],
-            "description": "An eloquent way of importing and exporting Excel and CSV in Laravel 4 with the power of PHPExcel",
-            "keywords": [
-                "PHPExcel",
-                "batch",
-                "csv",
-                "excel",
-                "export",
-                "import",
-                "laravel"
-            ],
-            "support": {
-                "issues": "https://github.com/Maatwebsite/Laravel-Excel/issues",
-                "source": "https://github.com/Maatwebsite/Laravel-Excel/tree/master"
-            },
-            "time": "2014-07-10T09:06:07+00:00"
-        },
-        {
             "name": "maennchen/zipstream-php",
             "version": "3.2.2",
             "source": {
@@ -11814,68 +11755,6 @@
             "time": "2025-11-21T15:09:14+00:00"
         },
         {
-            "name": "phpoffice/phpexcel",
-            "version": "1.8.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PHPOffice/PHPExcel.git",
-                "reference": "372c7cbb695a6f6f1e62649381aeaa37e7e70b32"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PHPExcel/zipball/372c7cbb695a6f6f1e62649381aeaa37e7e70b32",
-                "reference": "372c7cbb695a6f6f1e62649381aeaa37e7e70b32",
-                "shasum": ""
-            },
-            "require": {
-                "ext-xml": "*",
-                "ext-xmlwriter": "*",
-                "php": ">=5.2.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "PHPExcel": "Classes/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL"
-            ],
-            "authors": [
-                {
-                    "name": "Maarten Balliauw",
-                    "homepage": "http://blog.maartenballiauw.be"
-                },
-                {
-                    "name": "Mark Baker"
-                },
-                {
-                    "name": "Franck Lefevre",
-                    "homepage": "http://blog.rootslabs.net"
-                },
-                {
-                    "name": "Erik Tilt"
-                }
-            ],
-            "description": "PHPExcel - OpenXML - Read, Create and Write Spreadsheet documents in PHP - Spreadsheet engine",
-            "homepage": "http://phpexcel.codeplex.com",
-            "keywords": [
-                "OpenXML",
-                "excel",
-                "php",
-                "spreadsheet",
-                "xls",
-                "xlsx"
-            ],
-            "support": {
-                "issues": "https://github.com/PHPOffice/PHPExcel/issues",
-                "source": "https://github.com/PHPOffice/PHPExcel/tree/master"
-            },
-            "abandoned": "phpoffice/phpspreadsheet",
-            "time": "2015-05-01T07:00:55+00:00"
-        },
-        {
             "name": "phpoffice/phpspreadsheet",
             "version": "5.7.0",
             "source": {
@@ -13143,17 +13022,11 @@
         },
         {
             "name": "rawand201/filament-connection-badge",
-            "version": "v1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/RawanD201/filament-connection-badge.git",
-                "reference": "ec5014ac4b579b7b965e2a5946cf74c08658e962"
-            },
+            "version": "dev-main",
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/RawanD201/filament-connection-badge/zipball/ec5014ac4b579b7b965e2a5946cf74c08658e962",
-                "reference": "ec5014ac4b579b7b965e2a5946cf74c08658e962",
-                "shasum": ""
+                "type": "path",
+                "url": "app-plugins/rawand201/filament-connection-badge",
+                "reference": "cae3a78aa36f305fb0efcaf618c82c0634ff0eed"
             },
             "require": {
                 "filament/filament": "^4.0|^5.0",
@@ -13184,7 +13057,29 @@
                     "Rawand\\FilamentConnectionBadge\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Rawand\\FilamentConnectionBadge\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "analyse": [
+                    "vendor/bin/phpstan analyse --memory-limit=1G"
+                ],
+                "sync-assets": [
+                    "@php -r \"copy('resources/js/filament-connection-badge.js', 'resources/dist/filament-connection-badge.js');\"",
+                    "@php -r \"copy('resources/css/filament-connection-badge.css', 'resources/dist/filament-connection-badge.css');\""
+                ],
+                "test": [
+                    "vendor/bin/pest"
+                ],
+                "test-coverage": [
+                    "vendor/bin/pest --coverage"
+                ],
+                "format": [
+                    "vendor/bin/pint"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -13198,8 +13093,8 @@
             "description": "A Filament topbar badge that shows real-time network quality (full/medium/low/offline) with a live ping graph tooltip and a full-screen offline overlay. Works with Filament v4 and v5, supports RTL and multi-language.",
             "homepage": "https://github.com/RawanD201/filament-connection-badge",
             "keywords": [
-                "Connection",
                 "badge",
+                "connection",
                 "filament",
                 "filamentphp",
                 "indicator",
@@ -13216,7 +13111,10 @@
                 "issues": "https://github.com/RawanD201/filament-connection-badge/issues",
                 "source": "https://github.com/RawanD201/filament-connection-badge"
             },
-            "time": "2026-04-14T18:19:00+00:00"
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "react/cache",
@@ -24076,6 +23974,7 @@
         "mwguerra/web-terminal": 20,
         "osamaatef/filament-drilldown-sidebar": 20,
         "qalainau/filament-univer-sheet": 20,
+        "rawand201/filament-connection-badge": 20,
         "usamamuneerchaudhary/filament-notifier": 20,
         "waad/filament-import-wizard": 20,
         "wallacemartinss/filament-icon-picker": 20,

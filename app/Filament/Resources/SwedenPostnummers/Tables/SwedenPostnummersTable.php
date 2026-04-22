@@ -156,6 +156,18 @@ class SwedenPostnummersTable
                     ->label('Has Personer')
                     ->default(true)
                     ->query(fn (Builder $query) => $query->where('personer', '>', 0)),
+                Filter::make('is_queued')
+                    ->label('Is Queued')
+                    ->default(true)
+                    ->query(fn (Builder $query) => $query->where('personer_ratsit_queue', '>', 0)
+                        ->orWhere('personer_hitta_queue', '>', 0)
+                        ->orWhere('personer_merinfo_queue', '>', 0)),
+                Filter::make('not_queued')
+                    ->label('Not Queued')
+                    ->default(true)
+                    ->query(fn (Builder $query) => $query->where('personer_ratsit_queue', '=', 0)
+                        ->orWhere('personer_hitta_queue', '=', 0)
+                        ->orWhere('personer_merinfo_queue', '=', 0)),
                 SelectFilter::make('kommun')
                     ->label('Kommun')
                     ->searchable()

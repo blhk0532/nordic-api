@@ -263,19 +263,20 @@ class HittaScraper {
   /**
    * Get all queued postnummer records by kommun from sweden_postnummer table
    */
-  async getQueuedPostnummerByKommun(kommun) {
+  async getQueuedPostnummerByKommun(kommun, order = 'asc') {
     try {
       const pool = this.getDbConnection();
+      const sortOrder = order.toLowerCase() === 'desc' ? 'DESC' : 'ASC';
       const query = `
         SELECT postnummer, postort, kommun, lan, latitude, longitude, personer_hitta_queue
         FROM sweden_postnummer
         WHERE kommun = $1 AND personer_hitta_queue > 0
-        ORDER BY personer_hitta_queue DESC, postnummer ASC
+        ORDER BY personer_hitta_queue DESC, postnummer ${sortOrder}
       `;
 
       const result = await pool.query(query, [kommun]);
       const results = result.rows;
-      console.log(`✓ Found ${results.length} postnummer entries queued for hitta in ${kommun}`);
+      console.log(`✓ Found ${results.length} postnummer entries queued for hitta in ${kommun} (order: ${sortOrder})`);
       return results;
     } catch (error) {
       console.log(`✗ Error querying postnummer for kommun ${kommun}:`, error.message);
@@ -1130,6 +1131,7 @@ async function main() {
     .description('Scrape person data from hitta.se')
     .argument('[query]', 'Search query (optional if --kommun is provided)')
     .option('--kommun <kommun>', 'Process queued entries for a specific kommun')
+    .option('--order <direction>', 'Sort postnummer order (asc or desc)', 'asc')
     .option('--no-missing', 'Do not create separate CSV for missing phone numbers')
     .option('--no-db', 'Do not save to database')
     .option('--api-url <url>', 'Laravel API URL (default: https://ekoll.se/api)', 'https://ekoll.se/api')
@@ -1151,7 +1153,7 @@ async function main() {
     if (options.kommun) {
       console.log(`\n🔍 Processing queued entries for kommun: ${options.kommun}`);
 
-      const queuedPostnummer = await scraper.getQueuedPostnummerByKommun(options.kommun);
+      const queuedPostnummer = await scraper.getQueuedPostnummerByKommun(options.kommun, options.order);
 
       if (queuedPostnummer.length === 0) {
         console.log(`✓ No queued entries found for kommun: ${options.kommun}`);

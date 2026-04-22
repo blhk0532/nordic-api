@@ -26,7 +26,7 @@ return [
 
     'render_hook' => env(
         'FILAMENT_CONNECTION_BADGE_RENDER_HOOK',
-        'panels::user-menu.before'
+        'panels::global-search.before'
     ),
 
     /*
@@ -106,7 +106,7 @@ return [
     | responsive graph at the cost of slightly more network traffic.
     */
 
-    'ping_interval' => env('FILAMENT_CONNECTION_BADGE_PING_INTERVAL', 5000),
+    'ping_interval' => 10000,
 
     /*
     |--------------------------------------------------------------------------

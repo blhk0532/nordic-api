@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use InvalidArgumentException;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Support\Facades\Excel;
 use PDO;
 
 class ImportHittaData implements ShouldQueue

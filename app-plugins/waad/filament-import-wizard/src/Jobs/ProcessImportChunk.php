@@ -120,7 +120,7 @@ class ProcessImportChunk implements ShouldQueue
         $data = [];
         $currentRow = 0;
 
-        while (($row = fgetcsv($fp)) !== false) {
+        while (($row = fgetcsv($fp, 0, ',', '"', '')) !== false) {
             if ($currentRow < $startRow) {
                 $currentRow++;
 

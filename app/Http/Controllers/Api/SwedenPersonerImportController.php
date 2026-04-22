@@ -12,8 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Support\Facades\Excel;
 
 class SwedenPersonerImportController extends Controller
 {
@@ -165,8 +164,8 @@ class SwedenPersonerImportController extends Controller
         $path = $file->storeAs('imports', Str::random(16).'.'.$file->getClientOriginalExtension());
         $fullPath = Storage::path($path);
 
-        // Use Laravel Excel if available, else fallback to CSV
-        if (in_array($file->getClientOriginalExtension(), ['xlsx', 'xls']) && class_exists('Maatwebsite\\Excel\\Facades\\Excel')) {
+        // Use our Excel wrapper if available, else fallback to CSV
+        if (in_array($file->getClientOriginalExtension(), ['xlsx', 'xls'])) {
             $imported = $this->importExcel($fullPath);
         } else {
             $imported = $this->importCsv($fullPath);
@@ -201,9 +200,8 @@ class SwedenPersonerImportController extends Controller
 
     private function importExcel(string $filePath): int
     {
-        // Requires maatwebsite/excel
         $imported = 0;
-        Excel::import(new class implements ToModel
+        $import = new class
         {
             public $imported = 0;
 
@@ -212,8 +210,10 @@ class SwedenPersonerImportController extends Controller
                 SwedenPersoner::create($row);
                 $this->imported++;
             }
-        }, $filePath);
+        };
 
-        return $imported;
+        Excel::import($import, $filePath);
+
+        return $import->imported;
     }
 }

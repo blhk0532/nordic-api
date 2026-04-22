@@ -243,3 +243,7 @@ div.fi-main-ctn.fi-main-ctn-sidebar-open{
 .fiwa-content{
     background: #18181b!important;
 }
+
+.fi-workspace-tabs-context-menu{
+    visibility: auto;
+}

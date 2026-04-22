@@ -15,8 +15,7 @@ use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use GuzzleHttp\Client;
-use Maatwebsite\Excel\Concerns\ToArray;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Support\Facades\Excel;
 use Qalainau\UniverSheet\SpreadsheetColumn;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use ZipArchive;
@@ -148,17 +147,9 @@ class SpreadsheetsTable
                             $grid = [];
 
                             if (in_array($extension, ['xlsx', 'xls', 'xlsm', 'xltx', 'xltm'])) {
-                                // Read Excel file using Laravel Excel with proper import class
-                                $importClass = new class implements ToArray
-                                {
-                                    public function array(array $array): array
-                                    {
-                                        return $array;
-                                    }
-                                };
-
+                                // Read Excel file using our Excel wrapper
                                 try {
-                                    $rows = Excel::toArray($importClass, $fullPath);
+                                    $rows = Excel::toArray(null, $fullPath);
                                 } catch (\Exception $ex) {
                                     throw new \Exception('Excel read error: '.$ex->getMessage());
                                 }
@@ -501,15 +492,7 @@ class SpreadsheetsTable
             $newGrid = [];
 
             if (in_array($extension, ['xlsx', 'xls', 'xlsm', 'xltx', 'xltm'])) {
-                $importClass = new class implements ToArray
-                {
-                    public function array(array $array): array
-                    {
-                        return $array;
-                    }
-                };
-
-                $rows = Excel::toArray($importClass, $fullPath);
+                $rows = Excel::toArray(null, $fullPath);
                 if (empty($rows)) {
                     throw new \Exception('No data found in the Excel file.');
                 }

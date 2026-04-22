@@ -14,7 +14,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use InvalidArgumentException;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Support\Facades\Excel;
 use PDO;
 
 class ImportPostNums implements ShouldQueue
