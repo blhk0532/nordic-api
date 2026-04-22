@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Waad\FilamentImportWizard\Actions\ImportWizardAction as ExcelImportAction;
 
 class SwedenPersonersTable
@@ -398,6 +399,20 @@ class SwedenPersonersTable
                                 ->body($createdCount.' records transferred to Ringa Data'.($skippedCount > 0 ? ' ('.$skippedCount.' duplicates skipped)' : ''))
                                 ->success()
                                 ->send();
+                        }),
+                    BulkAction::make('export_selected')
+                        ->label('Export Selected')
+                        ->icon('heroicon-o-arrow-down-tray')
+                        ->color('success')
+                        ->form(fn ($livewire) => method_exists($livewire, 'getExportForm') ? $livewire->getExportForm() : [])
+                        ->action(function (Collection $records, array $data, $livewire): ?BinaryFileResponse {
+                            return $livewire->exportWithCustomColumns(
+                                $data['columns'] ?? [],
+                                $data['order_column'] ?? 'created_at',
+                                $data['order_direction'] ?? 'desc',
+                                $data['export_format'] ?? 'xlsx',
+                                $records
+                            );
                         }),
                 ]),
                 static::toggleGroupAction(),

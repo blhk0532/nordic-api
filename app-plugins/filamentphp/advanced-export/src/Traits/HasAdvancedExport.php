@@ -16,6 +16,7 @@ use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -108,7 +109,7 @@ trait HasAdvancedExport
      *
      * @return array<Component>
      */
-    protected function getExportForm(): array
+    public function getExportForm(): array
     {
         $columns = $this->getExportColumns();
         $config = $this->getExportConfig();
@@ -222,9 +223,15 @@ trait HasAdvancedExport
                 return null;
             }
 
+            $viewName = $this->getExportViewName();
+
+            if (! view()->exists($viewName)) {
+                $viewName = 'advanced-export::exports.default-simple';
+            }
+
             $export = new SimpleExport(
                 $records,
-                $this->getExportViewName(),
+                $viewName,
                 $this->getExportViewData($records)
             );
 
@@ -243,21 +250,26 @@ trait HasAdvancedExport
      *
      * @param  array<array{field: string, title: string}>  $columnsConfig
      */
-    protected function exportWithCustomColumns(
+    public function exportWithCustomColumns(
         array $columnsConfig = [],
         string $orderColumn = 'created_at',
         string $orderDirection = 'desc',
-        string $format = 'xlsx'
+        string $format = 'xlsx',
+        ?Collection $selectedRecords = null
     ): ?BinaryFileResponse {
         try {
             if (empty($columnsConfig)) {
                 return $this->exportSimple();
             }
 
-            $activeFilters = $this->extractActiveFilters();
-            $query = $this->buildExportQuery($activeFilters);
-            $this->applyCustomOrdering($query, $orderColumn, $orderDirection);
-            $records = $query->limit($this->getExportLimit())->get();
+            if ($selectedRecords && $selectedRecords->isNotEmpty()) {
+                $records = $selectedRecords;
+            } else {
+                $activeFilters = $this->extractActiveFilters();
+                $query = $this->buildExportQuery($activeFilters);
+                $this->applyCustomOrdering($query, $orderColumn, $orderDirection);
+                $records = $query->limit($this->getExportLimit())->get();
+            }
 
             if ($records->isEmpty()) {
                 $this->showNoDataNotification();
@@ -273,10 +285,16 @@ trait HasAdvancedExport
                 return Excel::download($export, $fileName, \Maatwebsite\Excel\Excel::CSV);
             }
 
+            $viewName = $this->getAdvancedExportViewName();
+
+            if (! view()->exists($viewName)) {
+                $viewName = 'advanced-export::exports.default-advanced';
+            }
+
             $export = new AdvancedExport(
                 $records,
                 $columnsConfig,
-                $this->getAdvancedExportViewName(),
+                $viewName,
                 $this->getExportViewData($records, $columnsConfig)
             );
 

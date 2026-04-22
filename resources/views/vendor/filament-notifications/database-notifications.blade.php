@@ -12,7 +12,7 @@
 
 <div class="fi-no-database">
     <x-filament::modal
-        :alignment="$hasNotifications ? null : Alignment::Center"
+        :alignment="null"
         close-button
         :description="$hasNotifications ? null : __('filament-notifications::database.modal.empty.description')"
         :heading="$hasNotifications ? null : __('filament-notifications::database.modal.empty.heading')"

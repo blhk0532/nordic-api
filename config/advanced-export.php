@@ -12,9 +12,9 @@ return [
     |
     */
     'limits' => [
-        'max_records' => env('EXPORT_MAX_RECORDS', 2000),
-        'chunk_size' => env('EXPORT_CHUNK_SIZE', 500),
-        'queue_threshold' => env('EXPORT_QUEUE_THRESHOLD', 2000),
+        'max_records' => env('EXPORT_MAX_RECORDS', 10000),
+        'chunk_size' => env('EXPORT_CHUNK_SIZE', 100),
+        'queue_threshold' => env('EXPORT_QUEUE_THRESHOLD', 100),
     ],
 
     /*
