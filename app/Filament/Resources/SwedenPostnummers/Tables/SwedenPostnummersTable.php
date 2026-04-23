@@ -7,6 +7,7 @@ namespace App\Filament\Resources\SwedenPostnummers\Tables;
 use App\Exports\PeopleExporter;
 use App\Filament\Resources\SwedenPostnummers\Actions\RunRatsitHittaAction;
 use App\Filament\Resources\SwedenPostnummers\Actions\RunRatsitHittaBulkAction;
+use App\Jobs\CheckDbCountsJob;
 use App\Jobs\RunHittaDataScriptJob;
 use App\Jobs\RunMerinfoDataScriptJob;
 use App\Jobs\RunRatsitDataScriptJob;
@@ -114,7 +115,7 @@ class SwedenPostnummersTable
                     ->placeholder('-')
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
-                        ToggleColumn::make('personer_ratsit_queue')
+                ToggleColumn::make('personer_ratsit_queue')
                     ->label('Rat Q')
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
@@ -401,38 +402,12 @@ class SwedenPostnummersTable
                         ->modalDescription('This will count matching rows in hitta_data, persons, and sweden_personer and update personer_hitta_saved, personer_merinfo_saved, and personer_ratsit_saved for selected records.')
                         ->modalSubmitActionLabel('Update Counts')
                         ->action(function (Collection $records): void {
-                            $updated = 0;
-
-                            foreach ($records as $record) {
-                                $postNummer = (string) $record->postnummer;
-
-                                $hittaCount = HittaData::query()
-                                    ->where('postnummer', $postNummer)
-                                    ->count();
-
-                                $merinfoCount = Person::query()
-                                    ->where('zip', $postNummer)
-                                    ->count();
-
-                                $ratsitCount = SwedenPersoner::query()
-                                    ->where('postnummer', $postNummer)
-                                    ->count();
-
-                                SwedenPostnummer::query()
-                                    ->whereKey($record->getKey())
-                                    ->update([
-                                        'personer_hitta_saved' => $hittaCount,
-                                        'personer_merinfo_saved' => $merinfoCount,
-                                        'personer_ratsit_saved' => $ratsitCount,
-                                    ]);
-
-                                $updated++;
-                            }
+                            CheckDbCountsJob::dispatch($records);
 
                             Notification::make()
-                                ->success()
-                                ->title('DB Counts Updated')
-                                ->body("Updated saved counts for {$updated} record(s).")
+                                ->info()
+                                ->title('Update Started')
+                                ->body('The database counts are being updated in the background on the "background" queue.')
                                 ->send();
                         })
                         ->deselectRecordsAfterCompletion(),

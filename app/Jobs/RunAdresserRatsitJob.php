@@ -18,11 +18,13 @@ class RunAdresserRatsitJob implements ShouldQueue
 
     public int $timeout = 7200;
 
-    public function __construct(public string $kommun) {}
+    public function __construct(public string $kommun) {
+        $this->onQueue('ratsit');
+    }
 
     public function handle(): void
     {
-        $script = base_path('scripts/sweden_adresser_ratsit.mjs');
+        $script = base_path('jobs/sweden_adresser_ratsit.mjs');
 
         $process = new Process([
             'node',

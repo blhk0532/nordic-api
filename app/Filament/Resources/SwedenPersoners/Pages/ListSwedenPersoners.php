@@ -33,44 +33,44 @@ class ListSwedenPersoners extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            $this->getAdvancedExportHeaderAction()
-                ->action(function (array $data): ?BinaryFileResponse {
-                    // Check if we should queue this or process immediately
-                    $recordCount = $this->getExportRecordCount();
-                    $threshold = config('advanced-export.limits.queue_threshold', 2000);
+            // $this->getAdvancedExportHeaderAction()
+            //    ->action(function (array $data): ?BinaryFileResponse {
+            //        // Check if we should queue this or process immediately
+            //        $recordCount = $this->getExportRecordCount();
+            //        $threshold = config('advanced-export.limits.queue_threshold', 2000);
 
-                    if ($recordCount > $threshold) {
-                        $activeFilters = $this->extractActiveFilters();
-                        $fileName = $this->generateFileName('advanced', $data['export_format'] ?? 'xlsx');
+            //        if ($recordCount > $threshold) {
+            //            $activeFilters = $this->extractActiveFilters();
+            //            $fileName = $this->generateFileName('advanced', $data['export_format'] ?? 'xlsx');
 
-                        ProcessExportJob::dispatch(
-                            $modelClass = static::$resource::getModel(),
-                            $filters = $activeFilters,
-                            $fileName = $fileName,
-                            $viewName = $this->getAdvancedExportViewName(),
-                            $columnsConfig = $data['columns'] ?? [],
-                            $orderColumn = $data['order_column'] ?? 'created_at',
-                            $orderDirection = $data['order_direction'] ?? 'desc',
-                            $relationships = $this->getExportRelationships(),
-                            $userId = auth()->id()
-                        );
+            //            ProcessExportJob::dispatch(
+            //                $modelClass = static::$resource::getModel(),
+            //                $filters = $activeFilters,
+            //                $fileName = $fileName,
+            //                $viewName = $this->getAdvancedExportViewName(),
+            //                $columnsConfig = $data['columns'] ?? [],
+            //                $orderColumn = $data['order_column'] ?? 'created_at',
+            //                $orderDirection = $data['order_direction'] ?? 'desc',
+            //                $relationships = $this->getExportRelationships(),
+            //                $userId = auth()->id()
+            //            );
 
-                        $this->showQueuedNotification();
+            //            $this->showQueuedNotification();
 
-                        return null;
-                    }
+            //            return null;
+            //        }
 
-                    // Set higher memory and execution time for the synchronous part
-                    ini_set('memory_limit', '1024M');
-                    set_time_limit(300);
+            //        // Set higher memory and execution time for the synchronous part
+            //        ini_set('memory_limit', '1024M');
+            //        set_time_limit(300);
 
-                    return $this->exportWithCustomColumns(
-                        $data['columns'] ?? [],
-                        $data['order_column'] ?? 'created_at',
-                        $data['order_direction'] ?? 'desc',
-                        $data['export_format'] ?? 'xlsx'
-                    );
-                }),
+            //        return $this->exportWithCustomColumns(
+            //            $data['columns'] ?? [],
+            //            $data['order_column'] ?? 'created_at',
+            //            $data['order_direction'] ?? 'desc',
+            //            $data['export_format'] ?? 'xlsx'
+            //        );
+            //    }),
         ];
     }
 

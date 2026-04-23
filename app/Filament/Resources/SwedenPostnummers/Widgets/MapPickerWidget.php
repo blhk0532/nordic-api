@@ -8,13 +8,11 @@ use App\Exports\PeopleExporter;
 use App\Exports\SwedenPostnummerExporter;
 use App\Filament\Resources\SwedenPostnummers\Actions\RunRatsitHittaAction;
 use App\Filament\Resources\SwedenPostnummers\Actions\RunRatsitHittaBulkAction;
+use App\Jobs\CheckDbCountsJob;
 use App\Jobs\RunHittaDataScriptJob;
 use App\Jobs\RunMerinfoDataScriptJob;
 use App\Jobs\RunRatsitDataScriptJob;
 use App\Jobs\RunScriptForPostnummerJob;
-use App\Models\HittaData;
-use App\Models\MerinfoData;
-use App\Models\RatsitData;
 use App\Models\SwedenPostnummer;
 use App\Services\GoogleSheets\PeopleSheetsSyncService;
 use App\Services\Import\PeopleImportService;
@@ -490,39 +488,12 @@ class MapPickerWidget extends MapTableWidget
                     ->modalDescription('This will count matching rows in hitta_data, merinfo_data, and ratsit_data and update personer_hitta_saved, personer_merinfo_saved, and personer_ratsit_saved for selected records.')
                     ->modalSubmitActionLabel('Update Counts')
                     ->action(function (Collection $records): void {
-                        $updated = 0;
-
-                        foreach ($records as $record) {
-                            $postNummer = (string) $record->postnummer;
-                            $normalizedPostNummer = $record->csv_id;
-
-                            $hittaCount = HittaData::query()
-                                ->where('postnummer', $postNummer)
-                                ->count();
-
-                            $merinfoCount = MerinfoData::query()
-                                ->where('postnummer', $postNummer)
-                                ->count();
-
-                            $ratsitCount = RatsitData::query()
-                                ->where('postnummer', $postNummer)
-                                ->count();
-
-                            SwedenPostnummer::query()
-                                ->whereKey($record->getKey())
-                                ->update([
-                                    'personer_hitta_saved' => $hittaCount,
-                                    'personer_merinfo_saved' => $merinfoCount,
-                                    'personer_ratsit_saved' => $ratsitCount,
-                                ]);
-
-                            $updated++;
-                        }
+                        CheckDbCountsJob::dispatch($records);
 
                         Notification::make()
-                            ->success()
-                            ->title('DB Counts Updated')
-                            ->body("Updated saved counts for {$updated} record(s).")
+                            ->info()
+                            ->title('Update Started')
+                            ->body('The database counts are being updated in the background on the "background" queue.')
                             ->send();
                     })
                     ->deselectRecordsAfterCompletion(),
