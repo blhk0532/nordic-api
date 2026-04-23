@@ -64,4 +64,39 @@ class SwedenPostnummerQueueController extends Controller
 
         return response()->json(['success' => true, 'data' => $row]);
     }
+
+    public function hittaQueue(Request $request): JsonResponse
+    {
+        $request->validate([
+            'kommun' => 'required|string',
+            'order' => 'nullable|string|in:asc,desc',
+        ]);
+
+        $orderDirection = strtolower((string) $request->input('order', 'asc')) === 'desc' ? 'desc' : 'asc';
+
+        $results = SwedenPostnummer::query()
+            ->where('kommun', $request->input('kommun'))
+            ->where('personer_hitta_queue', '>', 0)
+            ->orderBy('personer_hitta_queue', 'desc')
+            ->orderBy('postnummer', $orderDirection)
+            ->get();
+
+        return response()->json(['data' => $results]);
+    }
+
+    public function updateHittaQueue(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'postnummer' => 'required|string|exists:sweden_postnummer,postnummer',
+            'saved' => 'required|integer|min:0',
+        ]);
+
+        $row = SwedenPostnummer::where('postnummer', $validated['postnummer'])->firstOrFail();
+
+        $row->personer_hitta_saved = ($row->personer_hitta_saved ?? 0) + $validated['saved'];
+        $row->personer_hitta_queue = max(0, ($row->personer_hitta_queue ?? 0) - $validated['saved']);
+        $row->save();
+
+        return response()->json(['success' => true, 'data' => $row]);
+    }
 }

@@ -80,6 +80,7 @@ use App\Http\Controllers\Api\SwedenPersonerImportController;
 Route::post('/sweden-personer/import-json', [SwedenPersonerImportController::class, 'importJson']);
 Route::post('/sweden-personer/import-file', [SwedenPersonerImportController::class, 'importFile']);
 Route::post('/sweden-personer/scraped', [SwedenPersonerImportController::class, 'importScraped']);
+Route::post('/sweden-personer/hitta', [SwedenPersonerImportController::class, 'storeHittaPerson']);
 Route::post('/sweden-adresser/scraped', [SwedenAdresserImportController::class, 'importScraped']);
 Route::post('/sweden-gator/scraped', [SwedenGatorImportController::class, 'importScraped']);
 
@@ -89,6 +90,8 @@ Route::get('/sweden-adresser/next', [SwedenAdresserQueueController::class, 'next
 Route::post('/sweden-adresser/processed', [SwedenAdresserQueueController::class, 'markProcessed']);
 Route::get('/sweden-postnummer/next', [SwedenPostnummerQueueController::class, 'next']);
 Route::post('/sweden-postnummer/processed', [SwedenPostnummerQueueController::class, 'markProcessed']);
+Route::get('/sweden-postnummer/hitta-queue', [SwedenPostnummerQueueController::class, 'hittaQueue']);
+Route::post('/sweden-postnummer/hitta-queue', [SwedenPostnummerQueueController::class, 'updateHittaQueue']);
 Route::get('/sweden-personer/next', [SwedenPersonerQueueController::class, 'next']);
 Route::post('/sweden-personer/processed', [SwedenPersonerQueueController::class, 'markProcessed']);
 

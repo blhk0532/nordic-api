@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7ff7daeb69f2ed4c43c9eec6b9f6e8d1",
+    "content-hash": "a868f416b7ed4cfb0385ad8f24120faf",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -1264,6 +1264,75 @@
                 }
             ],
             "time": "2026-04-07T17:56:48+00:00"
+        },
+        {
+            "name": "blendbyte/filament-title-with-slug",
+            "version": "v3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/blendbyte/filament-title-with-slug.git",
+                "reference": "e4ee0717d15a5afc2f5c3ca6282196bb766ebed4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/blendbyte/filament-title-with-slug/zipball/e4ee0717d15a5afc2f5c3ca6282196bb766ebed4",
+                "reference": "e4ee0717d15a5afc2f5c3ca6282196bb766ebed4",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^5.0",
+                "illuminate/contracts": "^11.0|^12.0|^13.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.16"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "nunomaduro/larastan": "^3.0",
+                "orchestra/testbench": "^9.0|^10.0|^11.0",
+                "pestphp/pest": "^3.0|^4.0",
+                "pestphp/pest-plugin-laravel": "^3.0|^4.0",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan-deprecation-rules": "^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Blendbyte\\FilamentTitleWithSlug\\FilamentTitleWithSlugServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Blendbyte\\FilamentTitleWithSlug\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Blendbyte",
+                    "email": "hello@blendbyte.com",
+                    "homepage": "https://www.blendbyte.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Title + slug field for Filament v5 with auto-slug generation, live permalink preview, and inline editing.",
+            "homepage": "https://github.com/blendbyte/filament-title-with-slug",
+            "keywords": [
+                "filament",
+                "framework",
+                "laravel",
+                "livewire",
+                "permalink",
+                "slug"
+            ],
+            "support": {
+                "source": "https://github.com/blendbyte/filament-title-with-slug/tree/v3.0.0"
+            },
+            "time": "2026-04-16T12:53:26+00:00"
         },
         {
             "name": "brick/math",

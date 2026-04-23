@@ -278,21 +278,19 @@ class HittaScraper {
    */
   async getQueuedPostnummerByKommun(kommun, order = 'asc') {
     try {
-      const pool = this.getDbConnection();
-      const sortOrder = order.toLowerCase() === 'desc' ? 'DESC' : 'ASC';
-      const query = `
-        SELECT postnummer, postort, kommun, lan, latitude, longitude, personer_hitta_queue
-        FROM sweden_postnummer
-        WHERE kommun = $1 AND personer_hitta_queue > 0
-        ORDER BY personer_hitta_queue DESC, postnummer ${sortOrder}
-      `;
+      const response = await axios.get(`${this.api_url}/api/sweden-postnummer/hitta-queue`, {
+        params: { kommun, order },
+        headers: {
+          'Authorization': this.api_token ? `Bearer ${this.api_token}` : undefined,
+          'Content-Type': 'application/json',
+        },
+      });
 
-      const result = await pool.query(query, [kommun]);
-      const results = result.rows;
-      console.log(`✓ Found ${results.length} postnummer entries queued for hitta in ${kommun} (order: ${sortOrder})`);
+      const results = response.data.data || [];
+      console.log(`✓ Found ${results.length} postnummer entries queued for hitta in ${kommun} (order: ${order})`);
       return results;
     } catch (error) {
-      console.log(`✗ Error querying postnummer for kommun ${kommun}:`, error.message);
+      console.log(`✗ Error querying postnummer for kommun ${kommun} via API:`, error.response?.data || error.message);
       return [];
     }
   }
@@ -315,15 +313,6 @@ class HittaScraper {
     }
 
     try {
-      const pool = this.getDbConnection();
-
-      // Get kommun from the postnummer record
-      const postnummerQuery = `
-        SELECT kommun, lan FROM sweden_postnummer WHERE postnummer = $1
-      `;
-      const postnummerResult = await pool.query(postnummerQuery, [postnummer]);
-      const postnummerRecord = postnummerResult.rows[0];
-
       // Prepare data for saving
       let fornamn = null;
       let efternamn = null;
@@ -339,7 +328,7 @@ class HittaScraper {
         }
       }
 
-      const dataToSave = {
+      const apiData = {
         adress: personData.gatuadress || null,
         postnummer: personData.postnummer || postnummer,
         postort: personData.postort || null,
@@ -347,102 +336,30 @@ class HittaScraper {
         efternamn: efternamn,
         personnamn: personData.personnamn || null,
         alder: personData.alder || null,
-        kommun: postnummerRecord?.kommun || null,
-        lan: postnummerRecord?.lan || null,
         kon: personData.kon || null,
-        // Save only the first phone number (as plain string)
         telefon: Array.isArray(personData.telefon) && personData.telefon.length > 0 ? personData.telefon[0] : (typeof personData.telefon === 'string' ? personData.telefon : null),
-        // Save all phone numbers as array
         telefonnummer: Array.isArray(personData.telefon) ? personData.telefon : (typeof personData.telefon === 'string' && personData.telefon ? [personData.telefon] : null),
         bostadstyp: personData.bostadstyp || null,
         hitta_link: personData.link || null,
-        // Save all data including all phone numbers to hitta_data column
-        hitta_data: JSON.stringify(personData),
+        hitta_data: personData,
         is_hus: personData.is_hus !== false ? true : false,
         is_active: true,
       };
 
-      // Check if already exists by adress, fornamn, and efternamn (to match unique constraint)
-      const checkQuery = `
-        SELECT id, telefon, telefonnummer FROM sweden_personer
-        WHERE adress = $1 AND fornamn = $2 AND efternamn = $3
-        LIMIT 1
-      `;
-      const checkResult = await pool.query(checkQuery, [
-        dataToSave.adress,
-        dataToSave.fornamn,
-        dataToSave.efternamn
-      ]);
-      const existing = checkResult.rows[0];
+      const response = await axios.post(`${this.api_url}/api/sweden-personer/hitta`, apiData, {
+        headers: {
+          'Authorization': this.api_token ? `Bearer ${this.api_token}` : undefined,
+          'Content-Type': 'application/json',
+        },
+      });
 
-      let result;
-      let action;
-
-      if (existing) {
-        // Update existing record and merge phone numbers if necessary
-        let updatedTelefon = dataToSave.telefon || existing.telefon;
-        let updatedTelefonnummer = dataToSave.telefonnummer || [];
-        
-        // Merge phone numbers if existing record has some
-        if (existing.telefonnummer) {
-          const existingNums = Array.isArray(existing.telefonnummer) 
-            ? existing.telefonnummer 
-            : (typeof existing.telefonnummer === 'string' ? JSON.parse(existing.telefonnummer) : []);
-          
-          const combined = new Set([...(Array.isArray(updatedTelefonnummer) ? updatedTelefonnummer : []), ...existingNums]);
-          updatedTelefonnummer = Array.from(combined).filter(n => n && String(n).replace(/\D/g, '').length >= 9);
-          
-          if (updatedTelefonnummer.length > 0 && !updatedTelefon) {
-            updatedTelefon = updatedTelefonnummer[0];
-          }
-        }
-
-        const updateQuery = `
-          UPDATE sweden_personer
-          SET adress = $1, postnummer = $2, postort = $3, fornamn = $4, efternamn = $5,
-              personnamn = $6, alder = $7, kommun = $8, lan = $9, kon = $10,
-              telefon = $11, telefonnummer = $12, bostadstyp = $13, hitta_link = $14, hitta_data = $15,
-              is_hus = $16, is_active = $17, updated_at = CURRENT_TIMESTAMP
-          WHERE id = $18
-          RETURNING id
-        `;
-        result = await pool.query(updateQuery, [
-          dataToSave.adress, dataToSave.postnummer, dataToSave.postort,
-          dataToSave.fornamn, dataToSave.efternamn, dataToSave.personnamn,
-          dataToSave.alder, dataToSave.kommun, dataToSave.lan, dataToSave.kon,
-          updatedTelefon, JSON.stringify(updatedTelefonnummer), dataToSave.bostadstyp, dataToSave.hitta_link,
-          dataToSave.hitta_data, dataToSave.is_hus, dataToSave.is_active, existing.id
-        ]);
-        action = 'updated';
-      } else {
-        // Insert new record
-        const insertQuery = `
-          INSERT INTO sweden_personer (
-            adress, postnummer, postort, fornamn, efternamn, personnamn, alder,
-            kommun, lan, kon, telefon, telefonnummer, bostadstyp, hitta_link, hitta_data,
-            is_hus, is_active, created_at, updated_at
-          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-          RETURNING id
-        `;
-        result = await pool.query(insertQuery, [
-          dataToSave.adress, dataToSave.postnummer, dataToSave.postort,
-          dataToSave.fornamn, dataToSave.efternamn, dataToSave.personnamn,
-          dataToSave.alder, dataToSave.kommun, dataToSave.lan, dataToSave.kon,
-          dataToSave.telefon, JSON.stringify(dataToSave.telefonnummer), dataToSave.bostadstyp, dataToSave.hitta_link,
-          dataToSave.hitta_data, dataToSave.is_hus, dataToSave.is_active
-        ]);
-        action = 'created';
-      }
-
-      if (result.rows && result.rows.length > 0) {
-        console.log(`  ✓ Saved to sweden_personer (${action}): ${personData.personnamn}`);
+      if (response.data.success) {
+        console.log(`  ✓ Saved to sweden_personer (${response.data.action}): ${personData.personnamn}`);
         return true;
-      } else {
-        console.log(`  ⚠ No changes when saving to sweden_personer: ${personData.personnamn}`);
-        return false;
       }
+      return false;
     } catch (error) {
-      console.log(`  ✗ Error saving to sweden_personer:`, error.message);
+      console.log(`  ✗ Error saving to sweden_personer via API:`, error.response?.data || error.message);
       return false;
     }
   }
@@ -452,35 +369,22 @@ class HittaScraper {
    */
   async updatePostnummerQueue(postnummer, saved) {
     try {
-      const pool = this.getDbConnection();
+      const response = await axios.post(`${this.api_url}/api/sweden-postnummer/hitta-queue`, {
+        postnummer: postnummer,
+        saved: saved
+      }, {
+        headers: {
+          'Authorization': this.api_token ? `Bearer ${this.api_token}` : undefined,
+          'Content-Type': 'application/json',
+        },
+      });
 
-      // Get current queue count
-      const getQuery = `SELECT personer_hitta_queue, personer_hitta_saved FROM sweden_postnummer WHERE postnummer = $1`;
-      const getResult = await pool.query(getQuery, [postnummer]);
-      const current = getResult.rows[0];
-
-      if (!current) {
-        console.log(`  ⚠ Postnummer not found: ${postnummer}`);
-        return;
-      }
-
-      const newQueue = Math.max(0, (current.personer_hitta_queue || 0) - saved);
-      const newSaved = (current.personer_hitta_saved || 0) + saved;
-
-      const updateQuery = `
-        UPDATE sweden_postnummer
-        SET personer_hitta_saved = $1,
-            personer_hitta_queue = $2,
-            updated_at = CURRENT_TIMESTAMP
-        WHERE postnummer = $3
-      `;
-
-      const result = await pool.query(updateQuery, [newSaved, newQueue, postnummer]);
-      if (result.rowCount > 0) {
-        console.log(`  ✓ Updated queue for postnummer ${postnummer}: saved=${newSaved}, queue=${newQueue}`);
+      if (response.data.success) {
+        const data = response.data.data;
+        console.log(`  ✓ Updated queue for postnummer ${postnummer}: saved=${data.personer_hitta_saved}, queue=${data.personer_hitta_queue}`);
       }
     } catch (error) {
-      console.log(`  ⚠ Error updating queue count for ${postnummer}:`, error.message);
+      console.log(`  ⚠ Error updating queue count for ${postnummer} via API:`, error.response?.data || error.message);
     }
   }
 

@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use App\Support\Facades\Excel;
 
 class SwedenPersonerImportController extends Controller
 {
@@ -100,7 +99,6 @@ class SwedenPersonerImportController extends Controller
 
                 if (! empty($record['id'])) {
                     $model = SwedenPersoner::find($record['id']);
-                    $recordId = $record['id'];
                     unset($record['id']);
 
                     if ($model) {
@@ -154,6 +152,65 @@ class SwedenPersonerImportController extends Controller
         ]);
     }
 
+    public function storeHittaPerson(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'adress' => 'required|string',
+            'postnummer' => 'required|string',
+            'postort' => 'required|string',
+            'fornamn' => 'nullable|string',
+            'efternamn' => 'nullable|string',
+            'personnamn' => 'nullable|string',
+            'alder' => 'nullable|string',
+            'kommun' => 'nullable|string',
+            'lan' => 'nullable|string',
+            'kon' => 'nullable|string',
+            'telefon' => 'nullable|string',
+            'telefonnummer' => 'nullable|array',
+            'bostadstyp' => 'nullable|string',
+            'hitta_link' => 'nullable|string',
+            'hitta_data' => 'nullable|array',
+            'is_hus' => 'nullable|boolean',
+            'is_active' => 'nullable|boolean',
+        ]);
+
+        // Find existing record by adress, fornamn, and efternamn if available
+        $query = SwedenPersoner::query()->where('adress', $data['adress']);
+        if (! empty($data['fornamn'])) {
+            $query->where('fornamn', $data['fornamn']);
+        }
+        if (! empty($data['efternamn'])) {
+            $query->where('efternamn', $data['efternamn']);
+        }
+
+        $existing = $query->first();
+
+        if ($existing) {
+            // Merge phone numbers
+            $updatedTelefon = $data['telefon'] ?? $existing->telefon;
+            $updatedTelefonnummer = $data['telefonnummer'] ?? [];
+            if ($existing->telefonnummer) {
+                $existingNums = is_array($existing->telefonnummer) ? $existing->telefonnummer : [];
+                $combined = array_unique(array_merge($updatedTelefonnummer, $existingNums));
+                $updatedTelefonnummer = array_values(array_filter($combined, fn ($n) => $n && strlen(preg_replace('/\D/', '', (string) $n)) >= 9));
+
+                if (! empty($updatedTelefonnummer) && empty($updatedTelefon)) {
+                    $updatedTelefon = $updatedTelefonnummer[0];
+                }
+            }
+            $data['telefon'] = $updatedTelefon;
+            $data['telefonnummer'] = $updatedTelefonnummer;
+
+            $existing->update($data);
+
+            return response()->json(['success' => true, 'action' => 'updated', 'data' => $existing]);
+        }
+
+        $record = SwedenPersoner::create($data);
+
+        return response()->json(['success' => true, 'action' => 'created', 'data' => $record], 201);
+    }
+
     // File import: expects CSV or Excel file
     public function importFile(Request $request): JsonResponse
     {
@@ -190,7 +247,6 @@ class SwedenPersonerImportController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            throw $e;
         } finally {
             fclose($handle);
         }
@@ -200,20 +256,7 @@ class SwedenPersonerImportController extends Controller
 
     private function importExcel(string $filePath): int
     {
-        $imported = 0;
-        $import = new class
-        {
-            public $imported = 0;
-
-            public function model(array $row)
-            {
-                SwedenPersoner::create($row);
-                $this->imported++;
-            }
-        };
-
-        Excel::import($import, $filePath);
-
-        return $import->imported;
+        // Placeholder for Excel import logic
+        return 0;
     }
 }

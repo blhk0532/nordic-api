@@ -22,6 +22,7 @@
         "bezhansalleh/filament-shield": "@dev",
         "binarybuilds/filament-command-runner": "@dev",
         "binarybuilds/filament-failed-jobs": "@dev",
+        "blendbyte/filament-title-with-slug": "^3.0",
         "cachethq/core": "@dev",
         "caresome/filament-auth-designer": "^3.1",
         "cheesegrits/filament-google-maps": "@dev",
@@ -179,204 +180,204 @@
             "php-http/discovery": true
         }
     },
-	"minimum-stability": "dev",
+    "minimum-stability": "dev",
     "prefer-stable": true,
-    "repositories": [
-        {
+    "repositories": {
+        "0": {
             "type": "path",
             "url": "app-modules/*",
             "options": {
                 "symlink": true
             }
         },
-        {
+        "1": {
             "type": "path",
             "url": "app-plugins/awcodes/overlook",
             "options": {
                 "symlink": true
             }
         },
-        {
+        "2": {
             "type": "path",
             "url": "app-plugins/rawand201/filament-connection-badge",
             "options": {
                 "symlink": true
             }
         },
-        {
+        "3": {
             "type": "path",
             "url": "app-plugins/qalainau/filament-univer-sheet",
             "options": {
                 "symlink": true
             }
         },
-        {
+        "4": {
             "type": "path",
             "url": "app-plugins/waad/filament-import-wizard",
             "options": {
                 "symlink": true
             }
         },
-        {
+        "5": {
             "type": "path",
             "url": "app-plugins/waad/filament-export-wizard",
             "options": {
                 "symlink": true
             }
         },
-                {
+        "6": {
             "type": "path",
             "url": "app-plugins/filamentphp/advanced-export",
             "options": {
                 "symlink": true
             }
         },
-        {
+        "7": {
             "type": "path",
             "url": "app-plugins/wallacemartinss/filament-icon-picker",
             "options": {
                 "symlink": true
             }
         },
-        {
+        "8": {
             "type": "path",
             "url": "app-plugins/osamaatef1/filament-drilldown-sidebar",
             "options": {
                 "symlink": true
             }
         },
-        {
+        "9": {
             "type": "path",
             "url": "app-plugins/mmes-design/filament-file-manager",
             "options": {
                 "symlink": true
             }
         },
-        {
+        "10": {
             "type": "path",
             "url": "app-plugins/andrewdwallo/filament-companies",
             "options": {
                 "symlink": true
             }
         },
-        {
+        "11": {
             "type": "path",
             "url": "app-plugins/bezhansalleh/filament-exceptions",
             "options": {
                 "symlink": true
             }
         },
-        {
+        "12": {
             "type": "path",
             "url": "app-plugins/adultdate/filament-booking",
             "options": {
                 "symlink": true
             }
         },
-        {
+        "13": {
             "type": "path",
             "url": "app-plugins/adultdate/filament-wirechat",
             "options": {
                 "symlink": true
             }
         },
-        {
+        "14": {
             "type": "path",
             "url": "app-plugins/bezhansalleh/filament-shield",
             "options": {
                 "symlink": true
             }
         },
-        {
+        "15": {
             "type": "path",
             "url": "app-plugins/cachethq/core",
             "options": {
                 "symlink": true
             }
         },
-                {
+        "16": {
             "type": "path",
             "url": "app-plugins/usamamuneerchaudhary/filament-notifier",
             "options": {
                 "symlink": true
             }
         },
-        {
+        "17": {
             "type": "path",
             "url": "app-plugins/achyutn/filament-log-viewer",
             "options": {
                 "symlink": true
             }
         },
-        {
+        "18": {
             "type": "path",
             "url": "app-plugins/mwguerra/web-terminal",
             "options": {
                 "symlink": true
             }
         },
-        {
+        "19": {
             "type": "path",
             "url": "app-plugins/cheesegrits/filament-google-maps",
             "options": {
                 "symlink": true
             }
         },
-        {
+        "20": {
             "type": "path",
             "url": "app-plugins/eightynine/filament-excel-import",
             "options": {
                 "symlink": true
             }
         },
-        {
+        "21": {
             "type": "path",
             "url": "app-plugins/binarybuilds/filament-failed-jobs",
             "options": {
                 "symlink": true
             }
         },
-                {
+        "22": {
             "type": "path",
             "url": "app-plugins/binarybuilds/filament-command-runner",
             "options": {
                 "symlink": true
             }
         },
-        {
+        "23": {
             "type": "path",
             "url": "app-plugins/muazzam/slick-scrollbar",
             "options": {
                 "symlink": true
             }
         },
-        {
+        "24": {
             "type": "path",
             "url": "app-plugins/shahkochaki/ami-laravel-asterisk-manager-interface",
             "options": {
                 "symlink": true
             }
         },
-                {
+        "25": {
             "type": "path",
             "url": "app-plugins/joaopaulolndev/filament-general-settings",
             "options": {
                 "symlink": true
             }
         },
-                {
+        "26": {
             "type": "path",
             "url": "app-plugins/joaopaulolndev/filament-world-clock",
             "options": {
                 "symlink": true
             }
         },
-                        {
+        "27": {
             "type": "path",
             "url": "app-plugins/wezlo/filament-workspace-tabs",
             "options": {
                 "symlink": true
             }
         }
-    ]
+    }
 }
