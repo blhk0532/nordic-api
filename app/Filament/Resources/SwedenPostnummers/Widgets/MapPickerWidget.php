@@ -493,7 +493,7 @@ class MapPickerWidget extends MapTableWidget
                         Notification::make()
                             ->info()
                             ->title('Update Started')
-                            ->body('The database counts are being updated in the background on the "background" queue.')
+                            ->body('The database counts are being updated in the background on the "sweden-postnummer" queue.')
                             ->send();
                     })
                     ->deselectRecordsAfterCompletion(),

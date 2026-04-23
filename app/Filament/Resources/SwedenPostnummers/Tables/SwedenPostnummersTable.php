@@ -159,13 +159,13 @@ class SwedenPostnummersTable
                     ->query(fn (Builder $query) => $query->where('personer', '>', 0)),
                 Filter::make('is_queued')
                     ->label('Is Queued')
-                    ->default(true)
+                    ->default(false)
                     ->query(fn (Builder $query) => $query->where('personer_ratsit_queue', '>', 0)
                         ->orWhere('personer_hitta_queue', '>', 0)
                         ->orWhere('personer_merinfo_queue', '>', 0)),
                 Filter::make('not_queued')
                     ->label('Not Queued')
-                    ->default(true)
+                    ->default(false)
                     ->query(fn (Builder $query) => $query->where('personer_ratsit_queue', '=', 0)
                         ->orWhere('personer_hitta_queue', '=', 0)
                         ->orWhere('personer_merinfo_queue', '=', 0)),
@@ -407,7 +407,7 @@ class SwedenPostnummersTable
                             Notification::make()
                                 ->info()
                                 ->title('Update Started')
-                                ->body('The database counts are being updated in the background on the "background" queue.')
+                                ->body('The database counts are being updated in the background on the "sweden-postnummer" queue.')
                                 ->send();
                         })
                         ->deselectRecordsAfterCompletion(),

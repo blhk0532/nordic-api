@@ -15,11 +15,18 @@ class CheckDbCountsJob implements ShouldQueue
     use Queueable;
 
     /**
+     * The number of seconds the job can run before timing out.
+     *
+     * @var int
+     */
+    public $timeout = 300;
+
+    /**
      * Create a new job instance.
      */
     public function __construct(public Collection $records)
     {
-        $this->onQueue('default');
+        $this->onQueue('sweden-postnummer');
     }
 
     /**
