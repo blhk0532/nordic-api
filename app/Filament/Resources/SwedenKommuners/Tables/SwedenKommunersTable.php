@@ -142,6 +142,32 @@ class SwedenKommunersTable
                             }
                         })
                         ->deselectRecordsAfterCompletion(),
+                                            BulkAction::make('runHittaData')
+                        ->label('Run Hitta Script')
+                        ->icon('heroicon-o-map')
+                        ->color('info')
+                        ->requiresConfirmation()
+                        ->modalHeading('Queue Hitta Script')
+                        ->modalDescription('This will run hitta_data.mjs --kommun for each selected kommun. Jobs will run asynchronously via the queue.')
+                        ->action(function (Collection $records): void {
+                            $queued = 0;
+
+                            foreach ($records as $record) {
+                                if (empty($record->kommun)) {
+                                    continue;
+                                }
+
+                                dispatch(new RunHittaDataJob($record->kommun));
+                                $queued++;
+                            }
+
+                            Notification::make()
+                                ->success()
+                                ->title('Gator Ratsit queued')
+                                ->body("Queued {$queued} job(s).")
+                                ->send();
+                        })
+                        ->deselectRecordsAfterCompletion(),
                     BulkAction::make('runGatorRatsit')
                         ->label('Run Gator Ratsit')
                         ->icon('heroicon-o-map')
@@ -195,11 +221,11 @@ class SwedenKommunersTable
                         })
                         ->deselectRecordsAfterCompletion(),
                     BulkAction::make('updatePersonerCount')
-                        ->label('Update Persons DB  Count')
+                        ->label('Persons DB  Count')
                         ->icon('heroicon-o-calculator')
                         ->color('gray')
                         ->requiresConfirmation()
-                        ->modalHeading('Update Persons DB  Count')
+                        ->modalHeading('Persons DB  Count')
                         ->modalDescription('This counts actual records in sweden_personer for each selected kommun and saves the total to persons_count.')
                         ->action(function (Collection $records): void {
                             $updated = 0;

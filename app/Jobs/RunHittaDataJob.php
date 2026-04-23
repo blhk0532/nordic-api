@@ -12,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\Process\Process;
 
-class RunGatorRatsitJob implements ShouldQueue
+class RunHittaDataJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -22,12 +22,12 @@ class RunGatorRatsitJob implements ShouldQueue
 
     public function handle(): void
     {
-        $script = base_path('jobs/sweden_gator_ratsit.mjs');
+        $script = base_path('jobs/hitta_data.mjs');
 
         $process = new Process([
             'node',
             $script,
-            '--kommun='.$this->kommun,
+            '--kommun '.$this->kommun,
         ]);
 
         $process->setWorkingDirectory(base_path());
@@ -35,16 +35,16 @@ class RunGatorRatsitJob implements ShouldQueue
 
         $exitCode = $process->run(function (string $type, string $buffer): void {
             if ($type === Process::ERR) {
-                Log::error('RunGatorRatsitJob stderr: '.trim($buffer));
+                Log::error('RunHittaDataJob stderr: '.trim($buffer));
 
                 return;
             }
 
-            Log::info('RunGatorRatsitJob stdout: '.trim($buffer));
+            Log::info('RunHittaDataJob stdout: '.trim($buffer));
         });
 
         if ($exitCode !== 0 || ! $process->isSuccessful()) {
-            Log::error('RunGatorRatsitJob failed', [
+            Log::error('RunHittaDataJob failed', [
                 'kommun' => $this->kommun,
                 'exit_code' => $process->getExitCode(),
                 'output' => $process->getErrorOutput() ?: $process->getOutput(),
@@ -53,6 +53,6 @@ class RunGatorRatsitJob implements ShouldQueue
             throw new \RuntimeException('sweden_gator_ratsit.mjs failed with exit code '.$process->getExitCode());
         }
 
-        Log::info('RunGatorRatsitJob finished', ['kommun' => $this->kommun]);
+        Log::info('RunHittaDataJob finished', ['kommun' => $this->kommun]);
     }
 }
