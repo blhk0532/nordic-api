@@ -9,6 +9,7 @@ use App\Actions\UpdateSwedenPersonerAction;
 use App\Exports\SwedenKommunerExporter;
 use App\Jobs\RunAdresserRatsitJob;
 use App\Jobs\RunGatorRatsitJob;
+use App\Jobs\RunHittaDataJob;
 use App\Jobs\RunPersonerRatsitJob;
 use App\Models\SwedenPersoner;
 use Devletes\FilamentProgressBar\Tables\Columns\ProgressBarColumn;

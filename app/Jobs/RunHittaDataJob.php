@@ -27,7 +27,7 @@ class RunHittaDataJob implements ShouldQueue
         $process = new Process([
             'node',
             $script,
-            '--kommun '.$this->kommun,
+            '--kommun='.$this->kommun,
         ]);
 
         $process->setWorkingDirectory(base_path());
@@ -50,7 +50,7 @@ class RunHittaDataJob implements ShouldQueue
                 'output' => $process->getErrorOutput() ?: $process->getOutput(),
             ]);
 
-            throw new \RuntimeException('sweden_gator_ratsit.mjs failed with exit code '.$process->getExitCode());
+            throw new \RuntimeException('hitta_data.mjs failed with exit code '.$process->getExitCode());
         }
 
         Log::info('RunHittaDataJob finished', ['kommun' => $this->kommun]);
