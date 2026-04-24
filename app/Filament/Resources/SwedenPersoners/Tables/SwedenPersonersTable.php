@@ -408,6 +408,28 @@ class SwedenPersonersTable
                                 $records
                             );
                         }),
+                    BulkAction::make('update_kommun')
+                        ->label('Update Kommun')
+                        ->icon('heroicon-o-building-office')
+                        ->color('primary')
+                        ->requiresConfirmation()
+                        ->modalHeading('Update Kommun for selected records')
+                        ->modalSubmitActionLabel('Update Kommun')
+                        ->action(function (Collection $records) {
+                            $updatedCount = 0;
+                            foreach ($records as $record) {
+                                if ($record instanceof SwedenPersoner) {
+                                    UpdateSwedenPersonerAction::execute($record, false);
+                                    $updatedCount++;
+                                }
+                            }
+
+                            Notification::make()
+                                ->success()
+                                ->title('Kommun Updated')
+                                ->body("Successfully updated kommun for {$updatedCount} record(s).")
+                                ->send();
+                        }),
                 ]),
                 static::toggleGroupAction(),
                 BulkAction::make('refreshTable')

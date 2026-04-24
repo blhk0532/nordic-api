@@ -223,7 +223,7 @@ class SwedenKommunersTable
                         })
                         ->deselectRecordsAfterCompletion(),
                     BulkAction::make('updatePersonerCount')
-                        ->label('Persons DB  Count')
+                        ->label('Persons DB Count')
                         ->icon('heroicon-o-calculator')
                         ->color('gray')
                         ->requiresConfirmation()
