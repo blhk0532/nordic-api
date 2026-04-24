@@ -170,9 +170,11 @@ class SwedenPersonersTable
                 TextColumn::make('fornamn')
                     ->label('Förnamn')
                     ->searchable()
+                    ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false),
                 TextColumn::make('efternamn')
                     ->label('Efternamn')
+                    ->sortable()
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: false),
                 TextColumn::make('personnummer')
