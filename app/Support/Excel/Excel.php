@@ -42,7 +42,7 @@ class Excel
                 $import->model($data);
             }
         } elseif (method_exists($import, 'collection')) {
-            $collection = new Collection();
+            $collection = new Collection;
             foreach ($rows as $row) {
                 $data = array_combine($headers, $row);
                 $collection->push($data);
@@ -53,7 +53,7 @@ class Excel
 
     public function export(object $export, string $filePath): void
     {
-        $spreadsheet = new Spreadsheet();
+        $spreadsheet = new Spreadsheet;
         $sheet = $spreadsheet->getActiveSheet();
 
         if (method_exists($export, 'collection')) {
@@ -104,7 +104,7 @@ class Excel
 
     public static function __callStatic(string $method, array $args)
     {
-        return (new self())->{$method}(...$args);
+        return (new self)->{$method}(...$args);
     }
 
     public function __call(string $method, array $args)

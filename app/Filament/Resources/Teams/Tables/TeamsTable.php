@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Filament\Resources\Teams\Tables;
 
 use App\Enums\AuthRole;
+use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Actions\CreateAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
@@ -45,7 +45,7 @@ class TeamsTable
                 //
             ])
             ->toolbarActions([
-                  CreateAction::make(),
+                CreateAction::make(),
             ])
             ->recordActions([
                 ViewAction::make(),

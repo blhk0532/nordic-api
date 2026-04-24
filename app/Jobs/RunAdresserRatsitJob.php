@@ -18,7 +18,8 @@ class RunAdresserRatsitJob implements ShouldQueue
 
     public int $timeout = 7200;
 
-    public function __construct(public string $kommun) {
+    public function __construct(public string $kommun)
+    {
         $this->onQueue('ratsit');
     }
 

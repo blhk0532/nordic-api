@@ -14,10 +14,9 @@ class ListSpreadsheets extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-          //  CreateAction::make(),
+            //  CreateAction::make(),
         ];
     }
-
 
     public function getHeading(): string|Htmlable|null
     {

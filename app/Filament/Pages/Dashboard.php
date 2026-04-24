@@ -117,8 +117,8 @@ class Dashboard extends BaseDashboard
     {
         return [
             StorageMonitorWidget::class,
-     //       SwedenPersonerGrowthChart::class,
-       //     SwedenAdresserGrowthChart::class,
+            //       SwedenPersonerGrowthChart::class,
+            //     SwedenAdresserGrowthChart::class,
         ];
     }
 

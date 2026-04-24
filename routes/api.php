@@ -23,6 +23,7 @@ use App\Http\Controllers\Api\RatsitDataController;
 use App\Http\Controllers\Api\RatsitForetagQueueController;
 use App\Http\Controllers\Api\RatsitKommunApiController;
 use App\Http\Controllers\Api\RatsitQueueController;
+use App\Http\Controllers\Api\SanctumAuthController;
 use App\Http\Controllers\Api\SwedenAdresserQueueController;
 use App\Http\Controllers\Api\SwedenGatorQueueController;
 use App\Http\Controllers\Api\SwedenPersonerQueueController;
@@ -35,12 +36,37 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
+// ========================================
+// Authentication Routes (Public)
+// ========================================
+
+/**
+ * Issue a new API token
+ * POST /api/sanctum/token
+ */
+Route::post('/sanctum/token', [SanctumAuthController::class, 'issueToken'])
+    ->middleware('throttle:15,1')
+    ->name('sanctum.token');
+
+/**
+ * Protected Sanctum Routes
+ */
+Route::middleware('auth:sanctum')->group(function () {
+    // Get authenticated user
+    Route::get('/user', [SanctumAuthController::class, 'user']);
+
+    // Token management
+    Route::get('/sanctum/tokens', [SanctumAuthController::class, 'listTokens']);
+    Route::post('/sanctum/revoke', [SanctumAuthController::class, 'revokeToken']);
+    Route::delete('/sanctum/tokens/{tokenId}', [SanctumAuthController::class, 'revokeTokenById']);
+});
+
+// ========================================
+// Application Routes
+// ========================================
+
 Route::post('/people/import', [PeopleImportController::class, 'import']);
 Route::post('/merinfo/import', [MerinfoImportController::class, 'import']);
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
 
 // BookingOutcallQueue API: latest phone for current user
 use App\Http\Controllers\Api\BookingOutcallQueueController;
@@ -76,6 +102,7 @@ Route::post('/data-private/bulk', [DataPrivateController::class, 'bulkStore']);
 use App\Http\Controllers\Api\SwedenAdresserImportController;
 use App\Http\Controllers\Api\SwedenGatorImportController;
 use App\Http\Controllers\Api\SwedenPersonerImportController;
+use App\Http\Controllers\Api\SwedenPersonerSearchController;
 
 Route::post('/sweden-personer/import-json', [SwedenPersonerImportController::class, 'importJson']);
 Route::post('/sweden-personer/import-file', [SwedenPersonerImportController::class, 'importFile']);
@@ -93,6 +120,10 @@ Route::post('/sweden-postnummer/processed', [SwedenPostnummerQueueController::cl
 Route::get('/sweden-postnummer/hitta-queue', [SwedenPostnummerQueueController::class, 'hittaQueue']);
 Route::post('/sweden-postnummer/hitta-queue', [SwedenPostnummerQueueController::class, 'updateHittaQueue']);
 Route::get('/sweden-personer/next', [SwedenPersonerQueueController::class, 'next']);
+
+// SwedenPersoner search API endpoints
+Route::get('/sweden-personer/search', [SwedenPersonerSearchController::class, 'search']);
+Route::get('/sweden-personer/quick-search', [SwedenPersonerSearchController::class, 'quickSearch']);
 Route::post('/sweden-personer/processed', [SwedenPersonerQueueController::class, 'markProcessed']);
 
 // Public API routes (no authentication required)

@@ -81,7 +81,6 @@ use Wezlo\FilamentGridList\FilamentGridListPlugin;
 use Wezlo\FilamentWorkspaceTabs\WorkspaceTabsPlugin;
 use YousefAman\ModalRepeater\ModalRepeaterPlugin;
 
-
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel

@@ -87,4 +87,3 @@ test('can use scopes for status filtering', function () {
     expect(AudioVoiceFlow::active()->count())->toBe(1)
         ->and(AudioVoiceFlow::draft()->count())->toBe(1);
 });
-

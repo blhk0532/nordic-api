@@ -19,8 +19,9 @@ class UpdateSwedenPersonerKommunJob implements ShouldQueue
      *
      * @param  Collection<int, int>  $recordIds
      */
-    public function __construct(public Collection $recordIds) {
-         $this->onQueue('default');
+    public function __construct(public Collection $recordIds)
+    {
+        $this->onQueue('default');
     }
 
     /**

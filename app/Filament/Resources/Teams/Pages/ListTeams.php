@@ -8,13 +8,13 @@ use App\Filament\Resources\Teams\TeamResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Str;
 use Wezlo\FilamentGridList\Concerns\HasGridList;
 use Wezlo\FilamentGridList\GridListConfiguration;
-use Illuminate\Support\Str;
 
 class ListTeams extends ListRecords
 {
-   use HasGridList;
+    use HasGridList;
 
     protected static string $resource = TeamResource::class;
 
@@ -30,12 +30,12 @@ class ListTeams extends ListRecords
         return null;
     }
 
-        public function gridList(GridListConfiguration $config): GridListConfiguration
+    public function gridList(GridListConfiguration $config): GridListConfiguration
     {
         return $config
             ->gridColumns(['default' => 1, 'sm' => 2, 'lg' => 4])
             ->header(fn ($record) => $record->name)
             ->content(fn ($record) => Str::limit($record->slut, 100))
-            ->footer(fn ($record) => 'Personal = ' . ($record->is_personal ? 'Yes' : 'No'));
+            ->footer(fn ($record) => 'Personal = '.($record->is_personal ? 'Yes' : 'No'));
     }
 }

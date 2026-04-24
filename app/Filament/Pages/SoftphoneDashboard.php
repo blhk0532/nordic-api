@@ -9,7 +9,7 @@ class SoftphoneDashboard extends Page
 {
     protected string $view = 'filament.pages.softphone-dashboard';
 
-        protected static ?string $navigationLabel = 'Softphone';
+    protected static ?string $navigationLabel = 'Softphone';
 
     protected static ?string $title = '';
 

@@ -46,7 +46,7 @@ class SwedenKommuner extends Page
     {
         return [
             KommunerMapWidget::make(),
-            KommunerMapWidgetDb::make(),
+
         ];
     }
 
@@ -57,7 +57,7 @@ class SwedenKommuner extends Page
 
     public function getHeaderWidgetsColumns(): int|array
     {
-        return 2;
+        return 1;
     }
 
     protected function getFooterWidgets(): array
@@ -66,6 +66,7 @@ class SwedenKommuner extends Page
 
             //    LocationMapPickerWidget::class,   // Interactive picker
             SwedenKommunerWidget::class,     // Table with map
+                     KommunerMapWidgetDb::make(),
         ];
     }
 

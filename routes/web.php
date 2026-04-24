@@ -2,7 +2,6 @@
 
 use App\Http\Middleware\EnsureTeamMembership;
 use Illuminate\Support\Facades\Route;
-use Laravel\Fortify\Features;
 
 Route::redirect('/', '/admin');
 
