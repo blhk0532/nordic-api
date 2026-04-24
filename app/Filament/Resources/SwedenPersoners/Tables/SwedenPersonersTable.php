@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\SwedenPersoners\Tables;
 
-use App\Actions\TransferSwedenPersonerToRingaDataAction;
 use App\Actions\UpdateSwedenPersonerAction;
 use App\Exports\SwedenPersonerExporter;
+use App\Jobs\UpdateSwedenPersonerKommunJob;
 use App\Models\SwedenPersoner;
 use Filament\Actions\Action;
 use Filament\Actions\BulkAction;
@@ -414,20 +414,15 @@ class SwedenPersonersTable
                         ->color('primary')
                         ->requiresConfirmation()
                         ->modalHeading('Update Kommun for selected records')
-                        ->modalSubmitActionLabel('Update Kommun')
+                        ->modalDescription('This will queue the update for the selected records to run in the background.')
+                        ->modalSubmitActionLabel('Queue Update')
                         ->action(function (Collection $records) {
-                            $updatedCount = 0;
-                            foreach ($records as $record) {
-                                if ($record instanceof SwedenPersoner) {
-                                    UpdateSwedenPersonerAction::execute($record, false);
-                                    $updatedCount++;
-                                }
-                            }
+                            UpdateSwedenPersonerKommunJob::dispatch($records->pluck('id'));
 
                             Notification::make()
                                 ->success()
-                                ->title('Kommun Updated')
-                                ->body("Successfully updated kommun for {$updatedCount} record(s).")
+                                ->title('Update Queued')
+                                ->body('The kommun update has been queued and will run in the background.')
                                 ->send();
                         }),
                 ]),
