@@ -11,6 +11,7 @@ use App\Jobs\RunAdresserRatsitJob;
 use App\Jobs\RunGatorRatsitJob;
 use App\Jobs\RunHittaDataJob;
 use App\Jobs\RunPersonerRatsitJob;
+use App\Jobs\UpdateSwedenKommunerPersonerCountJob;
 use App\Models\SwedenPersoner;
 use Devletes\FilamentProgressBar\Tables\Columns\ProgressBarColumn;
 use Filament\Actions\Action;
@@ -143,7 +144,7 @@ class SwedenKommunersTable
                             }
                         })
                         ->deselectRecordsAfterCompletion(),
-                                            BulkAction::make('runHittaData')
+                    BulkAction::make('runHittaData')
                         ->label('Run Hitta Script')
                         ->icon('heroicon-o-map')
                         ->color('info')
@@ -229,22 +230,12 @@ class SwedenKommunersTable
                         ->modalHeading('Persons DB  Count')
                         ->modalDescription('This counts actual records in sweden_personer for each selected kommun and saves the total to persons_count.')
                         ->action(function (Collection $records): void {
-                            $updated = 0;
-
-                            foreach ($records as $record) {
-                                if (empty($record->kommun)) {
-                                    continue;
-                                }
-
-                                $count = SwedenPersoner::where('kommun', $record->kommun)->count();
-                                $record->update(['personer_count' => $count]);
-                                $updated++;
-                            }
+                            UpdateSwedenKommunerPersonerCountJob::dispatch($records);
 
                             Notification::make()
                                 ->success()
-                                ->title('Persons DB Count Updated')
-                                ->body("Updated {$updated} kommun(s).")
+                                ->title('Persons DB Count Started')
+                                ->body('The process has been queued and will update the counts in the background.')
                                 ->send();
                         })
                         ->deselectRecordsAfterCompletion(),
