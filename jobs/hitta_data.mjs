@@ -296,6 +296,56 @@ class HittaScraper {
   }
 
   /**
+   * Get all queued postnummer records by län from sweden_postnummer table
+   */
+  async getQueuedPostnummerByLan(lan, order = 'asc') {
+    try {
+      const response = await axios.get(`${this.api_url}/api/sweden-postnummer/hitta-queue`, {
+        params: { lan, order },
+        headers: {
+          'Authorization': this.api_token ? `Bearer ${this.api_token}` : undefined,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const results = response.data.data || [];
+      console.log(`✓ Found ${results.length} postnummer entries queued for hitta in ${lan} (order: ${order})`);
+      return results;
+    } catch (error) {
+      console.log(`✗ Error querying postnummer for län ${lan} via API:`, error.response?.data || error.message);
+      return [];
+    }
+  }
+
+  /**
+   * Get next queued postnummer record from sweden_postnummer table
+   */
+  async getNextQueuedPostnummer(order = 'asc') {
+    try {
+      const response = await axios.get(`${this.api_url}/api/sweden-postnummer/hitta-queue/next`, {
+        params: { order },
+        headers: {
+          'Authorization': this.api_token ? `Bearer ${this.api_token}` : undefined,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const result = response.data.data;
+      if (result) {
+        console.log(`✓ Found next queued postnummer: ${result.postnummer} (${result.postort})`);
+        return {
+          postnummer: result.postnummer,
+          postort: result.postort,
+        };
+      }
+      return null;
+    } catch (error) {
+      console.log(`✗ Error querying next postnummer via API:`, error.response?.data || error.message);
+      return null;
+    }
+  }
+
+  /**
    * Save person data to sweden_personer table
    */
   async saveSwedenPerson(personData, postnummer, targetPostnummer = null) {
@@ -1072,8 +1122,9 @@ class HittaScraper {
 async function main() {
   program
     .description('Scrape person data from hitta.se')
-    .argument('[query]', 'Search query (optional if --kommun is provided)')
+    .argument('[query]', 'Search query (optional - auto-processes next queued postnummer if not provided)')
     .option('--kommun <kommun>', 'Process queued entries for a specific kommun')
+    .option('--lan <lan>', 'Process queued entries for a specific län (state)')
     .option('--order <direction>', 'Sort postnummer order (asc or desc)', 'asc')
     .option('--no-missing', 'Do not create separate CSV for missing phone numbers')
     .option('--no-db', 'Do not save to database')
@@ -1148,10 +1199,106 @@ async function main() {
       return;
     }
 
-    // Original mode: search for a single query
+    // Handle --lan mode
+    if (options.lan) {
+      console.log(`\n🔍 Processing queued entries for län: ${options.lan}`);
+
+      const queuedPostnummer = await scraper.getQueuedPostnummerByLan(options.lan, options.order);
+
+      if (queuedPostnummer.length === 0) {
+        console.log(`✓ No queued entries found for län: ${options.lan}`);
+        return;
+      }
+
+      let totalSaved = 0;
+      let totalSwedenPerson = 0;
+
+      for (let idx = 0; idx < queuedPostnummer.length; idx++) {
+        const postnummerRecord = queuedPostnummer[idx];
+        const { postnummer, postort } = postnummerRecord;
+
+        console.log(`\n[${idx + 1}/${queuedPostnummer.length}] Processing postnummer ${postnummer} (${postort})`);
+
+        try {
+          // Search for postnummer (without spaces) on hitta.se
+          const searchQuery = postnummer.replace(/\s+/g, '');
+          const results = await scraper.scrapeSearchResults(searchQuery, 1000, startPage, startIndex);
+
+          if (results.length > 0) {
+            console.log(`  Found ${results.length} total results for postnummer ${postnummer}`);
+
+            if (!options.noDb) {
+              // Save with validation - only saves records matching the target postnummer with all required fields
+              const saved = await scraper.saveToDatabase(results, postnummer);
+              totalSaved += saved;
+              totalSwedenPerson += saved; // They're saved together now
+
+              // Update queue count
+              if (saved > 0) {
+                await scraper.updatePostnummerQueue(postnummer, saved);
+              }
+            }
+          } else {
+            console.log(`  No results found for query: ${searchQuery}`);
+          }
+        } catch (error) {
+          console.log(`  ✗ Error processing postnummer ${postnummer}:`, error.message);
+        }
+
+        // Brief pause between searches
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+
+      console.log(`\n✓ Completed processing for län: ${options.lan}`);
+      console.log(`Total saved to hitta_data: ${totalSaved}`);
+      console.log(`Total saved to sweden_personer: ${totalSwedenPerson}`);
+      return;
+    }
+
+    // Handle auto-queue mode (no query provided)
     if (!query) {
-      console.error('Error: Either provide a search query or use --kommun option');
-      process.exit(1);
+      console.log(`\n🔍 Auto-processing next queued postnummer...`);
+
+      const nextRecord = await scraper.getNextQueuedPostnummer(options.order);
+
+      if (!nextRecord) {
+        console.log(`✓ No queued entries found`);
+        return;
+      }
+
+      const { postnummer, postort } = nextRecord;
+
+      console.log(`Processing postnummer ${postnummer} (${postort})`);
+
+      try {
+        // Search for postnummer (without spaces) on hitta.se
+        const searchQuery = postnummer.replace(/\s+/g, '');
+        const results = await scraper.scrapeSearchResults(searchQuery, 1000, startPage, startIndex);
+
+        if (results.length > 0) {
+          console.log(`  Found ${results.length} total results for postnummer ${postnummer}`);
+
+          if (!options.noDb) {
+            // Save with validation - only saves records matching the target postnummer with all required fields
+            const saved = await scraper.saveToDatabase(results, postnummer);
+
+            // Update queue count
+            if (saved > 0) {
+              await scraper.updatePostnummerQueue(postnummer, saved);
+              console.log(`✓ Completed processing for postnummer ${postnummer}`);
+              console.log(`Total saved to hitta_data: ${saved}`);
+            } else {
+              console.log(`✓ No new records saved for postnummer ${postnummer}`);
+            }
+          }
+        } else {
+          console.log(`  No results found for query: ${searchQuery}`);
+        }
+      } catch (error) {
+        console.log(`  ✗ Error processing postnummer ${postnummer}:`, error.message);
+      }
+
+      return;
     }
 
     if (options.onlyTotals) {

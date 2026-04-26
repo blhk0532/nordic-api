@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a868f416b7ed4cfb0385ad8f24120faf",
+    "content-hash": "c7c6c96d086a4b3807a9fc3c31ff4126",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -12984,6 +12984,72 @@
                 "source": "https://github.com/bobthecow/psysh/tree/v0.12.22"
             },
             "time": "2026-03-22T23:03:24+00:00"
+        },
+        {
+            "name": "qalainau/filament-inbox",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/qalainau/filament-inbox.git",
+                "reference": "3c2df374237db3693fc2221c2a09b0dfff49f579"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/qalainau/filament-inbox/zipball/3c2df374237db3693fc2221c2a09b0dfff49f579",
+                "reference": "3c2df374237db3693fc2221c2a09b0dfff49f579",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^5.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.14"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "orchestra/testbench": "^10.0",
+                "pestphp/pest": "^4.0",
+                "pestphp/pest-plugin-laravel": "^4.0",
+                "pestphp/pest-plugin-livewire": "^4.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "FilamentInbox\\FilamentInboxServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "FilamentInbox\\": "src/",
+                    "FilamentInbox\\Database\\Factories\\": "database/factories/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Qalainau",
+                    "homepage": "https://github.com/qalainau"
+                }
+            ],
+            "description": "Email-like inbox messaging plugin for Filament v5 — threads, starring, trash, forwarding, read receipts, and multi-tenancy out of the box.",
+            "homepage": "https://github.com/qalainau/filament-inbox",
+            "keywords": [
+                "filament",
+                "filament-plugin",
+                "inbox",
+                "laravel",
+                "livewire",
+                "messaging"
+            ],
+            "support": {
+                "issues": "https://github.com/qalainau/filament-inbox/issues",
+                "source": "https://github.com/qalainau/filament-inbox/tree/v1.0.0"
+            },
+            "time": "2026-04-24T11:10:08+00:00"
         },
         {
             "name": "qalainau/filament-univer-sheet",

@@ -66,6 +66,7 @@ use MmesDesign\FilamentFileManager\FileManagerPlugin;
 use Muazzam\SlickScrollbar\SlickScrollbarPlugin;
 use MWGuerra\WebTerminal\WebTerminalPlugin;
 use OsamaAtef\DrilldownSidebar\DrilldownSidebarPlugin;
+use Qalainau\FilamentInbox\FilamentInboxPlugin;
 use Qalainau\UniverSheet\UniverSheetPlugin;
 use Usamamuneerchaudhary\Notifier\FilamentNotifierPlugin;
 use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
@@ -362,6 +363,7 @@ class AdminPanelProvider extends PanelProvider
                 ResizedColumnPlugin::make(),
                 FilamentLogViewer::make(),
             ])
-            ->plugin(UniverSheetPlugin::make());
+            ->plugin(UniverSheetPlugin::make())
+            ->plugin(FilamentInboxPlugin::make());
     }
 }

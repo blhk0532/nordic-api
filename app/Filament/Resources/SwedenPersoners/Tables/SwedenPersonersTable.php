@@ -250,6 +250,7 @@ class SwedenPersonersTable
             ->filters([
                 SelectFilter::make('telefon')
                     ->label('Phone')
+                    ->default('yes')
                     ->options([
                         'yes' => 'Yes',
                         'no' => 'No',

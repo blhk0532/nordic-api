@@ -66,7 +66,7 @@ class SwedenKommuner extends Page
 
             //    LocationMapPickerWidget::class,   // Interactive picker
             SwedenKommunerWidget::class,     // Table with map
-                     KommunerMapWidgetDb::make(),
+            KommunerMapWidgetDb::make(),
         ];
     }
 

@@ -118,6 +118,7 @@ Route::post('/sweden-adresser/processed', [SwedenAdresserQueueController::class,
 Route::get('/sweden-postnummer/next', [SwedenPostnummerQueueController::class, 'next']);
 Route::post('/sweden-postnummer/processed', [SwedenPostnummerQueueController::class, 'markProcessed']);
 Route::get('/sweden-postnummer/hitta-queue', [SwedenPostnummerQueueController::class, 'hittaQueue']);
+Route::get('/sweden-postnummer/hitta-queue/next', [SwedenPostnummerQueueController::class, 'hittaQueueNext']);
 Route::post('/sweden-postnummer/hitta-queue', [SwedenPostnummerQueueController::class, 'updateHittaQueue']);
 Route::get('/sweden-personer/next', [SwedenPersonerQueueController::class, 'next']);
 

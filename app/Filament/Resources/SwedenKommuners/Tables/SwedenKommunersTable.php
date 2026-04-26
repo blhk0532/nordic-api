@@ -25,7 +25,6 @@ use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\FileUpload;
 use Filament\Notifications\Notification;
-use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
@@ -48,39 +47,25 @@ class SwedenKommunersTable
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->searchable(),
 
-                TextColumn::make('sweden_postorter_count')
-                    ->counts('swedenPostorter')
+                TextColumn::make('postorter')
                     ->label('Postort')
                     ->numeric()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->summarize(Sum::make()),
-                TextColumn::make('sweden_postnummer_count')
-                    ->counts('swedenPostnummer')
+                    ->sortable(),
+                TextColumn::make('postnummer')
                     ->label('Postnr')
                     ->numeric()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->summarize(Sum::make()),
-                TextColumn::make('sweden_gator_count')
-                    ->counts('swedenGator')
+                    ->sortable(),
+                TextColumn::make('gator')
                     ->label('Gata')
                     ->numeric()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->summarize(Sum::make()),
-                TextColumn::make('sweden_adresser_count')
-                    ->counts('swedenAdresser')
+                    ->sortable(),
+                TextColumn::make('adresser')
                     ->label('Adress')
                     ->numeric()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->summarize(Sum::make()),
+                    ->sortable(),
                 TextColumn::make('personer')
                     ->numeric()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->summarize(Sum::make()),
+                    ->sortable(),
                 TextColumn::make('foretag')
                     ->numeric()
                     ->toggleable(isToggledHiddenByDefault: true)

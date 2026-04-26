@@ -70,6 +70,7 @@
         "nativephp/mobile": "^3.2",
         "nunomaduro/pokio": "^1.0",
         "osamaatef/filament-drilldown-sidebar": "@dev",
+        "qalainau/filament-inbox": "^1.0",
         "qalainau/filament-univer-sheet": "@dev",
         "rawand201/filament-connection-badge": "@dev",
         "secondnetwork/blade-tabler-icons": "^3.41",

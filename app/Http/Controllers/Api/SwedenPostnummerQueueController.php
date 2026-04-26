@@ -68,20 +68,57 @@ class SwedenPostnummerQueueController extends Controller
     public function hittaQueue(Request $request): JsonResponse
     {
         $request->validate([
-            'kommun' => 'required|string',
+            'kommun' => 'nullable|string',
+            'lan' => 'nullable|string',
+            'order' => 'nullable|string|in:asc,desc',
+        ]);
+
+        // Either kommun or lan must be provided
+        if (!$request->filled('kommun') && !$request->filled('lan')) {
+            return response()->json([
+                'message' => 'Either kommun or lan parameter is required',
+                'errors' => ['kommun' => ['The kommun field is required.'], 'lan' => ['The lan field is required.']],
+            ], 422);
+        }
+
+        $orderDirection = strtolower((string) $request->input('order', 'asc')) === 'desc' ? 'desc' : 'asc';
+
+        $query = SwedenPostnummer::query()
+            ->where('personer_hitta_queue', '>', 0)
+            ->orderBy('personer_hitta_queue', 'desc')
+            ->orderBy('postnummer', $orderDirection);
+
+        if ($request->filled('kommun')) {
+            $query->where('kommun', $request->input('kommun'));
+        }
+
+        if ($request->filled('lan')) {
+            $query->where('lan', $request->input('lan'));
+        }
+
+        $results = $query->get();
+
+        return response()->json(['data' => $results]);
+    }
+
+    public function hittaQueueNext(Request $request): JsonResponse
+    {
+        $request->validate([
             'order' => 'nullable|string|in:asc,desc',
         ]);
 
         $orderDirection = strtolower((string) $request->input('order', 'asc')) === 'desc' ? 'desc' : 'asc';
 
-        $results = SwedenPostnummer::query()
-            ->where('kommun', $request->input('kommun'))
+        $result = SwedenPostnummer::query()
             ->where('personer_hitta_queue', '>', 0)
-            ->orderBy('personer_hitta_queue', 'desc')
             ->orderBy('postnummer', $orderDirection)
-            ->get();
+            ->first();
 
-        return response()->json(['data' => $results]);
+        if (!$result) {
+            return response()->json(['data' => null], 204);
+        }
+
+        return response()->json(['data' => $result]);
     }
 
     public function updateHittaQueue(Request $request): JsonResponse
