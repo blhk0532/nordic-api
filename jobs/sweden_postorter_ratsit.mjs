@@ -24,7 +24,6 @@ async function scrapeRatsitPostorter(url, kommunName, lan, connection) {
         // Launch browser with realistic settings
         browser = await chromium.launch({
             headless: true,
-            executablePath: '/usr/bin/google-chrome',
             args: [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',

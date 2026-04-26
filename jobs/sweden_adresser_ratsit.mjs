@@ -271,7 +271,6 @@ async function scrapeRatsitPersoner(url, row, connection) {
 	try {
 		browser = await chromium.launch({
 			headless: true,
-			executablePath: '/usr/bin/google-chrome',
 			args: [
 				'--no-sandbox',
 				'--disable-setuid-sandbox',
