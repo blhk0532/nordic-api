@@ -1257,47 +1257,63 @@ async function main() {
 
     // Handle auto-queue mode (no query provided)
     if (!query) {
-      console.log(`\n🔍 Auto-processing next queued postnummer...`);
+      console.log(`\n🔍 Auto-processing queued postnummers continuously...`);
 
-      const nextRecord = await scraper.getNextQueuedPostnummer(options.order);
+      let processedCount = 0;
+      let totalSaved = 0;
+      let continueProcessing = true;
 
-      if (!nextRecord) {
-        console.log(`✓ No queued entries found`);
-        return;
-      }
+      while (continueProcessing) {
+        const nextRecord = await scraper.getNextQueuedPostnummer(options.order);
 
-      const { postnummer, postort } = nextRecord;
-
-      console.log(`Processing postnummer ${postnummer} (${postort})`);
-
-      try {
-        // Search for postnummer (without spaces) on hitta.se
-        const searchQuery = postnummer.replace(/\s+/g, '');
-        const results = await scraper.scrapeSearchResults(searchQuery, 1000, startPage, startIndex);
-
-        if (results.length > 0) {
-          console.log(`  Found ${results.length} total results for postnummer ${postnummer}`);
-
-          if (!options.noDb) {
-            // Save with validation - only saves records matching the target postnummer with all required fields
-            const saved = await scraper.saveToDatabase(results, postnummer);
-
-            // Update queue count
-            if (saved > 0) {
-              await scraper.updatePostnummerQueue(postnummer, saved);
-              console.log(`✓ Completed processing for postnummer ${postnummer}`);
-              console.log(`Total saved to hitta_data: ${saved}`);
-            } else {
-              console.log(`✓ No new records saved for postnummer ${postnummer}`);
-            }
-          }
-        } else {
-          console.log(`  No results found for query: ${searchQuery}`);
+        if (!nextRecord) {
+          console.log(`\n✓ No more queued entries found. Processing complete.`);
+          continueProcessing = false;
+          break;
         }
-      } catch (error) {
-        console.log(`  ✗ Error processing postnummer ${postnummer}:`, error.message);
+
+        const { postnummer, postort } = nextRecord;
+        processedCount++;
+
+        console.log(`\n[${processedCount}] Processing postnummer ${postnummer} (${postort})`);
+
+        try {
+          // Search for postnummer (without spaces) on hitta.se
+          const searchQuery = postnummer.replace(/\s+/g, '');
+          const results = await scraper.scrapeSearchResults(searchQuery, 1000, startPage, startIndex);
+
+          if (results.length > 0) {
+            console.log(`  Found ${results.length} total results for postnummer ${postnummer}`);
+
+            if (!options.noDb) {
+              // Save with validation - only saves records matching the target postnummer with all required fields
+              const saved = await scraper.saveToDatabase(results, postnummer);
+              totalSaved += saved;
+
+              // Update queue count
+              if (saved > 0) {
+                await scraper.updatePostnummerQueue(postnummer, saved);
+                console.log(`  ✓ Saved ${saved} records for postnummer ${postnummer}`);
+              } else {
+                console.log(`  ✓ No new records saved for postnummer ${postnummer}`);
+              }
+            }
+          } else {
+            console.log(`  No results found for query: ${searchQuery}`);
+          }
+        } catch (error) {
+          console.log(`  ✗ Error processing postnummer ${postnummer}:`, error.message);
+        }
+
+        // Brief pause before fetching next
+        await new Promise(resolve => setTimeout(resolve, 1000));
       }
 
+      console.log(`\n═══════════════════════════════════════════`);
+      console.log(`✓ Auto-processing completed`);
+      console.log(`Total postnummers processed: ${processedCount}`);
+      console.log(`Total records saved: ${totalSaved}`);
+      console.log(`═══════════════════════════════════════════`);
       return;
     }
 
