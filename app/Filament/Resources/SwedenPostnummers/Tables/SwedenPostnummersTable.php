@@ -417,6 +417,61 @@ class SwedenPostnummersTable
                                 ->send();
                         })
                         ->deselectRecordsAfterCompletion(),
+                    BulkAction::make('queueRows')
+                        ->label('Queue Rows')
+                        ->icon('heroicon-o-queue-list')
+                        ->color('warning')
+                        ->requiresConfirmation()
+                        ->modalHeading('Queue Rows')
+                        ->modalDescription('Select which queue columns should be set to 1 for the selected records.')
+                        ->modalSubmitActionLabel('Set Selected Queues = 1')
+                        ->schema([
+                            Select::make('queues')
+                                ->label('Queue columns')
+                                ->multiple()
+                                ->options([
+                                    'personer_merinfo_queue' => 'Merinfo Queue',
+                                    'personer_hitta_queue' => 'Hitta Queue',
+                                    'personer_ratsit_queue' => 'Ratsit Queue',
+                                ])
+                                ->required(),
+                        ])
+                        ->action(function (Collection $records, array $data): void {
+                            $queueColumns = collect($data['queues'] ?? [])
+                                ->filter(fn (mixed $column): bool => in_array($column, [
+                                    'personer_merinfo_queue',
+                                    'personer_hitta_queue',
+                                    'personer_ratsit_queue',
+                                ], true))
+                                ->values();
+
+                            if ($queueColumns->isEmpty()) {
+                                Notification::make()
+                                    ->danger()
+                                    ->title('No queue selected')
+                                    ->body('Please select at least one queue column.')
+                                    ->send();
+
+                                return;
+                            }
+
+                            $updatePayload = $queueColumns
+                                ->mapWithKeys(fn (string $column): array => [$column => 1])
+                                ->all();
+
+                            $recordIds = $records->modelKeys();
+
+                            SwedenPostnummer::query()
+                                ->whereKey($recordIds)
+                                ->update($updatePayload);
+
+                            Notification::make()
+                                ->success()
+                                ->title('Queue Columns Updated')
+                                ->body('Set selected queue columns to 1 for '.count($recordIds).' record(s).')
+                                ->send();
+                        })
+                        ->deselectRecordsAfterCompletion(),
                     BulkAction::make('setAllQueueFlags0')
                         ->label('Set All Queue = 0')
                         ->icon('heroicon-o-queue-list')
