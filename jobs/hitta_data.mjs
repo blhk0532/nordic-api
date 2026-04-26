@@ -461,7 +461,6 @@ class HittaScraper {
       // Launch browser
       browser = await chromium.launch({
         headless: true,
-        executablePath: '/usr/bin/google-chrome',
         args: [
           '--no-sandbox',
           '--disable-dev-shm-usage',
@@ -1324,7 +1323,6 @@ async function main() {
       console.log(`Checking totals for: ${query}`);
       const browser = await chromium.launch({
         headless: true,
-        executablePath: '/usr/bin/google-chrome',
         args: [
           '--no-sandbox',
           '--disable-dev-shm-usage',
