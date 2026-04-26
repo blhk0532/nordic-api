@@ -157,18 +157,72 @@ class SwedenPostnummersTable
                     ->label('Has Personer')
                     ->default(true)
                     ->query(fn (Builder $query) => $query->where('personer', '>', 0)),
-                Filter::make('is_queued')
-                    ->label('Is Queued')
-                    ->default(false)
-                    ->query(fn (Builder $query) => $query->where('personer_ratsit_queue', '>', 0)
-                        ->orWhere('personer_hitta_queue', '>', 0)
-                        ->orWhere('personer_merinfo_queue', '>', 0)),
-                Filter::make('not_queued')
-                    ->label('Not Queued')
-                    ->default(false)
-                    ->query(fn (Builder $query) => $query->where('personer_ratsit_queue', '=', 0)
-                        ->orWhere('personer_hitta_queue', '=', 0)
-                        ->orWhere('personer_merinfo_queue', '=', 0)),
+                SelectFilter::make('queue_status')
+                    ->label('Queue Status')
+                    ->options([
+                        'none' => 'No filter',
+                        'merinfo_queued' => 'Merinfo Queued',
+                        'merinfo_not_queued' => 'Merinfo No Queue',
+                        'hitta_queued' => 'Hitta Queued',
+                        'hitta_not_queued' => 'Hitta No Queue',
+                        'ratsit_queued' => 'Ratsit Queded',
+                        'ratsit_not_queued' => 'Ratsit No Queue',
+                        'all_queued' => 'All Queued',
+                        'non_queue' => 'Non Queue',
+                    ])
+                    ->default('none')
+                    ->query(function (Builder $query, array $data): Builder {
+                        return match ($data['value'] ?? 'none') {
+                            'merinfo_queued' => $query->where('personer_merinfo_queue', 1),
+                            'merinfo_not_queued' => $query->where('personer_merinfo_queue', 0),
+                            'hitta_queued' => $query->where('personer_hitta_queue', 1),
+                            'hitta_not_queued' => $query->where('personer_hitta_queue', 0),
+                            'ratsit_queued' => $query->where('personer_ratsit_queue', 1),
+                            'ratsit_not_queued' => $query->where('personer_ratsit_queue', 0),
+                            'all_queued' => $query
+                                ->where('personer_merinfo_queue', 1)
+                                ->where('personer_hitta_queue', 1)
+                                ->where('personer_ratsit_queue', 1),
+                            'non_queue' => $query
+                                ->where('personer_merinfo_queue', 0)
+                                ->where('personer_hitta_queue', 0)
+                                ->where('personer_ratsit_queue', 0),
+                            default => $query,
+                        };
+                    }),
+                SelectFilter::make('saved_status')
+                    ->label('Saved Status')
+                    ->options([
+                        'none' => 'No filter',
+                        'merinfo_saved' => 'Merinfo Saved',
+                        'merinfo_not_saved' => 'Merinfo Not Saved',
+                        'hitta_saved' => 'Hitta Saved',
+                        'hitta_not_saved' => 'Hitta Not Saved',
+                        'ratsit_saved' => 'Ratsit Saved',
+                        'ratsit_not_saved' => 'Ratsit Not Saved',
+                        'all_saved' => 'All Saved',
+                        'non_saved' => 'Non Saved',
+                    ])
+                    ->default('none')
+                    ->query(function (Builder $query, array $data): Builder {
+                        return match ($data['value'] ?? 'none') {
+                            'merinfo_saved' => $query->where('personer_merinfo_saved', '>=', 1),
+                            'merinfo_not_saved' => $query->where('personer_merinfo_saved', '=', 0),
+                            'hitta_saved' => $query->where('personer_hitta_saved', '>=', 1),
+                            'hitta_not_saved' => $query->where('personer_hitta_saved', '=', 0),
+                            'ratsit_saved' => $query->where('personer_ratsit_saved', '>=', 1),
+                            'ratsit_not_saved' => $query->where('personer_ratsit_saved', '=', 0),
+                            'all_saved' => $query
+                                ->where('personer_merinfo_saved', '>=', 1)
+                                ->where('personer_hitta_saved', '>=', 1)
+                                ->where('personer_ratsit_saved', '>=', 1),
+                            'non_saved' => $query
+                                ->where('personer_merinfo_saved', '=', 0)
+                                ->where('personer_hitta_saved', '=', 0)
+                                ->where('personer_ratsit_saved', '=', 0),
+                            default => $query,
+                        };
+                    }),
                 SelectFilter::make('kommun')
                     ->label('Kommun')
                     ->searchable()
