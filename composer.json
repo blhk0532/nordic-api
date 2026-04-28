@@ -29,6 +29,7 @@
         "christmex/filament-toggle-table-group-action": "^1.0",
         "croustibat/filament-jobs-monitor": "^4.4",
         "cyberline/filament-navigation-footermenu": "^1.0",
+        "cybertroniankelvin/graper": "@dev",
         "deldius/filament-user-field": "^1.1",
         "devletes/filament-pinnable-navigation": "^1.0",
         "devletes/filament-progress-bar": "^1.0",
@@ -376,6 +377,13 @@
         "27": {
             "type": "path",
             "url": "app-plugins/wezlo/filament-workspace-tabs",
+            "options": {
+                "symlink": true
+            }
+        },
+        "28": {
+            "type": "path",
+            "url": "app-plugins/cybertroniankelvin/graper",
             "options": {
                 "symlink": true
             }

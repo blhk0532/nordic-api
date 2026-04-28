@@ -986,3 +986,11 @@ When the platform is confirmed, give the relevant command(s) above and tell the 
 </laravel-boost-guidelines>
 
 </laravel-boost-guidelines>
+
+</laravel-boost-guidelines>
+
+</laravel-boost-guidelines>
+
+</laravel-boost-guidelines>
+
+</laravel-boost-guidelines>

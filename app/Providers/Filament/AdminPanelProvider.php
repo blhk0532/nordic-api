@@ -80,6 +80,7 @@ use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 use Wezlo\FilamentGridList\FilamentGridListPlugin;
 use Wezlo\FilamentWorkspaceTabs\WorkspaceTabsPlugin;
 use YousefAman\ModalRepeater\ModalRepeaterPlugin;
+use CybertronianKelvin\Graper\GraperPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -201,6 +202,7 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugins([
+                GraperPlugin::make(),
                 FilamentDiffsPlugin::make(),
             ])
             ->plugin(

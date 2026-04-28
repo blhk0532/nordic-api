@@ -1,0 +1,24 @@
+{
+    "name": "graper/graper",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "vite build",
+        "dev": "vite build",
+        "preview": "vite preview",
+        "test": "vitest run",
+        "test:coverage": "vitest run --coverage"
+    },
+    "devDependencies": {
+        "@vitest/coverage-v8": "^4.1.5",
+        "jsdom": "^29.0.2",
+        "laravel-vite-plugin": "^1.0.6",
+        "typescript": "^5.0",
+        "vite": "^6.0",
+        "vitest": "^4.1.5"
+    },
+    "dependencies": {
+        "grapesjs": "^0.22.0",
+        "grapesjs-tailwind": "^1.0.13"
+    }
+}
