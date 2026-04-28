@@ -60,7 +60,7 @@ class GraperPageResource extends Resource
                 ->columnSpan(1),
             Action::make('viewPage')
             ->extraAttributes(['style' => 'position: relative;top: 27px;'])
-                ->label('Preview Page')
+                ->label('Preview')
                 ->icon('heroicon-o-eye')
                 ->url(fn (?Model $record) => $record ? route('graper.page.display', ['slug' => $record->slug]) : null)
                 ->openUrlInNewTab()
