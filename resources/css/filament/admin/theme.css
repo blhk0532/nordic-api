@@ -247,3 +247,11 @@ div.fi-main-ctn.fi-main-ctn-sidebar-open{
 .fi-workspace-tabs-context-menu{
     visibility: auto;
 }
+
+.gjs-one-bg {
+  background-color: #18181b!important;
+}
+
+.gjs-two-color {
+  color: #d0d0d1!important;
+}
