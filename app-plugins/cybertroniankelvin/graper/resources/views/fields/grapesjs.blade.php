@@ -1,15 +1,17 @@
 @php
     $uniqueId = 'graper-' . uniqid();
-    $initialContent = $getStatePath() ? ($getRecord()?->content ?? null) : null;
+    $statePath = $getStatePath();
+    $initialContent = $getState() ?? $getRecord()?->content ?? null;
 @endphp
 
 <x-dynamic-component :component="$getFieldWrapperView()" :field="$field">
-    <div
-        wire:ignore
-        x-data="{}"
-        @graper.sync.window="$wire.set('data.content', $event.detail, false)"
-    >
-        <input type="hidden" id="{{ $uniqueId }}-input" value="{{ $initialContent ?? '' }}" />
+    <div wire:ignore>
         <div id="{{ $uniqueId }}" style="min-height: {{ $getMinHeight() }};"></div>
     </div>
+    <input
+        type="hidden"
+        id="{{ $uniqueId }}-input"
+        value="{{ $initialContent ?? '' }}"
+        data-state-path="{{ $statePath }}"
+    />
 </x-dynamic-component>

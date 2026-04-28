@@ -9,8 +9,10 @@ use CybertronianKelvin\Graper\Models\GraperPage;
 use CybertronianKelvin\Graper\Resources\GraperPageResource\Pages\CreateGraperPage;
 use CybertronianKelvin\Graper\Resources\GraperPageResource\Pages\EditGraperPage;
 use CybertronianKelvin\Graper\Resources\GraperPageResource\Pages\ListGraperPages;
+use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -19,8 +21,6 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Filament\Actions\Action;
-use Illuminate\Database\Eloquent\Model;
 
 class GraperPageResource extends Resource
 {
@@ -62,7 +62,7 @@ class GraperPageResource extends Resource
             ->extraAttributes(['style' => 'position: relative;top: 27px;'])
                 ->label('Preview Page')
                 ->icon('heroicon-o-eye')
-                ->url(fn (Model $record) => route('graper.page.display', ['slug' => $record->slug]))
+                ->url(fn (?Model $record) => $record ? route('graper.page.display', ['slug' => $record->slug]) : null)
                 ->openUrlInNewTab()
                 ->color('gray'),
             GrapesJsField::make('content')
