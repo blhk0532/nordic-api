@@ -19,7 +19,14 @@
     },
     "dependencies": {
         "grapesjs": "^0.22.0",
+        "grapesjs-blocks-basic": "^1.0.2",
         "grapesjs-custom-code": "^1.0.2",
-        "grapesjs-tailwind": "^1.0.13"
+        "grapesjs-navbar": "^1.0.2",
+        "grapesjs-plugin-forms": "^2.0.6",
+        "grapesjs-preset-webpage": "^1.0.3",
+        "grapesjs-tabs": "^1.0.6",
+        "grapesjs-tailwind": "^1.0.13",
+        "grapesjs-templates": "^1.0.6",
+        "grapesjs-user-blocks": "^1.0.6"
     }
 }
