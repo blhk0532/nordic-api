@@ -1,0 +1,8 @@
+{
+  "resources/js/index.ts": {
+    "file": "index.js",
+    "name": "index",
+    "src": "resources/js/index.ts",
+    "isEntry": true
+  }
+}
