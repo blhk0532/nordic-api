@@ -1,6 +1,7 @@
 import grapesjs, { type Editor } from 'grapesjs';
 // @ts-ignore — grapesjs-tailwind ships no TypeScript types
 import tailwindPlugin from 'grapesjs-tailwind';
+import grapesjsCustomCode from 'grapesjs-custom-code';
 
 interface BlockDefinition {
     id: string;
@@ -51,7 +52,7 @@ function initGraper(graperDiv: HTMLElement): void {
         container: container,
         height: '600px',
         storageManager: false,
-        plugins: [tailwindPlugin],
+        plugins: [tailwindPlugin, grapesjsCustomCode],
     });
 
     fetch('/graper/api/blocks')
