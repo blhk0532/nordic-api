@@ -19,6 +19,8 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Actions\Action;
+use Illuminate\Database\Eloquent\Model;
 
 class GraperPageResource extends Resource
 {
@@ -37,22 +39,38 @@ class GraperPageResource extends Resource
         return $schema->components([
             TextInput::make('title')
                 ->required()
-                ->columnSpan(2),
+                 ->default(fn () => auth()->user()->name)
+                ->columnSpan(3),
             TextInput::make('slug')
                 ->unique(ignoreRecord: true)
+                ->columnSpan(3)
+                ->default(fn () => auth()->user()->name)
                 ->required(),
             Select::make('is_published')
                 ->label('Published')
                 ->options([true => 'Yes', false => 'No'])
-                ->default(false)
+                ->default('Yes')
+                ->columnSpan(2)
                 ->required(),
             DateTimePicker::make('published_at')
-                ->columnSpan(2),
+            ->default(fn () => now())
+            ->displayFormat('d F Y')
+              ->seconds(false)
+              ->hidden()
+                ->columnSpan(1),
+            Action::make('viewPage')
+            ->extraAttributes(['style' => 'position: relative;top: 27px;'])
+                ->label('Preview Page')
+                ->icon('heroicon-o-eye')
+                ->url(fn (Model $record) => route('graper.page.display', ['slug' => $record->slug]))
+                ->openUrlInNewTab()
+                ->color('gray'),
             GrapesJsField::make('content')
+            ->label('Page Editor')
                 ->loadDefaultBlocks()
                 ->minHeight('70vh')
                 ->columnSpanFull(),
-        ])->columns(3);
+        ])->columns(9);
     }
 
     public static function table(Table $table): Table

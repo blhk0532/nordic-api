@@ -8,6 +8,7 @@ use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use CybertronianKelvin\Graper\Resources\GraperPageResource;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Support\Htmlable;
 
 class EditGraperPage extends EditRecord
 {
@@ -21,12 +22,12 @@ class EditGraperPage extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\Action::make('viewPage')
-                ->label('View Page')
-                ->icon('heroicon-o-eye')
-                ->url(fn (Model $record) => route('graper.page.display', ['slug' => $record->slug]))
-                ->openUrlInNewTab()
-                ->color('gray'),
+        //    Actions\Action::make('viewPage')
+        //        ->label('View Page')
+        //        ->icon('heroicon-o-eye')
+        //        ->url(fn (Model $record) => route('graper.page.display', ['slug' => $record->slug]))
+        //        ->openUrlInNewTab()
+        //        ->color('gray'),
         ];
     }
 
@@ -44,5 +45,10 @@ class EditGraperPage extends EditRecord
         ));
 
         $this->form->fill($data);
+    }
+
+    public function getHeading(): string|Htmlable|null
+    {
+        return null;
     }
 }

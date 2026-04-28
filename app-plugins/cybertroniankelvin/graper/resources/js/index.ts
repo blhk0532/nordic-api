@@ -56,15 +56,38 @@ function initGraper(graperDiv: HTMLElement): void {
     console.log('[Graper] Input element found:', !!inputEl, 'value:', inputEl?.value);
     console.log('[Graper] Wrapper found:', !!wrapper);
 
-    const initialState = inputEl?.value || null;
-    console.log('[Graper] initialState:', initialState ? JSON.parse(initialState) : null);
 
     const editor: Editor = grapesjs.init({
         container: container,
         height: '600px',
         storageManager: false,
-        plugins: [tailwindPlugin, grapesjsCustomCode, grapesjsNavbar, grapesjsTabs, gjsForms, grapesjsBlocksBasic, grapesjsTemplates, grapesjsUserBlocks, grapesjsComponentCodeEditor, grapesjsScriptEditor, grapesjsAlpinejs, grapesjsRulers, grapesjsDataSource],
+        plugins: [
+            tailwindPlugin, 
+            grapesjsCustomCode, 
+            grapesjsNavbar, 
+            grapesjsTabs, 
+            gjsForms, 
+            grapesjsBlocksBasic, 
+            grapesjsTemplates, 
+            grapesjsUserBlocks, 
+            grapesjsComponentCodeEditor, 
+            grapesjsScriptEditor, 
+            grapesjsAlpinejs, 
+            grapesjsRulers, 
+            grapesjsDataSource
+        ],
+        deviceManager: {
+        devices: [
+            { name: 'Desktop', width: '', widthMedia: '' },
+            { name: 'Tablet', width: '768px', widthMedia: '768px' },
+            { name: 'Mobile', width: '375px', widthMedia: '480px' },
+        ],
+    },
     });
+    
+
+    const initialState = inputEl?.value || null;
+    console.log('[Graper] initialState:', initialState ? JSON.parse(initialState) : null);
 
     fetch('/graper/api/blocks')
         .then((r) => r.json())
@@ -102,6 +125,7 @@ function initGraper(graperDiv: HTMLElement): void {
         }
     }
 
+    
     editor.on('update', () => {
         const payload = JSON.stringify({
             html: editor.getHtml(),
