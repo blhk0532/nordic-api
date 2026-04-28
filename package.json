@@ -12,6 +12,7 @@
         "better-sqlite3": "^12.9.0",
         "commander": "^14.0.3",
         "concurrently": "^9.0.1",
+        "gasp": "^0.0.2",
         "grapesjs-alpinejs": "^1.0.8",
         "grapesjs-component-code-editor": "^1.0.20",
         "grapesjs-rulers": "^1.0.8",
