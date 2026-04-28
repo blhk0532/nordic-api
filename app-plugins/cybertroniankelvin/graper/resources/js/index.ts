@@ -6,9 +6,13 @@ import grapesjsNavbar from 'grapesjs-navbar';
 import grapesjsTabs from 'grapesjs-tabs';
 import gjsForms from 'grapesjs-plugin-forms';
 import grapesjsBlocksBasic from 'grapesjs-blocks-basic';
-import grapesjsPresetWebpage from 'grapesjs-preset-webpage';
 import grapesjsTemplates from 'grapesjs-templates';
 import grapesjsUserBlocks from 'grapesjs-user-blocks';
+import grapesjsComponentCodeEditor from 'grapesjs-component-code-editor';
+import grapesjsScriptEditor from 'grapesjs-script-editor';
+import grapesjsAlpinejs from 'grapesjs-alpinejs';
+import grapesjsRulers from 'grapesjs-rulers';
+import grapesjsDataSource from '@silexlabs/grapesjs-data-source';
 
 interface BlockDefinition {
     id: string;
@@ -59,7 +63,7 @@ function initGraper(graperDiv: HTMLElement): void {
         container: container,
         height: '600px',
         storageManager: false,
-        plugins: [tailwindPlugin, grapesjsCustomCode, grapesjsNavbar, grapesjsTabs, gjsForms, grapesjsBlocksBasic, grapesjsPresetWebpage, grapesjsTemplates, grapesjsUserBlocks],
+        plugins: [tailwindPlugin, grapesjsCustomCode, grapesjsNavbar, grapesjsTabs, gjsForms, grapesjsBlocksBasic, grapesjsTemplates, grapesjsUserBlocks, grapesjsComponentCodeEditor, grapesjsScriptEditor, grapesjsAlpinejs, grapesjsRulers, grapesjsDataSource],
     });
 
     fetch('/graper/api/blocks')
