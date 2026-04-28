@@ -15,7 +15,7 @@ class ComponentTraitRegistry
 
     public static function make(): static
     {
-        return self::$instance ??= new self();
+        return self::$instance ??= new self;
     }
 
     public static function reset(): void
@@ -26,7 +26,7 @@ class ComponentTraitRegistry
     public function register(string|ComponentTrait $trait): static
     {
         if (is_string($trait)) {
-            $trait = new $trait();
+            $trait = new $trait;
         }
 
         $this->traits[$trait::getId()] = $trait;

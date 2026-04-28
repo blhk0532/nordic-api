@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CybertronianKelvin\Graper;
 
+use CybertronianKelvin\Graper\Resources\GraperPageResource;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
-use CybertronianKelvin\Graper\Resources\GraperPageResource;
 
 class GraperPlugin implements Plugin
 {

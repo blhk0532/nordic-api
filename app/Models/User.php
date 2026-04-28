@@ -29,9 +29,9 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements FilamentUser, HasTenants
 {
     /** @use HasFactory<UserFactory> */
-    use HasApiTokens, HasFactory, HasInbox, HasTeams, Notifiable, TwoFactorAuthenticatable;
-
-    use HasRoles;
+    use HasApiTokens, HasFactory, HasInbox, HasTeams, Notifiable, TwoFactorAuthenticatable, HasRoles {
+        HasTeams::teams insteadof HasRoles;
+    }
 
     public function canAccessPanel(Panel $panel): bool
     {

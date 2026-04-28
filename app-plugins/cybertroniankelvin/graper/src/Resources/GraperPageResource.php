@@ -12,7 +12,6 @@ use CybertronianKelvin\Graper\Resources\GraperPageResource\Pages\ListGraperPages
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
-use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -21,6 +20,7 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class GraperPageResource extends Resource
 {
@@ -39,7 +39,7 @@ class GraperPageResource extends Resource
         return $schema->components([
             TextInput::make('title')
                 ->required()
-                 ->default(fn () => auth()->user()->name)
+                ->default(fn () => auth()->user()->name)
                 ->columnSpan(3),
             TextInput::make('slug')
                 ->unique(ignoreRecord: true)
@@ -53,20 +53,20 @@ class GraperPageResource extends Resource
                 ->columnSpan(2)
                 ->required(),
             DateTimePicker::make('published_at')
-            ->default(fn () => now())
-            ->displayFormat('d F Y')
-              ->seconds(false)
-              ->hidden()
+                ->default(fn () => now())
+                ->displayFormat('d F Y')
+                ->seconds(false)
+                ->hidden()
                 ->columnSpan(1),
             Action::make('viewPage')
-            ->extraAttributes(['style' => 'position: relative;top: 27px;'])
+                ->extraAttributes(['style' => 'position: relative;top: 27px;'])
                 ->label('Preview')
                 ->icon('heroicon-o-eye')
                 ->url(fn (?Model $record) => $record ? route('graper.page.display', ['slug' => $record->slug]) : null)
                 ->openUrlInNewTab()
                 ->color('gray'),
             GrapesJsField::make('content')
-            ->label('Page Editor')
+                ->label('Page Editor')
                 ->loadDefaultBlocks()
                 ->minHeight('70vh')
                 ->columnSpanFull(),

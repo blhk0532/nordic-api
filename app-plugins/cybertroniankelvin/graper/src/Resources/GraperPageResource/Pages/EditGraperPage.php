@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CybertronianKelvin\Graper\Resources\GraperPageResource\Pages;
 
+use CybertronianKelvin\Graper\Resources\GraperPageResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
-use CybertronianKelvin\Graper\Resources\GraperPageResource;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Database\Eloquent\Model;
 
 class EditGraperPage extends EditRecord
 {
@@ -22,12 +22,12 @@ class EditGraperPage extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-        //    Actions\Action::make('viewPage')
-        //        ->label('View Page')
-        //        ->icon('heroicon-o-eye')
-        //        ->url(fn (Model $record) => route('graper.page.display', ['slug' => $record->slug]))
-        //        ->openUrlInNewTab()
-        //        ->color('gray'),
+            //    Actions\Action::make('viewPage')
+            //        ->label('View Page')
+            //        ->icon('heroicon-o-eye')
+            //        ->url(fn (Model $record) => route('graper.page.display', ['slug' => $record->slug]))
+            //        ->openUrlInNewTab()
+            //        ->color('gray'),
         ];
     }
 

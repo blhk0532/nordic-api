@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CybertronianKelvin\Graper;
 
-use CybertronianKelvin\Graper\Blocks\BlockRegistry;
 use CybertronianKelvin\Graper\Commands\GraperCommand;
 use CybertronianKelvin\Graper\Commands\GraperInstallCommand;
 use CybertronianKelvin\Graper\Http\Controllers\GraperPageController;
@@ -33,7 +32,7 @@ class GraperServiceProvider extends PackageServiceProvider
     {
         parent::boot();
 
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'graper');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'graper');
 
         $this->loadRoutes();
         $this->registerDisplayRoute();

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CybertronianKelvin\Graper\Models;
 
-use CybertronianKelvin\Graper\Helpers\GraperHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

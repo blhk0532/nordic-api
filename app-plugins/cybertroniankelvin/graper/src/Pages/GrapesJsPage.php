@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CybertronianKelvin\Graper\Pages;
 
+use CybertronianKelvin\Graper\Models\GraperPage;
 use Filament\Pages\Page;
 use Filament\Panel;
-use CybertronianKelvin\Graper\Models\GraperPage;
 use Illuminate\Support\Facades\Route;
 
 class GrapesJsPage extends Page
