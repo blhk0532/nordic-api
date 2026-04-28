@@ -7,7 +7,7 @@ import gjsForms from 'grapesjs-plugin-forms';
 import grapesjsBlocksBasic from 'grapesjs-blocks-basic';
 import grapesjsTemplates from 'grapesjs-templates';
 import grapesjsUserBlocks from 'grapesjs-user-blocks';
-import grapesjsTable from 'grapesjs-table';
+import grapesjsIndexeddb from 'grapesjs-indexeddb';
 import grapesjsPresetWebpage from 'grapesjs-preset-webpage';
 import grapesjsComponentCodeEditor from 'grapesjs-component-code-editor';
 import grapesjsChartjs from 'grapesjs-chartjs-plugin';
@@ -101,7 +101,7 @@ const editor: Editor = grapesjs.init({
         safePlugin('grapesjs-blocks-basic', grapesjsBlocksBasic),
         safePlugin('grapesjs-templates', grapesjsTemplates),
         safePlugin('grapesjs-user-blocks', grapesjsUserBlocks),
-        safePlugin('grapesjs-table', grapesjsTable),
+        safePlugin('grapesjs-indexeddb', grapesjsIndexeddb),
     ],
     modal: {},
     canvas: {

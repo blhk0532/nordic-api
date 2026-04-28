@@ -6,28 +6,30 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="sploit" content="{{ csrf_token() }}">
     <title>{{ $page->title }}</title>
-       <link rel="stylesheet" href="https://cdn.prod.website-files.com/6750141970e01af85c9dd0ab/css/galvanite.webflow.shared.f100ec936.min.css" />
-    <link
-    href="https://cdn.prod.website-files.com/6750141970e01af85c9dd0ab/css/galvanite.webflow.shared.f100ec936.min.css"
-    rel="stylesheet" type="text/css" integrity="sha384-8QDsk2d28A71MOZJ8pUvaADtU/HY8Wkh3pD+vvav14RXf54K1pgmXH4LaEiGgWRo"
-    crossorigin="anonymous" />
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+
+
   <style>
     html.w-mod-js:not(.w-mod-ix3) :is([reveal="text"], [reveal="fade"], .bento-h) {
       visibility: hidden !important;
     }
   </style>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js" type="text/javascript"></script>
-  <script src="https://cdn.prod.website-files.com/gsap/3.15.0/SplitText.min.js" type="text/javascript"></script>
-  <script src="https://cdn.prod.website-files.com/gsap/3.15.0/ScrollTrigger.min.js" type="text/javascript"></script>
-  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+
+
   
-       @if ($css && strlen($css) > 200)
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.17/dist/base.min.css" />
+    @if ($css && strlen($css) > 200)
         <style>{!! \CybertronianKelvin\Graper\Helpers\GraperHelper::stripLayerDirectives($css) !!}</style>
     @endif
+
+
+
+       <link rel="stylesheet" href="https://ekoll.se/css/grapesjs/site.css" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+
 </head>
 <body class="antialiased">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -47,6 +49,14 @@
     type="text/javascript" integrity="sha384-+rNOhpAKmd/PclfaBTKEmYbfJTrzD5Hy+Ra2r/lWXPc7kBH6msENvMAqIAn4lMf7"
     crossorigin="anonymous"></script>
 
+
+ <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.15.0/SplitText.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.15.0/ScrollTrigger.min.js" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
 
 </body>
 </html>

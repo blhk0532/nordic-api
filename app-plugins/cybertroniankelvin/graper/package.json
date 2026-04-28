@@ -26,6 +26,7 @@
         "grapesjs-component-code-editor": "^1.0.20",
         "grapesjs-custom-code": "^1.0.2",
         "grapesjs-custom-code-monaco-editor": "^1.0.12",
+        "grapesjs-indexeddb": "^1.0.5",
         "grapesjs-mjml": "^1.0.8",
         "grapesjs-navbar": "^1.0.2",
         "grapesjs-plugin-forms": "^2.0.6",
