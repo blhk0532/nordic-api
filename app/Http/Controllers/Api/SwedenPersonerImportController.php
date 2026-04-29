@@ -188,15 +188,12 @@ class SwedenPersonerImportController extends Controller
         if ($existing) {
             // Merge phone numbers
             $updatedTelefon = $data['telefon'] ?? $existing->telefon;
-            $updatedTelefonnummer = $data['telefonnummer'] ?? [];
-            if ($existing->telefonnummer) {
-                $existingNums = is_array($existing->telefonnummer) ? $existing->telefonnummer : [];
-                $combined = array_unique(array_merge($updatedTelefonnummer, $existingNums));
-                $updatedTelefonnummer = array_values(array_filter($combined, fn ($n) => $n && ! is_array($n) && strlen(preg_replace('/\D/', '', (string) $n)) >= 9));
+            $incomingNumbers = $this->normalizePhoneNumbers($data['telefonnummer'] ?? []);
+            $existingNumbers = $this->normalizePhoneNumbers($existing->telefonnummer ?? []);
+            $updatedTelefonnummer = array_values(array_unique(array_merge($incomingNumbers, $existingNumbers)));
 
-                if (! empty($updatedTelefonnummer) && empty($updatedTelefon)) {
-                    $updatedTelefon = $updatedTelefonnummer[0];
-                }
+            if (! empty($updatedTelefonnummer) && empty($updatedTelefon)) {
+                $updatedTelefon = $updatedTelefonnummer[0];
             }
             $data['telefon'] = $updatedTelefon;
             $data['telefonnummer'] = $updatedTelefonnummer;
@@ -209,6 +206,35 @@ class SwedenPersonerImportController extends Controller
         $record = SwedenPersoner::create($data);
 
         return response()->json(['success' => true, 'action' => 'created', 'data' => $record], 201);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function normalizePhoneNumbers(mixed $value): array
+    {
+        $numbers = is_array($value) ? $value : [$value];
+        $normalized = [];
+
+        foreach ($numbers as $number) {
+            if (is_array($number) || $number === null) {
+                continue;
+            }
+
+            $phone = trim((string) $number);
+            if ($phone === '') {
+                continue;
+            }
+
+            $digits = preg_replace('/\D/', '', $phone) ?? '';
+            if (strlen($digits) < 9) {
+                continue;
+            }
+
+            $normalized[] = $phone;
+        }
+
+        return $normalized;
     }
 
     // File import: expects CSV or Excel file
