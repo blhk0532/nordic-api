@@ -82,7 +82,7 @@ class ImportSwedenKommunerCountsFromRatsit
 
         RatsitKommun::query()
             ->orderBy('id')
-            ->get(['kommun', 'personer_count', 'foretag_count'])
+            ->get(['kommun', 'personer', 'foretag'])
             ->each(function (RatsitKommun $kommun) use (&$lookup): void {
                 $payload = [
                     'personer' => (int) $kommun->personer_count,

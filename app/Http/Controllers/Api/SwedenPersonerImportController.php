@@ -192,7 +192,7 @@ class SwedenPersonerImportController extends Controller
             if ($existing->telefonnummer) {
                 $existingNums = is_array($existing->telefonnummer) ? $existing->telefonnummer : [];
                 $combined = array_unique(array_merge($updatedTelefonnummer, $existingNums));
-                $updatedTelefonnummer = array_values(array_filter($combined, fn ($n) => $n && strlen(preg_replace('/\D/', '', (string) $n)) >= 9));
+                $updatedTelefonnummer = array_values(array_filter($combined, fn ($n) => $n && ! is_array($n) && strlen(preg_replace('/\D/', '', (string) $n)) >= 9));
 
                 if (! empty($updatedTelefonnummer) && empty($updatedTelefon)) {
                     $updatedTelefon = $updatedTelefonnummer[0];
