@@ -29,7 +29,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements FilamentUser, HasTenants
 {
     /** @use HasFactory<UserFactory> */
-    use HasApiTokens, HasFactory, HasInbox, HasTeams, Notifiable, TwoFactorAuthenticatable, HasRoles {
+    use HasApiTokens, HasFactory, HasInbox, HasRoles, HasTeams, Notifiable, TwoFactorAuthenticatable {
         HasTeams::teams insteadof HasRoles;
     }
 

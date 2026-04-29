@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use CybertronianKelvin\Graper\Models\GraperPage;
 use App\Models\User;
+use CybertronianKelvin\Graper\Models\GraperPage;
 
 class GraperPagePolicy
 {

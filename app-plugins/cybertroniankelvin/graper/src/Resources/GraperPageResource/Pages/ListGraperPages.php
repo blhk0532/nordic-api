@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace CybertronianKelvin\Graper\Resources\GraperPageResource\Pages;
 
 use CybertronianKelvin\Graper\Resources\GraperPageResource;
-use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Contracts\Support\Htmlable;
 
@@ -16,7 +15,7 @@ class ListGraperPages extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-          
+
         ];
     }
 
@@ -24,5 +23,4 @@ class ListGraperPages extends ListRecords
     {
         return null;
     }
-
 }

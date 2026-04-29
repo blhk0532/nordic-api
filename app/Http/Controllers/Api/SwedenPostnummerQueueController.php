@@ -74,7 +74,7 @@ class SwedenPostnummerQueueController extends Controller
         ]);
 
         // Either kommun or lan must be provided
-        if (!$request->filled('kommun') && !$request->filled('lan')) {
+        if (! $request->filled('kommun') && ! $request->filled('lan')) {
             return response()->json([
                 'message' => 'Either kommun or lan parameter is required',
                 'errors' => ['kommun' => ['The kommun field is required.'], 'lan' => ['The lan field is required.']],
@@ -114,7 +114,7 @@ class SwedenPostnummerQueueController extends Controller
             ->orderBy('postnummer', $orderDirection)
             ->first();
 
-        if (!$result) {
+        if (! $result) {
             return response()->json(['data' => null], 204);
         }
 

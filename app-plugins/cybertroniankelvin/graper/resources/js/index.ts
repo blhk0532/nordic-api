@@ -9,6 +9,7 @@ import grapesjsTemplates from 'grapesjs-templates';
 import grapesjsUserBlocks from 'grapesjs-user-blocks';
 import grapesjsIndexeddb from 'grapesjs-indexeddb';
 import grapesjsPresetWebpage from 'grapesjs-preset-webpage';
+import grapesjsPresetNewsletter from 'grapesjs-preset-newsletter';
 import grapesjsComponentCodeEditor from 'grapesjs-component-code-editor';
 import grapesjsChartjs from 'grapesjs-chartjs-plugin';
 import grapesjsMonacoEditor from 'grapesjs-custom-code-monaco-editor';
@@ -16,6 +17,7 @@ import grapesjsDataSource from '@silexlabs/grapesjs-data-source';
 import grapesjsRulers from 'grapesjs-rulers';
 import grapesjsScriptEditor from 'grapesjs-script-editor';
 import grapesjsAlpinejs from 'grapesjs-alpinejs';
+import grapesjsMjml from 'grapesjs-mjml';
 
 interface BlockDefinition {
     id: string;
@@ -87,6 +89,7 @@ const editor: Editor = grapesjs.init({
     plugins: [
         safePlugin('grapesjs-tailwind', tailwindPlugin),
         safePlugin('grapesjs-preset-webpage', grapesjsPresetWebpage),
+        safePlugin('grapesjs-preset-newsletter', grapesjsPresetNewsletter),
         safePlugin('grapesjs-component-code-editor', grapesjsComponentCodeEditor),
         safePlugin('grapesjs-chartjs-plugin', grapesjsChartjs),
         safePlugin('grapesjs-custom-code-monaco-editor', grapesjsMonacoEditor),
@@ -94,6 +97,7 @@ const editor: Editor = grapesjs.init({
         safePlugin('grapesjs-rulers', grapesjsRulers),
         safePlugin('grapesjs-script-editor', grapesjsScriptEditor),
         safePlugin('grapesjs-alpinejs', grapesjsAlpinejs),
+        safePlugin('grapesjs-mjml', grapesjsMjml),
         safePlugin('grapesjs-custom-code', grapesjsCustomCode),
         safePlugin('grapesjs-navbar', grapesjsNavbar),
         safePlugin('grapesjs-tabs', grapesjsTabs),

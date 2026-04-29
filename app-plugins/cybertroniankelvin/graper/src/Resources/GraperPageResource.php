@@ -10,6 +10,7 @@ use CybertronianKelvin\Graper\Resources\GraperPageResource\Pages\CreateGraperPag
 use CybertronianKelvin\Graper\Resources\GraperPageResource\Pages\EditGraperPage;
 use CybertronianKelvin\Graper\Resources\GraperPageResource\Pages\ListGraperPages;
 use Filament\Actions\Action;
+use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\DateTimePicker;
@@ -20,20 +21,19 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Filament\Actions\CreateAction;
 use Illuminate\Database\Eloquent\Model;
 
 class GraperPageResource extends Resource
 {
     protected static ?string $model = GraperPage::class;
 
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-document-text';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-m-square-3-stack-3d';
 
-    protected static ?string $navigationLabel = 'Pages';
+    protected static ?string $navigationLabel = 'Editor';
 
     protected static bool $isScopedToTenant = false;
 
-    protected static ?string $slug = 'graper-pages';
+    protected static ?string $slug = 'mentor-pages';
 
     public static function form(Schema $schema): Schema
     {
@@ -89,10 +89,10 @@ class GraperPageResource extends Resource
                 DeleteAction::make(),
             ])
             ->toolbarActions([
-                  CreateAction::make()
-                  ->label('Nya Sidor')
-                  ->color('gray')
-                  ->icon('heroicon-o-plus'),
+                CreateAction::make()
+                    ->label('Nya Sidor')
+                    ->color('gray')
+                    ->icon('heroicon-o-plus'),
             ]);
     }
 

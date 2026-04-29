@@ -16,5 +16,4 @@ class CreateGraperPage extends CreateRecord
     {
         return null;
     }
-
 }

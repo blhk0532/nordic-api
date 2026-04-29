@@ -19,6 +19,7 @@ use App\Filament\Resources\SwedenPostnummers\SwedenPostnummerResource;
 use App\Filament\Resources\SwedenPostorters\SwedenPostorterResource;
 use App\Http\Middleware\ApplyTenantScopes;
 use App\Http\Middleware\CurrentTenant;
+use App\Http\Responses\FilamentLoginResponse;
 use App\Models\Team;
 use App\Models\User;
 use Asmit\ResizedColumn\ResizedColumnPlugin;
@@ -29,12 +30,14 @@ use BinaryBuilds\CommandRunner\CommandRunnerPlugin;
 use BinaryBuilds\FilamentFailedJobs\FilamentFailedJobsPlugin;
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
 use Caresome\FilamentAuthDesigner\Enums\MediaPosition;
-use Cyberline\FilamentNavigationFootermenu\Data\FooterMenuItem;
 // use Flexpik\FilamentStudio\FilamentStudioPlugin;
+use Cyberline\FilamentNavigationFootermenu\Data\FooterMenuItem;
 use Cyberline\FilamentNavigationFootermenu\FooterMenuPlugin;
+use CybertronianKelvin\Graper\GraperPlugin;
 use Devletes\FilamentPinnableNavigation\PinnableNavigationPlugin;
 use DutchCodingCompany\FilamentSocialite\FilamentSocialitePlugin;
 use Filament\Actions\Action;
+use Filament\Auth\Http\Responses\Contracts\LoginResponse as FilamentLoginResponseContract;
 use Filament\Enums\ThemeMode;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -80,10 +83,14 @@ use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 use Wezlo\FilamentGridList\FilamentGridListPlugin;
 use Wezlo\FilamentWorkspaceTabs\WorkspaceTabsPlugin;
 use YousefAman\ModalRepeater\ModalRepeaterPlugin;
-use CybertronianKelvin\Graper\GraperPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
+    public function boot(): void
+    {
+        app()->bind(FilamentLoginResponseContract::class, FilamentLoginResponse::class);
+    }
+
     public function panel(Panel $panel): Panel
     {
         Notifications::alignment(Alignment::End);
@@ -112,6 +119,7 @@ class AdminPanelProvider extends PanelProvider
             ->sidebarWidth('21rem')
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->brandName('Noridic Digital')
+            ->darkMode(true)
             ->defaultThemeMode(ThemeMode::Dark)
             ->breadcrumbs(false)
             ->revealablePasswords(true)

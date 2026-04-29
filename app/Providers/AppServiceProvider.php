@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use App\Listeners\AmiDialerEventSubscriber;
-use Carbon\CarbonImmutable;
 use App\Policies\GraperPagePolicy;
+use Carbon\CarbonImmutable;
 use CybertronianKelvin\Graper\Models\GraperPage;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
