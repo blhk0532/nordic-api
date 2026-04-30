@@ -157,72 +157,18 @@ class SwedenPostnummersTable
                     ->label('Has Personer')
                     ->default(true)
                     ->query(fn (Builder $query) => $query->where('personer', '>', 0)),
-                SelectFilter::make('queue_status')
-                    ->label('Queue Status')
-                    ->options([
-                        'none' => 'No filter',
-                        'merinfo_queued' => 'Merinfo Queued',
-                        'merinfo_not_queued' => 'Merinfo No Queue',
-                        'hitta_queued' => 'Hitta Queued',
-                        'hitta_not_queued' => 'Hitta No Queue',
-                        'ratsit_queued' => 'Ratsit Queded',
-                        'ratsit_not_queued' => 'Ratsit No Queue',
-                        'all_queued' => 'All Queued',
-                        'non_queue' => 'Non Queue',
-                    ])
-                    ->default('none')
-                    ->query(function (Builder $query, array $data): Builder {
-                        return match ($data['value'] ?? 'none') {
-                            'merinfo_queued' => $query->where('personer_merinfo_queue', 1),
-                            'merinfo_not_queued' => $query->where('personer_merinfo_queue', 0),
-                            'hitta_queued' => $query->where('personer_hitta_queue', 1),
-                            'hitta_not_queued' => $query->where('personer_hitta_queue', 0),
-                            'ratsit_queued' => $query->where('personer_ratsit_queue', 1),
-                            'ratsit_not_queued' => $query->where('personer_ratsit_queue', 0),
-                            'all_queued' => $query
-                                ->where('personer_merinfo_queue', 1)
-                                ->where('personer_hitta_queue', 1)
-                                ->where('personer_ratsit_queue', 1),
-                            'non_queue' => $query
-                                ->where('personer_merinfo_queue', 0)
-                                ->where('personer_hitta_queue', 0)
-                                ->where('personer_ratsit_queue', 0),
-                            default => $query,
-                        };
-                    }),
-                SelectFilter::make('saved_status')
-                    ->label('Saved Status')
-                    ->options([
-                        'none' => 'No filter',
-                        'merinfo_saved' => 'Merinfo Saved',
-                        'merinfo_not_saved' => 'Merinfo Not Saved',
-                        'hitta_saved' => 'Hitta Saved',
-                        'hitta_not_saved' => 'Hitta Not Saved',
-                        'ratsit_saved' => 'Ratsit Saved',
-                        'ratsit_not_saved' => 'Ratsit Not Saved',
-                        'all_saved' => 'All Saved',
-                        'non_saved' => 'Non Saved',
-                    ])
-                    ->default('none')
-                    ->query(function (Builder $query, array $data): Builder {
-                        return match ($data['value'] ?? 'none') {
-                            'merinfo_saved' => $query->where('personer_merinfo_saved', '>=', 1),
-                            'merinfo_not_saved' => $query->where('personer_merinfo_saved', '=', 0),
-                            'hitta_saved' => $query->where('personer_hitta_saved', '>=', 1),
-                            'hitta_not_saved' => $query->where('personer_hitta_saved', '=', 0),
-                            'ratsit_saved' => $query->where('personer_ratsit_saved', '>=', 1),
-                            'ratsit_not_saved' => $query->where('personer_ratsit_saved', '=', 0),
-                            'all_saved' => $query
-                                ->where('personer_merinfo_saved', '>=', 1)
-                                ->where('personer_hitta_saved', '>=', 1)
-                                ->where('personer_ratsit_saved', '>=', 1),
-                            'non_saved' => $query
-                                ->where('personer_merinfo_saved', '=', 0)
-                                ->where('personer_hitta_saved', '=', 0)
-                                ->where('personer_ratsit_saved', '=', 0),
-                            default => $query,
-                        };
-                    }),
+                Filter::make('is_queued')
+                    ->label('Is Queued')
+                    ->default(false)
+                    ->query(fn (Builder $query) => $query->where('personer_ratsit_queue', '>', 0)
+                        ->orWhere('personer_hitta_queue', '>', 0)
+                        ->orWhere('personer_merinfo_queue', '>', 0)),
+                Filter::make('not_queued')
+                    ->label('Not Queued')
+                    ->default(false)
+                    ->query(fn (Builder $query) => $query->where('personer_ratsit_queue', '=', 0)
+                        ->orWhere('personer_hitta_queue', '=', 0)
+                        ->orWhere('personer_merinfo_queue', '=', 0)),
                 SelectFilter::make('kommun')
                     ->label('Kommun')
                     ->searchable()
@@ -414,61 +360,6 @@ class SwedenPostnummersTable
                                 ->success()
                                 ->title('Queue Columns Updated')
                                 ->body("Set all queue columns to 1 for {$updated} record(s).")
-                                ->send();
-                        })
-                        ->deselectRecordsAfterCompletion(),
-                    BulkAction::make('queueRows')
-                        ->label('Queue Rows')
-                        ->icon('heroicon-o-queue-list')
-                        ->color('warning')
-                        ->requiresConfirmation()
-                        ->modalHeading('Queue Rows')
-                        ->modalDescription('Select which queue columns should be set to 1 for the selected records.')
-                        ->modalSubmitActionLabel('Set Selected Queues = 1')
-                        ->schema([
-                            Select::make('queues')
-                                ->label('Queue columns')
-                                ->multiple()
-                                ->options([
-                                    'personer_merinfo_queue' => 'Merinfo Queue',
-                                    'personer_hitta_queue' => 'Hitta Queue',
-                                    'personer_ratsit_queue' => 'Ratsit Queue',
-                                ])
-                                ->required(),
-                        ])
-                        ->action(function (Collection $records, array $data): void {
-                            $queueColumns = collect($data['queues'] ?? [])
-                                ->filter(fn (mixed $column): bool => in_array($column, [
-                                    'personer_merinfo_queue',
-                                    'personer_hitta_queue',
-                                    'personer_ratsit_queue',
-                                ], true))
-                                ->values();
-
-                            if ($queueColumns->isEmpty()) {
-                                Notification::make()
-                                    ->danger()
-                                    ->title('No queue selected')
-                                    ->body('Please select at least one queue column.')
-                                    ->send();
-
-                                return;
-                            }
-
-                            $updatePayload = $queueColumns
-                                ->mapWithKeys(fn (string $column): array => [$column => 1])
-                                ->all();
-
-                            $recordIds = $records->modelKeys();
-
-                            SwedenPostnummer::query()
-                                ->whereKey($recordIds)
-                                ->update($updatePayload);
-
-                            Notification::make()
-                                ->success()
-                                ->title('Queue Columns Updated')
-                                ->body('Set selected queue columns to 1 for '.count($recordIds).' record(s).')
                                 ->send();
                         })
                         ->deselectRecordsAfterCompletion(),
