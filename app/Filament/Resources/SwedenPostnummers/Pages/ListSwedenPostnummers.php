@@ -6,9 +6,12 @@ use App\Filament\Resources\SwedenPostnummers\SwedenPostnummerResource;
 use App\Filament\Resources\SwedenPostnummers\Widgets\MapPickerWidget;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Contracts\Support\Htmlable;
+use Leek\FilamentHeaderFilters\Concerns\HasHeaderFilters;
 
 class ListSwedenPostnummers extends ListRecords
 {
+    use HasHeaderFilters;
+
     protected static string $resource = SwedenPostnummerResource::class;
 
     protected function getFooterWidgets(): array

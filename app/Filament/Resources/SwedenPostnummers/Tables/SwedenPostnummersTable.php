@@ -53,23 +53,71 @@ class SwedenPostnummersTable
                     ->label('Postnr')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false)
-                    ->searchable(),
+                    ->searchable()
+                    ->headerFilter(
+                        SelectFilter::make('header_postnummer')
+                            ->attribute('postnummer')
+                            ->options(fn (): array => SwedenPostnummer::query()
+                                ->whereNotNull('postnummer')
+                                ->where('postnummer', '<>', '')
+                                ->orderBy('postnummer')
+                                ->pluck('postnummer', 'postnummer')
+                                ->all())
+                            ->searchable()
+                            ->native(false),
+                    ),
                 TextColumn::make('postort')
                     ->label('Postort')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false)
-                    ->searchable(),
+                    ->searchable()
+                    ->headerFilter(
+                        SelectFilter::make('header_postort')
+                            ->attribute('postort')
+                            ->options(fn (): array => SwedenPostnummer::query()
+                                ->whereNotNull('postort')
+                                ->where('postort', '<>', '')
+                                ->orderBy('postort')
+                                ->pluck('postort', 'postort')
+                                ->all())
+                            ->searchable()
+                            ->native(false),
+                    ),
                 TextColumn::make('kommun')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->label('Kommun')
-                    ->searchable(),
+                    ->searchable()
+                    ->headerFilter(
+                        SelectFilter::make('header_kommun')
+                            ->attribute('kommun')
+                            ->options(fn (): array => SwedenPostnummer::query()
+                                ->whereNotNull('kommun')
+                                ->where('kommun', '<>', '')
+                                ->orderBy('kommun')
+                                ->pluck('kommun', 'kommun')
+                                ->all())
+                            ->searchable()
+                            ->native(false),
+                    ),
                 TextColumn::make('lan')
                     ->sortable()
                     ->label('Landskap')
                     ->limit(12)
                     ->toggleable(isToggledHiddenByDefault: true)
-                    ->searchable(),
+                    ->searchable()
+                    ->headerFilter(
+                        SelectFilter::make('header_lan')
+                            ->attribute('lan')
+                            ->options(fn (): array => SwedenPostnummer::query()
+                                ->whereNotNull('lan')
+                                ->where('lan', '<>', '')
+                                ->orderBy('lan')
+                                ->pluck('lan', 'lan')
+                                ->all())
+                            ->searchable()
+                            ->native(false),
+                    ),
                 TextColumn::make('country')
                     ->hidden()
                     ->label('Land')
@@ -210,12 +258,14 @@ class SwedenPostnummersTable
                         'none' => 'None',
                     ])
                     ->query(function (Builder $query, array $state): Builder {
-                        if ($state === []) {
+                        $values = $state['values'] ?? [];
+
+                        if ($values === []) {
                             return $query;
                         }
 
-                        $query->where(function (Builder $q) use ($state): void {
-                            if (in_array('all', $state)) {
+                        $query->where(function (Builder $q) use ($values): void {
+                            if (in_array('all', $values)) {
                                 $q->orWhere(function (Builder $sub): void {
                                     $sub->where('personer_ratsit_saved', '>', 0)
                                         ->where('personer_hitta_saved', '>', 0)
@@ -223,7 +273,7 @@ class SwedenPostnummersTable
                                 });
                             }
 
-                            if (in_array('none', $state)) {
+                            if (in_array('none', $values)) {
                                 $q->orWhere(function (Builder $sub): void {
                                     $sub->where(function (Builder $q): void {
                                         $q->where('personer_ratsit_saved', 0)->orWhereNull('personer_ratsit_saved');
@@ -237,15 +287,15 @@ class SwedenPostnummersTable
                                 });
                             }
 
-                            if (in_array('ratsit', $state)) {
+                            if (in_array('ratsit', $values)) {
                                 $q->orWhere('personer_ratsit_saved', '>', 0);
                             }
 
-                            if (in_array('hitta', $state)) {
+                            if (in_array('hitta', $values)) {
                                 $q->orWhere('personer_hitta_saved', '>', 0);
                             }
 
-                            if (in_array('merinfo', $state)) {
+                            if (in_array('merinfo', $values)) {
                                 $q->orWhere('personer_merinfo_saved', '>', 0);
                             }
                         });
@@ -263,12 +313,14 @@ class SwedenPostnummersTable
                         'none' => 'None',
                     ])
                     ->query(function (Builder $query, array $state): Builder {
-                        if ($state === []) {
+                        $values = $state['values'] ?? [];
+
+                        if ($values === []) {
                             return $query;
                         }
 
-                        $query->where(function (Builder $q) use ($state): void {
-                            if (in_array('all', $state)) {
+                        $query->where(function (Builder $q) use ($values): void {
+                            if (in_array('all', $values)) {
                                 $q->orWhere(function (Builder $sub): void {
                                     $sub->where(function (Builder $q): void {
                                         $q->where('personer_ratsit_saved', 0)->orWhereNull('personer_ratsit_saved');
@@ -282,7 +334,7 @@ class SwedenPostnummersTable
                                 });
                             }
 
-                            if (in_array('none', $state)) {
+                            if (in_array('none', $values)) {
                                 $q->orWhere(function (Builder $sub): void {
                                     $sub->where('personer_ratsit_saved', '>', 0)
                                         ->where('personer_hitta_saved', '>', 0)
@@ -290,19 +342,19 @@ class SwedenPostnummersTable
                                 });
                             }
 
-                            if (in_array('ratsit', $state)) {
+                            if (in_array('ratsit', $values)) {
                                 $q->orWhere(function (Builder $q): void {
                                     $q->where('personer_ratsit_saved', 0)->orWhereNull('personer_ratsit_saved');
                                 });
                             }
 
-                            if (in_array('hitta', $state)) {
+                            if (in_array('hitta', $values)) {
                                 $q->orWhere(function (Builder $q): void {
                                     $q->where('personer_hitta_saved', 0)->orWhereNull('personer_hitta_saved');
                                 });
                             }
 
-                            if (in_array('merinfo', $state)) {
+                            if (in_array('merinfo', $values)) {
                                 $q->orWhere(function (Builder $q): void {
                                     $q->where('personer_merinfo_saved', 0)->orWhereNull('personer_merinfo_saved');
                                 });
@@ -322,12 +374,14 @@ class SwedenPostnummersTable
                         'none' => 'None',
                     ])
                     ->query(function (Builder $query, array $state): Builder {
-                        if ($state === []) {
+                        $values = $state['values'] ?? [];
+
+                        if ($values === []) {
                             return $query;
                         }
 
-                        $query->where(function (Builder $q) use ($state): void {
-                            if (in_array('all', $state)) {
+                        $query->where(function (Builder $q) use ($values): void {
+                            if (in_array('all', $values)) {
                                 $q->orWhere(function (Builder $sub): void {
                                     $sub->where('personer_ratsit_queue', '>', 0)
                                         ->where('personer_hitta_queue', '>', 0)
@@ -335,7 +389,7 @@ class SwedenPostnummersTable
                                 });
                             }
 
-                            if (in_array('none', $state)) {
+                            if (in_array('none', $values)) {
                                 $q->orWhere(function (Builder $sub): void {
                                     $sub->where(function (Builder $q): void {
                                         $q->where('personer_ratsit_queue', 0)->orWhereNull('personer_ratsit_queue');
@@ -349,15 +403,15 @@ class SwedenPostnummersTable
                                 });
                             }
 
-                            if (in_array('ratsit', $state)) {
+                            if (in_array('ratsit', $values)) {
                                 $q->orWhere('personer_ratsit_queue', '>', 0);
                             }
 
-                            if (in_array('hitta', $state)) {
+                            if (in_array('hitta', $values)) {
                                 $q->orWhere('personer_hitta_queue', '>', 0);
                             }
 
-                            if (in_array('merinfo', $state)) {
+                            if (in_array('merinfo', $values)) {
                                 $q->orWhere('personer_merinfo_queue', '>', 0);
                             }
                         });
@@ -375,12 +429,14 @@ class SwedenPostnummersTable
                         'none' => 'None',
                     ])
                     ->query(function (Builder $query, array $state): Builder {
-                        if ($state === []) {
+                        $values = $state['values'] ?? [];
+
+                        if ($values === []) {
                             return $query;
                         }
 
-                        $query->where(function (Builder $q) use ($state): void {
-                            if (in_array('all', $state)) {
+                        $query->where(function (Builder $q) use ($values): void {
+                            if (in_array('all', $values)) {
                                 $q->orWhere(function (Builder $sub): void {
                                     $sub->where(function (Builder $q): void {
                                         $q->where('personer_ratsit_queue', 0)->orWhereNull('personer_ratsit_queue');
@@ -394,7 +450,7 @@ class SwedenPostnummersTable
                                 });
                             }
 
-                            if (in_array('none', $state)) {
+                            if (in_array('none', $values)) {
                                 $q->orWhere(function (Builder $sub): void {
                                     $sub->where('personer_ratsit_queue', '>', 0)
                                         ->where('personer_hitta_queue', '>', 0)
@@ -402,19 +458,19 @@ class SwedenPostnummersTable
                                 });
                             }
 
-                            if (in_array('ratsit', $state)) {
+                            if (in_array('ratsit', $values)) {
                                 $q->orWhere(function (Builder $q): void {
                                     $q->where('personer_ratsit_queue', 0)->orWhereNull('personer_ratsit_queue');
                                 });
                             }
 
-                            if (in_array('hitta', $state)) {
+                            if (in_array('hitta', $values)) {
                                 $q->orWhere(function (Builder $q): void {
                                     $q->where('personer_hitta_queue', 0)->orWhereNull('personer_hitta_queue');
                                 });
                             }
 
-                            if (in_array('merinfo', $state)) {
+                            if (in_array('merinfo', $values)) {
                                 $q->orWhere(function (Builder $q): void {
                                     $q->where('personer_merinfo_queue', 0)->orWhereNull('personer_merinfo_queue');
                                 });
