@@ -199,6 +199,230 @@ class SwedenPostnummersTable
                         ->orderBy('lan')
                         ->pluck('lan', 'lan')
                         ->all()),
+                SelectFilter::make('has_saved')
+                    ->label('Has Saved')
+                    ->multiple()
+                    ->options([
+                        'ratsit' => 'Ratsit',
+                        'hitta' => 'Hitta',
+                        'merinfo' => 'Merinfo',
+                        'all' => 'All',
+                        'none' => 'None',
+                    ])
+                    ->query(function (Builder $query, array $state): Builder {
+                        if ($state === []) {
+                            return $query;
+                        }
+
+                        $query->where(function (Builder $q) use ($state): void {
+                            if (in_array('all', $state)) {
+                                $q->orWhere(function (Builder $sub): void {
+                                    $sub->where('personer_ratsit_saved', '>', 0)
+                                        ->where('personer_hitta_saved', '>', 0)
+                                        ->where('personer_merinfo_saved', '>', 0);
+                                });
+                            }
+
+                            if (in_array('none', $state)) {
+                                $q->orWhere(function (Builder $sub): void {
+                                    $sub->where(function (Builder $q): void {
+                                        $q->where('personer_ratsit_saved', 0)->orWhereNull('personer_ratsit_saved');
+                                    })
+                                        ->where(function (Builder $q): void {
+                                            $q->where('personer_hitta_saved', 0)->orWhereNull('personer_hitta_saved');
+                                        })
+                                        ->where(function (Builder $q): void {
+                                            $q->where('personer_merinfo_saved', 0)->orWhereNull('personer_merinfo_saved');
+                                        });
+                                });
+                            }
+
+                            if (in_array('ratsit', $state)) {
+                                $q->orWhere('personer_ratsit_saved', '>', 0);
+                            }
+
+                            if (in_array('hitta', $state)) {
+                                $q->orWhere('personer_hitta_saved', '>', 0);
+                            }
+
+                            if (in_array('merinfo', $state)) {
+                                $q->orWhere('personer_merinfo_saved', '>', 0);
+                            }
+                        });
+
+                        return $query;
+                    }),
+                SelectFilter::make('non_saved')
+                    ->label('Non Saved')
+                    ->multiple()
+                    ->options([
+                        'ratsit' => 'Ratsit',
+                        'hitta' => 'Hitta',
+                        'merinfo' => 'Merinfo',
+                        'all' => 'All',
+                        'none' => 'None',
+                    ])
+                    ->query(function (Builder $query, array $state): Builder {
+                        if ($state === []) {
+                            return $query;
+                        }
+
+                        $query->where(function (Builder $q) use ($state): void {
+                            if (in_array('all', $state)) {
+                                $q->orWhere(function (Builder $sub): void {
+                                    $sub->where(function (Builder $q): void {
+                                        $q->where('personer_ratsit_saved', 0)->orWhereNull('personer_ratsit_saved');
+                                    })
+                                        ->where(function (Builder $q): void {
+                                            $q->where('personer_hitta_saved', 0)->orWhereNull('personer_hitta_saved');
+                                        })
+                                        ->where(function (Builder $q): void {
+                                            $q->where('personer_merinfo_saved', 0)->orWhereNull('personer_merinfo_saved');
+                                        });
+                                });
+                            }
+
+                            if (in_array('none', $state)) {
+                                $q->orWhere(function (Builder $sub): void {
+                                    $sub->where('personer_ratsit_saved', '>', 0)
+                                        ->where('personer_hitta_saved', '>', 0)
+                                        ->where('personer_merinfo_saved', '>', 0);
+                                });
+                            }
+
+                            if (in_array('ratsit', $state)) {
+                                $q->orWhere(function (Builder $q): void {
+                                    $q->where('personer_ratsit_saved', 0)->orWhereNull('personer_ratsit_saved');
+                                });
+                            }
+
+                            if (in_array('hitta', $state)) {
+                                $q->orWhere(function (Builder $q): void {
+                                    $q->where('personer_hitta_saved', 0)->orWhereNull('personer_hitta_saved');
+                                });
+                            }
+
+                            if (in_array('merinfo', $state)) {
+                                $q->orWhere(function (Builder $q): void {
+                                    $q->where('personer_merinfo_saved', 0)->orWhereNull('personer_merinfo_saved');
+                                });
+                            }
+                        });
+
+                        return $query;
+                    }),
+                SelectFilter::make('has_queued')
+                    ->label('Has Queued')
+                    ->multiple()
+                    ->options([
+                        'ratsit' => 'Ratsit',
+                        'hitta' => 'Hitta',
+                        'merinfo' => 'Merinfo',
+                        'all' => 'All',
+                        'none' => 'None',
+                    ])
+                    ->query(function (Builder $query, array $state): Builder {
+                        if ($state === []) {
+                            return $query;
+                        }
+
+                        $query->where(function (Builder $q) use ($state): void {
+                            if (in_array('all', $state)) {
+                                $q->orWhere(function (Builder $sub): void {
+                                    $sub->where('personer_ratsit_queue', '>', 0)
+                                        ->where('personer_hitta_queue', '>', 0)
+                                        ->where('personer_merinfo_queue', '>', 0);
+                                });
+                            }
+
+                            if (in_array('none', $state)) {
+                                $q->orWhere(function (Builder $sub): void {
+                                    $sub->where(function (Builder $q): void {
+                                        $q->where('personer_ratsit_queue', 0)->orWhereNull('personer_ratsit_queue');
+                                    })
+                                        ->where(function (Builder $q): void {
+                                            $q->where('personer_hitta_queue', 0)->orWhereNull('personer_hitta_queue');
+                                        })
+                                        ->where(function (Builder $q): void {
+                                            $q->where('personer_merinfo_queue', 0)->orWhereNull('personer_merinfo_queue');
+                                        });
+                                });
+                            }
+
+                            if (in_array('ratsit', $state)) {
+                                $q->orWhere('personer_ratsit_queue', '>', 0);
+                            }
+
+                            if (in_array('hitta', $state)) {
+                                $q->orWhere('personer_hitta_queue', '>', 0);
+                            }
+
+                            if (in_array('merinfo', $state)) {
+                                $q->orWhere('personer_merinfo_queue', '>', 0);
+                            }
+                        });
+
+                        return $query;
+                    }),
+                SelectFilter::make('non_queued')
+                    ->label('Non Queued')
+                    ->multiple()
+                    ->options([
+                        'ratsit' => 'Ratsit',
+                        'hitta' => 'Hitta',
+                        'merinfo' => 'Merinfo',
+                        'all' => 'All',
+                        'none' => 'None',
+                    ])
+                    ->query(function (Builder $query, array $state): Builder {
+                        if ($state === []) {
+                            return $query;
+                        }
+
+                        $query->where(function (Builder $q) use ($state): void {
+                            if (in_array('all', $state)) {
+                                $q->orWhere(function (Builder $sub): void {
+                                    $sub->where(function (Builder $q): void {
+                                        $q->where('personer_ratsit_queue', 0)->orWhereNull('personer_ratsit_queue');
+                                    })
+                                        ->where(function (Builder $q): void {
+                                            $q->where('personer_hitta_queue', 0)->orWhereNull('personer_hitta_queue');
+                                        })
+                                        ->where(function (Builder $q): void {
+                                            $q->where('personer_merinfo_queue', 0)->orWhereNull('personer_merinfo_queue');
+                                        });
+                                });
+                            }
+
+                            if (in_array('none', $state)) {
+                                $q->orWhere(function (Builder $sub): void {
+                                    $sub->where('personer_ratsit_queue', '>', 0)
+                                        ->where('personer_hitta_queue', '>', 0)
+                                        ->where('personer_merinfo_queue', '>', 0);
+                                });
+                            }
+
+                            if (in_array('ratsit', $state)) {
+                                $q->orWhere(function (Builder $q): void {
+                                    $q->where('personer_ratsit_queue', 0)->orWhereNull('personer_ratsit_queue');
+                                });
+                            }
+
+                            if (in_array('hitta', $state)) {
+                                $q->orWhere(function (Builder $q): void {
+                                    $q->where('personer_hitta_queue', 0)->orWhereNull('personer_hitta_queue');
+                                });
+                            }
+
+                            if (in_array('merinfo', $state)) {
+                                $q->orWhere(function (Builder $q): void {
+                                    $q->where('personer_merinfo_queue', 0)->orWhereNull('personer_merinfo_queue');
+                                });
+                            }
+                        });
+
+                        return $query;
+                    }),
             ])
             ->recordActions([
                 RunRatsitHittaAction::make(),
@@ -390,6 +614,72 @@ class SwedenPostnummersTable
                                 ->success()
                                 ->title('Queue Columns Updated')
                                 ->body("Set all queue columns to 1 for {$updated} record(s).")
+                                ->send();
+                        })
+                        ->deselectRecordsAfterCompletion(),
+                    BulkAction::make('setQueue')
+                        ->label('Set Queue')
+                        ->icon('heroicon-o-queue-list')
+                        ->color('warning')
+                        ->form([
+                            Select::make('queue_options')
+                                ->label('Queue Options')
+                                ->multiple()
+                                ->options([
+                                    'ratsit' => 'Ratsit',
+                                    'hitta' => 'Hitta',
+                                    'merinfo' => 'Merinfo',
+                                    'all_queue' => 'All Queue',
+                                    'all_unqueue' => 'All Un-Queue',
+                                ])
+                                ->required(),
+                        ])
+                        ->action(function (Collection $records, array $data): void {
+                            $options = $data['queue_options'] ?? [];
+                            $updated = 0;
+
+                            foreach ($records as $record) {
+                                $update = [];
+
+                                if (in_array('all_unqueue', $options)) {
+                                    $update = [
+                                        'personer_ratsit_queue' => 0,
+                                        'personer_hitta_queue' => 0,
+                                        'personer_merinfo_queue' => 0,
+                                    ];
+                                } elseif (in_array('all_queue', $options)) {
+                                    $update = [
+                                        'personer_ratsit_queue' => 1,
+                                        'personer_hitta_queue' => 1,
+                                        'personer_merinfo_queue' => 1,
+                                    ];
+                                } else {
+                                    if (in_array('ratsit', $options)) {
+                                        $update['personer_ratsit_queue'] = 1;
+                                    }
+
+                                    if (in_array('hitta', $options)) {
+                                        $update['personer_hitta_queue'] = 1;
+                                    }
+
+                                    if (in_array('merinfo', $options)) {
+                                        $update['personer_merinfo_queue'] = 1;
+                                    }
+                                }
+
+                                if ($update !== []) {
+                                    SwedenPostnummer::query()
+                                        ->whereKey($record->getKey())
+                                        ->update($update);
+
+                                    $updated++;
+                                }
+                            }
+
+                            Notification::make()
+                                ->success()
+                                ->title('Queue Updated')
+                                ->body("Updated queue columns for {$updated} record(s).")
                                 ->send();
                         })
                         ->deselectRecordsAfterCompletion(),
